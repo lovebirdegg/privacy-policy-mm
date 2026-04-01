@@ -1,0 +1,2049 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>车检监拆复勘系统 - 后台管理</title>
+<style>
+:root {
+  --primary: #2e6cf6;
+  --primary-dark: #1a56db;
+  --primary-light: #e8f0fe;
+  --green: #18a058;
+  --green-light: #e6f7ef;
+  --orange: #f0a020;
+  --orange-light: #fff8ec;
+  --red: #e03e3e;
+  --red-light: #fef2f2;
+  --purple: #7c3aed;
+  --purple-light: #f3e8ff;
+  --gray: #f5f7fa;
+  --gray2: #e4e7ed;
+  --gray3: #d3d6dc;
+  --text: #1a1a1a;
+  --text2: #606266;
+  --text3: #909399;
+  --text4: #c0c4cc;
+  --white: #fff;
+  --sidebar-w: 220px;
+  --header-h: 56px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif; background: var(--gray); color: var(--text); font-size: 14px; }
+
+/* 布局 */
+#app { display: flex; min-height: 100vh; }
+
+/* 侧边栏 */
+.sidebar {
+  width: var(--sidebar-w);
+  background: #1e293b;
+  color: #e2e8f0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
+  flex-shrink: 0;
+  z-index: 100;
+}
+.sidebar-logo {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  background: rgba(0,0,0,0.2);
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  gap: 10px;
+}
+.sidebar-logo-icon { font-size: 22px; }
+.sidebar-menu { padding: 12px 0; }
+.menu-group { margin-bottom: 8px; }
+.menu-group-title {
+  padding: 8px 20px;
+  font-size: 11px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  gap: 10px;
+  font-size: 14px;
+  color: #94a3b8;
+  border-left: 3px solid transparent;
+}
+.menu-item:hover { background: rgba(255,255,255,0.05); color: #e2e8f0; }
+.menu-item.active {
+  background: rgba(46, 108, 246, 0.15);
+  color: var(--primary);
+  border-left-color: var(--primary);
+}
+.menu-item-icon { font-size: 18px; width: 22px; text-align: center; }
+.menu-item-badge {
+  margin-left: auto;
+  background: var(--red);
+  color: white;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+.menu-sub {
+  padding-left: 52px;
+  display: none;
+}
+.menu-sub.open { display: block; }
+.menu-sub-item {
+  padding: 10px 16px;
+  font-size: 13px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.menu-sub-item:hover { color: #e2e8f0; }
+.menu-sub-item.active { color: var(--primary); }
+
+/* 主内容区 */
+.main {
+  flex: 1;
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 顶部导航 */
+.header {
+  height: var(--header-h);
+  background: white;
+  border-bottom: 1px solid var(--gray2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.header-left { display: flex; align-items: center; gap: 16px; }
+.header-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text3); }
+.header-breadcrumb span:last-child { color: var(--text); }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.header-search {
+  width: 240px;
+  height: 34px;
+  border: 1px solid var(--gray2);
+  border-radius: 6px;
+  padding: 0 12px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.header-search:focus { border-color: var(--primary); }
+.header-icon { font-size: 18px; color: var(--text3); cursor: pointer; padding: 6px; border-radius: 6px; transition: all 0.2s; }
+.header-icon:hover { background: var(--gray); color: var(--text); }
+.header-user { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: background 0.2s; }
+.header-user:hover { background: var(--gray); }
+.header-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; }
+.header-name { font-size: 13px; color: var(--text); }
+
+/* 内容区 */
+.content {
+  flex: 1;
+  padding: 20px 24px;
+}
+
+/* 页面容器 */
+.page { display: none; }
+.page.active { display: block; }
+
+/* 仪表盘统计卡片 */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+.stat-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.stat-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.stat-card-title { font-size: 13px; color: var(--text2); }
+.stat-card-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.stat-card-icon.blue { background: var(--primary-light); color: var(--primary); }
+.stat-card-icon.green { background: var(--green-light); color: var(--green); }
+.stat-card-icon.orange { background: var(--orange-light); color: var(--orange); }
+.stat-card-icon.purple { background: var(--purple-light); color: var(--purple); }
+.stat-card-value { font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.stat-card-trend { font-size: 12px; display: flex; align-items: center; gap: 4px; }
+.stat-card-trend.up { color: var(--green); }
+.stat-card-trend.down { color: var(--red); }
+
+/* 卡片容器 */
+.card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  margin-bottom: 16px;
+}
+.card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--gray2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-title { font-size: 15px; font-weight: 600; color: var(--text); }
+.card-body { padding: 20px; }
+
+/* 双列布局 */
+.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* 表格 */
+.table-wrap { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--gray2); }
+.table th { font-size: 12px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; background: #fafbfc; }
+.table td { font-size: 13px; color: var(--text); }
+.table tr:hover { background: #fafbfc; }
+.table-link { color: var(--primary); cursor: pointer; }
+.table-link:hover { text-decoration: underline; }
+
+/* 标签 */
+.tag { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+.tag-blue { background: var(--primary-light); color: var(--primary); }
+.tag-green { background: var(--green-light); color: var(--green); }
+.tag-orange { background: var(--orange-light); color: var(--orange); }
+.tag-red { background: var(--red-light); color: var(--red); }
+.tag-gray { background: #f0f0f0; color: var(--text3); }
+
+/* 按钮 */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; transition: all 0.2s; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-outline { background: white; color: var(--primary); border: 1px solid var(--primary); }
+.btn-outline:hover { background: var(--primary-light); }
+.btn-success { background: var(--green); color: white; }
+.btn-danger { background: var(--red); color: white; }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+.btn-icon { padding: 6px; background: transparent; color: var(--text3); }
+.btn-icon:hover { background: var(--gray); color: var(--text); }
+
+/* 筛选栏 */
+.filter-bar {
+  background: white;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.filter-item { display: flex; align-items: center; gap: 8px; }
+.filter-label { font-size: 13px; color: var(--text2); white-space: nowrap; }
+.filter-input {
+  height: 34px;
+  border: 1px solid var(--gray2);
+  border-radius: 6px;
+  padding: 0 12px;
+  font-size: 13px;
+  outline: none;
+  min-width: 160px;
+}
+.filter-input:focus { border-color: var(--primary); }
+.filter-select {
+  height: 34px;
+  border: 1px solid var(--gray2);
+  border-radius: 6px;
+  padding: 0 28px 0 12px;
+  font-size: 13px;
+  outline: none;
+  background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M2 4l4 4 4-4'/%3E%3C/svg%3E") no-repeat right 10px center;
+  appearance: none;
+  cursor: pointer;
+}
+
+/* 分页 */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px 0;
+}
+.pagination-info { font-size: 13px; color: var(--text3); margin-right: auto; }
+.pagination-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--gray2);
+  border-radius: 4px;
+  background: white;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pagination-btn:hover { border-color: var(--primary); color: var(--primary); }
+.pagination-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+.pagination-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* 图表占位 */
+.chart-placeholder {
+  height: 280px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text3);
+  font-size: 13px;
+}
+
+/* 表单 */
+.form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: span 2; }
+.form-label { font-size: 13px; color: var(--text2); }
+.form-label.required::after { content: '*'; color: var(--red); margin-left: 4px; }
+.form-control {
+  height: 38px;
+  border: 1px solid var(--gray2);
+  border-radius: 6px;
+  padding: 0 12px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(46, 108, 246, 0.1); }
+.form-control-full { width: 100%; }
+textarea.form-control { height: auto; min-height: 80px; padding: 10px 12px; resize: vertical; }
+
+/* 详情页 */
+.detail-header {
+  background: white;
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.detail-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.detail-meta { display: flex; gap: 24px; font-size: 13px; color: var(--text2); }
+.detail-section { margin-bottom: 16px; }
+.detail-section-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+.detail-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.detail-item { display: flex; flex-direction: column; gap: 4px; }
+.detail-item-label { font-size: 12px; color: var(--text3); }
+.detail-item-value { font-size: 14px; color: var(--text); }
+
+/* 图片网格 */
+.photo-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.photo-item {
+  aspect-ratio: 1;
+  background: var(--gray);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+.photo-item img { width: 100%; height: 100%; object-fit: cover; }
+.photo-item-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  font-size: 11px;
+  padding: 4px 8px;
+}
+
+/* 操作按钮组 */
+.action-bar {
+  display: flex;
+  gap: 8px;
+  padding: 16px 0;
+  border-top: 1px solid var(--gray2);
+  margin-top: 16px;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text3);
+}
+.empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state-text { font-size: 14px; }
+
+/* 进度条 */
+.progress { height: 8px; background: var(--gray2); border-radius: 4px; overflow: hidden; }
+.progress-bar { height: 100%; border-radius: 4px; transition: width 0.3s; }
+.progress-bar.blue { background: var(--primary); }
+.progress-bar.green { background: var(--green); }
+.progress-bar.orange { background: var(--orange); }
+
+/* 通知徽标 */
+.badge { position: relative; }
+.badge-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background: var(--red);
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+/* 快捷操作 */
+.quick-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.quick-action {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.quick-action:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.quick-action-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.quick-action-text { font-size: 14px; font-weight: 500; color: var(--text); }
+
+/* 通知列表 */
+.notice-list { display: flex; flex-direction: column; }
+.notice-item {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--gray2);
+  display: flex;
+  gap: 12px;
+  cursor: pointer;
+}
+.notice-item:last-child { border-bottom: none; }
+.notice-item:hover { background: #fafbfc; margin: 0 -20px; padding: 14px 20px; }
+.notice-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.notice-content { flex: 1; }
+.notice-title { font-size: 13px; color: var(--text); margin-bottom: 4px; }
+.notice-time { font-size: 12px; color: var(--text3); }
+
+/* 模态框 */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: white;
+  border-radius: 8px;
+  width: 520px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+}
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--gray2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-title { font-size: 16px; font-weight: 600; }
+.modal-close { font-size: 20px; color: var(--text3); cursor: pointer; padding: 4px; }
+.modal-close:hover { color: var(--text); }
+.modal-body { padding: 20px; max-height: 60vh; overflow-y: auto; }
+.modal-footer { padding: 12px 20px; border-top: 1px solid var(--gray2); display: flex; justify-content: flex-end; gap: 10px; }
+
+/* Toast */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #1e293b;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 13px;
+  z-index: 2000;
+  display: none;
+  animation: slideIn 0.3s ease;
+}
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* 响应式 */
+@media (max-width: 1200px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .detail-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .main { margin-left: 0; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .row-2 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- 侧边栏 -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span class="sidebar-logo-icon">🚗</span>
+    <span>监拆复勘系统</span>
+  </div>
+  <nav class="sidebar-menu">
+    <div class="menu-group">
+      <div class="menu-group-title">概览</div>
+      <div class="menu-item active" onclick="showPage('dashboard')">
+        <span class="menu-item-icon">📊</span>
+        <span>数据仪表盘</span>
+      </div>
+    </div>
+    <div class="menu-group">
+      <div class="menu-group-title">订单管理</div>
+      <div class="menu-item" onclick="toggleSubMenu(this); showPage('orders-jianzhai')">
+        <span class="menu-item-icon">🚙</span>
+        <span>车辆监拆</span>
+        <span class="menu-item-badge">12</span>
+      </div>
+      <div class="menu-sub">
+        <div class="menu-sub-item active" onclick="showPage('orders-jianzhai')">全部订单</div>
+        <div class="menu-sub-item" onclick="showPage('orders-jianzhai')">待分配</div>
+        <div class="menu-sub-item" onclick="showPage('orders-jianzhai')">进行中</div>
+        <div class="menu-sub-item" onclick="showPage('orders-jianzhai')">待审批</div>
+      </div>
+      <div class="menu-item" onclick="showPage('orders-tanshi')">
+        <span class="menu-item-icon">🏥</span>
+        <span>住院探视</span>
+        <span class="menu-item-badge">5</span>
+      </div>
+      <div class="menu-item" onclick="showPage('orders-wusun')">
+        <span class="menu-item-icon">📦</span>
+        <span>物损清单</span>
+        <span class="menu-item-badge">3</span>
+      </div>
+      <div class="menu-item" onclick="showPage('orders-fukan')">
+        <span class="menu-item-icon">🔍</span>
+        <span>复勘管理</span>
+      </div>
+    </div>
+    <div class="menu-group">
+      <div class="menu-group-title">人员管理</div>
+      <div class="menu-item" onclick="showPage('staff')">
+        <span class="menu-item-icon">👷</span>
+        <span>工作人员</span>
+      </div>
+      <div class="menu-item" onclick="showPage('approvers')">
+        <span class="menu-item-icon">✅</span>
+        <span>审批人员</span>
+      </div>
+    </div>
+    <div class="menu-group">
+      <div class="menu-group-title">客户管理</div>
+      <div class="menu-item" onclick="showPage('insurance')">
+        <span class="menu-item-icon">🏢</span>
+        <span>保险公司</span>
+      </div>
+      <div class="menu-item" onclick="showPage('garage')">
+        <span class="menu-item-icon">🔧</span>
+        <span>修理厂</span>
+      </div>
+    </div>
+    <div class="menu-group">
+      <div class="menu-group-title">数据统计</div>
+      <div class="menu-item" onclick="showPage('stats')">
+        <span class="menu-item-icon">📈</span>
+        <span>统计报表</span>
+      </div>
+      <div class="menu-item" onclick="showPage('export')">
+        <span class="menu-item-icon">📥</span>
+        <span>数据导出</span>
+      </div>
+    </div>
+    <div class="menu-group">
+      <div class="menu-group-title">系统设置</div>
+      <div class="menu-item" onclick="showPage('settings')">
+        <span class="menu-item-icon">⚙️</span>
+        <span>系统配置</span>
+      </div>
+      <div class="menu-item" onclick="showPage('logs')">
+        <span class="menu-item-icon">📋</span>
+        <span>操作日志</span>
+      </div>
+    </div>
+  </nav>
+</aside>
+
+<!-- 主内容区 -->
+<main class="main">
+  <!-- 顶部导航 -->
+  <header class="header">
+    <div class="header-left">
+      <div class="header-breadcrumb">
+        <span>首页</span>
+        <span>/</span>
+        <span id="breadcrumb-current">数据仪表盘</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <input type="text" class="header-search" placeholder="搜索订单、人员...">
+      <span class="header-icon badge" onclick="showToast('暂无新通知')">🔔<span class="badge-dot"></span></span>
+      <span class="header-icon" onclick="showToast('帮助中心')">❓</span>
+      <div class="header-user" onclick="showPage('profile')">
+        <div class="header-avatar">管</div>
+        <span class="header-name">管理员</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 内容区 -->
+  <div class="content">
+    
+    <!-- ==================== 仪表盘页面 ==================== -->
+    <div id="page-dashboard" class="page active">
+      <!-- 统计卡片 -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span class="stat-card-title">今日监拆订单</span>
+            <div class="stat-card-icon blue">🚙</div>
+          </div>
+          <div class="stat-card-value">47</div>
+          <div class="stat-card-trend up">↑ 12.5% 较昨日</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span class="stat-card-title">今日探视订单</span>
+            <div class="stat-card-icon green">🏥</div>
+          </div>
+          <div class="stat-card-value">23</div>
+          <div class="stat-card-trend up">↑ 8.2% 较昨日</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span class="stat-card-title">今日物损订单</span>
+            <div class="stat-card-icon orange">📦</div>
+          </div>
+          <div class="stat-card-value">18</div>
+          <div class="stat-card-trend down">↓ 3.1% 较昨日</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span class="stat-card-title">待处理审批</span>
+            <div class="stat-card-icon purple">✅</div>
+          </div>
+          <div class="stat-card-value">15</div>
+          <div class="stat-card-trend">需要及时处理</div>
+        </div>
+      </div>
+
+      <!-- 快捷操作 -->
+      <div class="quick-actions">
+        <div class="quick-action" onclick="showPage('orders-jianzhai')">
+          <div class="quick-action-icon" style="background:var(--primary-light);color:var(--primary)">➕</div>
+          <span class="quick-action-text">新建监拆订单</span>
+        </div>
+        <div class="quick-action" onclick="showPage('orders-tanshi')">
+          <div class="quick-action-icon" style="background:var(--green-light);color:var(--green)">➕</div>
+          <span class="quick-action-text">新建探视订单</span>
+        </div>
+        <div class="quick-action" onclick="showPage('orders-wusun')">
+          <div class="quick-action-icon" style="background:var(--orange-light);color:var(--orange)">➕</div>
+          <span class="quick-action-text">新建物损订单</span>
+        </div>
+        <div class="quick-action" onclick="showPage('staff')">
+          <div class="quick-action-icon" style="background:var(--purple-light);color:var(--purple)">👷</div>
+          <span class="quick-action-text">人员调度</span>
+        </div>
+      </div>
+
+      <div class="row-2">
+        <!-- 订单趋势图表 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📈 订单趋势（近7日）</span>
+            <select class="filter-select" style="width:auto">
+              <option>全部类型</option>
+              <option>车辆监拆</option>
+              <option>住院探视</option>
+              <option>物损清单</option>
+            </select>
+          </div>
+          <div class="card-body">
+            <div class="chart-placeholder">
+              📊 图表区域（可接入 ECharts）
+            </div>
+          </div>
+        </div>
+
+        <!-- 最新通知 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🔔 最新通知</span>
+            <span class="table-link" onclick="showToast('查看全部')">查看全部</span>
+          </div>
+          <div class="card-body">
+            <div class="notice-list">
+              <div class="notice-item">
+                <div class="notice-icon" style="background:var(--orange-light);color:var(--orange)">!</div>
+                <div class="notice-content">
+                  <div class="notice-title">监拆订单 #JD2026033101 已超时，请及时处理</div>
+                  <div class="notice-time">10分钟前</div>
+                </div>
+              </div>
+              <div class="notice-item">
+                <div class="notice-icon" style="background:var(--green-light);color:var(--green)">✓</div>
+                <div class="notice-content">
+                  <div class="notice-title">探视订单 #TS2026033105 已完成审批</div>
+                  <div class="notice-time">30分钟前</div>
+                </div>
+              </div>
+              <div class="notice-item">
+                <div class="notice-icon" style="background:var(--primary-light);color:var(--primary)">📋</div>
+                <div class="notice-content">
+                  <div class="notice-title">新增修理厂「莱芜顺达汽修」已通过审核</div>
+                  <div class="notice-time">1小时前</div>
+                </div>
+              </div>
+              <div class="notice-item">
+                <div class="notice-icon" style="background:var(--purple-light);color:var(--purple)">👤</div>
+                <div class="notice-content">
+                  <div class="notice-title">监拆员「张三」已绑定新的记录仪设备</div>
+                  <div class="notice-time">2小时前</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 待处理订单 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📋 待处理订单</span>
+          <span class="table-link" onclick="showPage('orders-jianzhai')">查看全部</span>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>订单编号</th>
+                  <th>类型</th>
+                  <th>关联信息</th>
+                  <th>负责人</th>
+                  <th>状态</th>
+                  <th>创建时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="table-link" onclick="showOrderDetail('jianzhai')">JD2026033101</span></td>
+                  <td><span class="tag tag-blue">车辆监拆</span></td>
+                  <td>鲁S·12345 / 莱芜鑫鑫修理厂</td>
+                  <td>屈波</td>
+                  <td><span class="tag tag-orange">待审批</span></td>
+                  <td>2026-03-31 09:30</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="showOrderDetail('jianzhai')">查看</button>
+                    <button class="btn btn-sm btn-outline" onclick="showToast('审批通过')">审批</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="table-link" onclick="showOrderDetail('tanshi')">TS2026033102</span></td>
+                  <td><span class="tag tag-green">住院探视</span></td>
+                  <td>张敏 / 莱芜区人民医院</td>
+                  <td>屈波</td>
+                  <td><span class="tag tag-blue">进行中</span></td>
+                  <td>2026-03-31 10:15</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="showOrderDetail('tanshi')">查看</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="table-link" onclick="showOrderDetail('wusun')">WS2026033103</span></td>
+                  <td><span class="tag tag-orange">物损清单</span></td>
+                  <td>王建国 / 济南历下区</td>
+                  <td>未分配</td>
+                  <td><span class="tag tag-red">待分配</span></td>
+                  <td>2026-03-31 11:00</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="showOrderDetail('wusun')">查看</button>
+                    <button class="btn btn-sm btn-success" onclick="showToast('已分配')">分配</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 车辆监拆订单列表 ==================== -->
+    <div id="page-orders-jianzhai" class="page">
+      <div class="card-header" style="background:white;border-radius:8px 8px 0 0;margin-bottom:0">
+        <span class="card-title">🚙 车辆监拆订单</span>
+        <button class="btn btn-primary" onclick="showModal('modal-new-order')">+ 新建订单</button>
+      </div>
+      
+      <!-- 筛选栏 -->
+      <div class="filter-bar">
+        <div class="filter-item">
+          <span class="filter-label">订单编号</span>
+          <input type="text" class="filter-input" placeholder="输入订单编号">
+        </div>
+        <div class="filter-item">
+          <span class="filter-label">车牌号</span>
+          <input type="text" class="filter-input" placeholder="输入车牌号">
+        </div>
+        <div class="filter-item">
+          <span class="filter-label">状态</span>
+          <select class="filter-select">
+            <option value="">全部状态</option>
+            <option value="pending">待分配</option>
+            <option value="doing">进行中</option>
+            <option value="approve">待审批</option>
+            <option value="done">已完成</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <span class="filter-label">日期范围</span>
+          <input type="date" class="filter-input" style="width:130px">
+          <span style="color:var(--text3)">至</span>
+          <input type="date" class="filter-input" style="width:130px">
+        </div>
+        <button class="btn btn-primary">搜索</button>
+        <button class="btn btn-outline">重置</button>
+      </div>
+
+      <!-- 表格 -->
+      <div class="card" style="margin-top:0;border-radius:0 0 8px 8px">
+        <div class="card-body" style="padding:0">
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox"></th>
+                  <th>订单编号</th>
+                  <th>报案号</th>
+                  <th>车牌号</th>
+                  <th>车辆品牌</th>
+                  <th>修理厂</th>
+                  <th>定损员</th>
+                  <th>监拆员</th>
+                  <th>状态</th>
+                  <th>创建时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td><span class="table-link" onclick="showOrderDetail('jianzhai')">JD2026033101</span></td>
+                  <td>P2026033154319</td>
+                  <td>鲁S·12345</td>
+                  <td>丰田 RAV4</td>
+                  <td>莱芜鑫鑫修理厂</td>
+                  <td>齐鹏泽</td>
+                  <td>屈波</td>
+                  <td><span class="tag tag-orange">待审批</span></td>
+                  <td>2026-03-31 09:30</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="showOrderDetail('jianzhai')">详情</button>
+                    <button class="btn btn-sm btn-outline">编辑</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td><span class="table-link" onclick="showOrderDetail('jianzhai')">JD2026033102</span></td>
+                  <td>P2026033154320</td>
+                  <td>鲁A·88888</td>
+                  <td>大众 迈腾</td>
+                  <td>济南万通汽修</td>
+                  <td>吴艳明</td>
+                  <td>张三</td>
+                  <td><span class="tag tag-blue">进行中</span></td>
+                  <td>2026-03-31 10:15</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="showOrderDetail('jianzhai')">详情</button>
+                    <button class="btn btn-sm btn-outline">编辑</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td><span class="table-link" onclick="showOrderDetail('jianzhai')">JD2026033103</span></td>
+                  <td>P2026033154321</td>
+                  <td>鲁S·66666</td>
+                  <td>本田 CR-V</td>
+                  <td>莱芜顺达汽修</td>
+                  <td>齐鹏泽</td>
+                  <td>—</td>
+                  <td><span class="tag tag-red">待分配</span></td>
+                  <td>2026-03-31 11:00</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="showOrderDetail('jianzhai')">详情</button>
+                    <button class="btn btn-sm btn-success">分配</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td><span class="table-link" onclick="showOrderDetail('jianzhai')">JD2026033104</span></td>
+                  <td>P2026033154315</td>
+                  <td>鲁S·99999</td>
+                  <td>比亚迪 汉</td>
+                  <td>莱芜鑫鑫修理厂</td>
+                  <td>吴艳明</td>
+                  <td>屈波</td>
+                  <td><span class="tag tag-green">已完成</span></td>
+                  <td>2026-03-30 14:20</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="showOrderDetail('jianzhai')">详情</button>
+                    <button class="btn btn-sm btn-outline">导出</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <span class="pagination-info">共 47 条记录，第 1/5 页</span>
+            <button class="pagination-btn" disabled>‹</button>
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+            <button class="pagination-btn">4</button>
+            <button class="pagination-btn">5</button>
+            <button class="pagination-btn">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 住院探视订单列表 ==================== -->
+    <div id="page-orders-tanshi" class="page">
+      <div class="card-header" style="background:white;border-radius:8px 8px 0 0;margin-bottom:0">
+        <span class="card-title">🏥 住院探视订单</span>
+        <button class="btn btn-primary" style="background:var(--green)" onclick="showModal('modal-new-tanshi')">+ 新建探视</button>
+      </div>
+      
+      <div class="filter-bar">
+        <div class="filter-item">
+          <span class="filter-label">订单编号</span>
+          <input type="text" class="filter-input" placeholder="输入订单编号">
+        </div>
+        <div class="filter-item">
+          <span class="filter-label">伤者姓名</span>
+          <input type="text" class="filter-input" placeholder="输入伤者姓名">
+        </div>
+        <div class="filter-item">
+          <span class="filter-label">状态</span>
+          <select class="filter-select">
+            <option value="">全部状态</option>
+            <option value="pending">待分配</option>
+            <option value="doing">进行中</option>
+            <option value="approve">待审批</option>
+            <option value="done">已完成</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="background:var(--green)">搜索</button>
+        <button class="btn btn-outline">重置</button>
+      </div>
+
+      <div class="card" style="margin-top:0;border-radius:0 0 8px 8px">
+        <div class="card-body" style="padding:0">
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox"></th>
+                  <th>订单编号</th>
+                  <th>报案号</th>
+                  <th>伤者姓名</th>
+                  <th>就诊医院</th>
+                  <th>诊断结果</th>
+                  <th>探视员</th>
+                  <th>状态</th>
+                  <th>创建时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td><span class="table-link" onclick="showOrderDetail('tanshi')">TS2026033101</span></td>
+                  <td>P2026033154322</td>
+                  <td>张敏</td>
+                  <td>莱芜区人民医院</td>
+                  <td>左腿骨折</td>
+                  <td>屈波</td>
+                  <td><span class="tag tag-blue">进行中</span></td>
+                  <td>2026-03-31 09:30</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="showOrderDetail('tanshi')">详情</button>
+                    <button class="btn btn-sm btn-outline">编辑</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td><span class="table-link" onclick="showOrderDetail('tanshi')">TS2026033102</span></td>
+                  <td>P2026033154323</td>
+                  <td>刘洋</td>
+                  <td>济南市第三人民医院</td>
+                  <td>轻微脑震荡</td>
+                  <td>屈波</td>
+                  <td><span class="tag tag-orange">待审批</span></td>
+                  <td>2026-03-31 10:15</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="showOrderDetail('tanshi')">详情</button>
+                    <button class="btn btn-sm btn-outline" onclick="showToast('审批通过')">审批</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td><span class="table-link" onclick="showOrderDetail('tanshi')">TS2026033103</span></td>
+                  <td>P2026033154324</td>
+                  <td>王芳</td>
+                  <td>泰安市中心医院</td>
+                  <td>肋骨骨折</td>
+                  <td>—</td>
+                  <td><span class="tag tag-red">待分配</span></td>
+                  <td>2026-03-31 11:00</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="showOrderDetail('tanshi')">详情</button>
+                    <button class="btn btn-sm btn-success">分配</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <span class="pagination-info">共 23 条记录，第 1/3 页</span>
+            <button class="pagination-btn" disabled>‹</button>
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+            <button class="pagination-btn">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 物损清单订单列表 ==================== -->
+    <div id="page-orders-wusun" class="page">
+      <div class="card-header" style="background:white;border-radius:8px 8px 0 0;margin-bottom:0">
+        <span class="card-title">📦 物损清单订单</span>
+        <button class="btn btn-primary" style="background:var(--orange)" onclick="showModal('modal-new-wusun')">+ 新建物损</button>
+      </div>
+      
+      <div class="filter-bar">
+        <div class="filter-item">
+          <span class="filter-label">订单编号</span>
+          <input type="text" class="filter-input" placeholder="输入订单编号">
+        </div>
+        <div class="filter-item">
+          <span class="filter-label">当事人</span>
+          <input type="text" class="filter-input" placeholder="输入当事人姓名">
+        </div>
+        <div class="filter-item">
+          <span class="filter-label">状态</span>
+          <select class="filter-select">
+            <option value="">全部状态</option>
+            <option value="pending">待分配</option>
+            <option value="doing">进行中</option>
+            <option value="approve">待审批</option>
+            <option value="fukan">待复勘</option>
+            <option value="done">已完成</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="background:var(--orange)">搜索</button>
+        <button class="btn btn-outline">重置</button>
+      </div>
+
+      <div class="card" style="margin-top:0;border-radius:0 0 8px 8px">
+        <div class="card-body" style="padding:0">
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox"></th>
+                  <th>订单编号</th>
+                  <th>报案号</th>
+                  <th>当事人</th>
+                  <th>物损类型</th>
+                  <th>预估金额</th>
+                  <th>出险地点</th>
+                  <th>勘察员</th>
+                  <th>状态</th>
+                  <th>创建时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td><span class="table-link" onclick="showOrderDetail('wusun')">WS2026033101</span></td>
+                  <td>P2026033154325</td>
+                  <td>王建国</td>
+                  <td>财产损失</td>
+                  <td style="color:var(--orange);font-weight:600">¥12,500</td>
+                  <td>济南市历下区XX路</td>
+                  <td>—</td>
+                  <td><span class="tag tag-red">待分配</span></td>
+                  <td>2026-03-31 09:15</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="showOrderDetail('wusun')">详情</button>
+                    <button class="btn btn-sm btn-success">分配</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td><span class="table-link" onclick="showOrderDetail('wusun')">WS2026033102</span></td>
+                  <td>P2026033154326</td>
+                  <td>李秀梅</td>
+                  <td>设备损坏</td>
+                  <td style="color:var(--orange);font-weight:600">¥8,300</td>
+                  <td>莱芜区鹏泉大道XX号</td>
+                  <td>屈波</td>
+                  <td><span class="tag tag-blue">进行中</span></td>
+                  <td>2026-03-30 14:22</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="showOrderDetail('wusun')">详情</button>
+                    <button class="btn btn-sm btn-outline">编辑</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td><span class="table-link" onclick="showOrderDetail('wusun')">WS2026033003</span></td>
+                  <td>P2026033054318</td>
+                  <td>赵志强</td>
+                  <td>房屋损坏</td>
+                  <td style="color:var(--orange);font-weight:600">¥35,000</td>
+                  <td>泰安市泰山区XX小区</td>
+                  <td>张三</td>
+                  <td><span class="tag tag-purple" style="background:var(--purple-light);color:var(--purple)">待复勘</span></td>
+                  <td>2026-03-30 17:45</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="showOrderDetail('wusun')">详情</button>
+                    <button class="btn btn-sm btn-outline">复勘</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <span class="pagination-info">共 18 条记录，第 1/2 页</span>
+            <button class="pagination-btn" disabled>‹</button>
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 复勘管理 ==================== -->
+    <div id="page-orders-fukan" class="page">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🔍 复勘任务列表</span>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>原订单编号</th>
+                  <th>类型</th>
+                  <th>关联信息</th>
+                  <th>复勘原因</th>
+                  <th>复勘员</th>
+                  <th>状态</th>
+                  <th>创建时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="table-link">JD2026032805</span></td>
+                  <td><span class="tag tag-blue">车辆监拆</span></td>
+                  <td>鲁S·12345 / 莱芜鑫鑫修理厂</td>
+                  <td>定损金额存疑</td>
+                  <td>李四</td>
+                  <td><span class="tag tag-orange">进行中</span></td>
+                  <td>2026-03-30 10:00</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary">详情</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="table-link">WS2026033003</span></td>
+                  <td><span class="tag tag-orange">物损清单</span></td>
+                  <td>赵志强 / 泰安市泰山区</td>
+                  <td>物损清单需核实</td>
+                  <td>—</td>
+                  <td><span class="tag tag-red">待分配</span></td>
+                  <td>2026-03-30 17:45</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary">详情</button>
+                    <button class="btn btn-sm btn-success">分配</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 人员管理 ==================== -->
+    <div id="page-staff" class="page">
+      <div class="card-header" style="background:white;border-radius:8px 8px 0 0;margin-bottom:0">
+        <span class="card-title">👷 工作人员管理</span>
+        <button class="btn btn-primary" onclick="showModal('modal-new-staff')">+ 添加人员</button>
+      </div>
+      <div class="filter-bar">
+        <div class="filter-item">
+          <span class="filter-label">姓名</span>
+          <input type="text" class="filter-input" placeholder="输入姓名">
+        </div>
+        <div class="filter-item">
+          <span class="filter-label">角色</span>
+          <select class="filter-select">
+            <option value="">全部角色</option>
+            <option value="jianzhai">监拆员</option>
+            <option value="tanshi">探视员</option>
+            <option value="wusun">勘察员</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <span class="filter-label">状态</span>
+          <select class="filter-select">
+            <option value="">全部状态</option>
+            <option value="active">在职</option>
+            <option value="inactive">离职</option>
+          </select>
+        </div>
+        <button class="btn btn-primary">搜索</button>
+      </div>
+      <div class="card" style="margin-top:0;border-radius:0 0 8px 8px">
+        <div class="card-body" style="padding:0">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>工号</th>
+                <th>姓名</th>
+                <th>角色</th>
+                <th>联系电话</th>
+                <th>负责区域</th>
+                <th>绑定设备</th>
+                <th>本月完成</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>JZ001</td>
+                <td>屈波</td>
+                <td><span class="tag tag-blue">监拆员</span></td>
+                <td>138****5678</td>
+                <td>莱芜区</td>
+                <td>记录仪 #001</td>
+                <td>21单</td>
+                <td><span class="tag tag-green">在职</span></td>
+                <td>
+                  <button class="btn btn-sm btn-outline">编辑</button>
+                  <button class="btn btn-sm btn-danger">禁用</button>
+                </td>
+              </tr>
+              <tr>
+                <td>JZ002</td>
+                <td>张三</td>
+                <td><span class="tag tag-blue">监拆员</span></td>
+                <td>139****1234</td>
+                <td>历城区</td>
+                <td>记录仪 #002</td>
+                <td>18单</td>
+                <td><span class="tag tag-green">在职</span></td>
+                <td>
+                  <button class="btn btn-sm btn-outline">编辑</button>
+                  <button class="btn btn-sm btn-danger">禁用</button>
+                </td>
+              </tr>
+              <tr>
+                <td>TS001</td>
+                <td>李四</td>
+                <td><span class="tag tag-green">探视员</span></td>
+                <td>137****5678</td>
+                <td>莱芜区</td>
+                <td>记录仪 #003</td>
+                <td>9单</td>
+                <td><span class="tag tag-green">在职</span></td>
+                <td>
+                  <button class="btn btn-sm btn-outline">编辑</button>
+                  <button class="btn btn-sm btn-danger">禁用</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 审批人员 ==================== -->
+    <div id="page-approvers" class="page">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">✅ 审批人员管理</span>
+          <button class="btn btn-primary">+ 添加审批人</button>
+        </div>
+        <div class="card-body" style="padding:0">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>工号</th>
+                <th>姓名</th>
+                <th>职位</th>
+                <th>所属公司</th>
+                <th>联系电话</th>
+                <th>审批权限</th>
+                <th>本月审批</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>SP001</td>
+                <td>齐鹏泽</td>
+                <td>定损主管</td>
+                <td>太平洋财险济南分公司</td>
+                <td>135****1234</td>
+                <td>监拆/探视/物损</td>
+                <td>45单</td>
+                <td><span class="tag tag-green">正常</span></td>
+                <td>
+                  <button class="btn btn-sm btn-outline">编辑</button>
+                </td>
+              </tr>
+              <tr>
+                <td>SP002</td>
+                <td>吴艳明</td>
+                <td>核赔员</td>
+                <td>太平洋财险莱芜支公司</td>
+                <td>136****5678</td>
+                <td>监拆/物损</td>
+                <td>38单</td>
+                <td><span class="tag tag-green">正常</span></td>
+                <td>
+                  <button class="btn btn-sm btn-outline">编辑</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 保险公司管理 ==================== -->
+    <div id="page-insurance" class="page">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🏢 保险公司管理</span>
+          <button class="btn btn-primary">+ 添加公司</button>
+        </div>
+        <div class="card-body" style="padding:0">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>公司编码</th>
+                <th>公司名称</th>
+                <th>联系人</th>
+                <th>联系电话</th>
+                <th>合作区域</th>
+                <th>本月订单</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>CPIC</td>
+                <td>太平洋财产保险</td>
+                <td>王经理</td>
+                <td>0531-88888888</td>
+                <td>山东省</td>
+                <td>68单</td>
+                <td><span class="tag tag-green">合作中</span></td>
+                <td>
+                  <button class="btn btn-sm btn-outline">编辑</button>
+                  <button class="btn btn-sm btn-outline">详情</button>
+                </td>
+              </tr>
+              <tr>
+                <td>PICC</td>
+                <td>中国人民保险</td>
+                <td>李经理</td>
+                <td>0531-66666666</td>
+                <td>济南市</td>
+                <td>42单</td>
+                <td><span class="tag tag-green">合作中</span></td>
+                <td>
+                  <button class="btn btn-sm btn-outline">编辑</button>
+                  <button class="btn btn-sm btn-outline">详情</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 修理厂管理 ==================== -->
+    <div id="page-garage" class="page">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🔧 修理厂管理</span>
+          <button class="btn btn-primary">+ 添加修理厂</button>
+        </div>
+        <div class="card-body" style="padding:0">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>修理厂编码</th>
+                <th>修理厂名称</th>
+                <th>负责人</th>
+                <th>联系电话</th>
+                <th>地址</th>
+                <th>本月订单</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>LC001</td>
+                <td>莱芜鑫鑫修理厂</td>
+                <td>赵老板</td>
+                <td>138****8888</td>
+                <td>莱芜区鹏泉街道XX路</td>
+                <td>23单</td>
+                <td><span class="tag tag-green">正常</span></td>
+                <td>
+                  <button class="btn btn-sm btn-outline">编辑</button>
+                </td>
+              </tr>
+              <tr>
+                <td>LC002</td>
+                <td>莱芜顺达汽修</td>
+                <td>钱老板</td>
+                <td>139****6666</td>
+                <td>莱芜区凤城街道XX路</td>
+                <td>15单</td>
+                <td><span class="tag tag-green">正常</span></td>
+                <td>
+                  <button class="btn btn-sm btn-outline">编辑</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 统计报表 ==================== -->
+    <div id="page-stats" class="page">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span class="stat-card-title">本月总订单</span>
+            <div class="stat-card-icon blue">📊</div>
+          </div>
+          <div class="stat-card-value">88</div>
+          <div class="stat-card-trend up">↑ 15.3% 较上月</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span class="stat-card-title">本月完成率</span>
+            <div class="stat-card-icon green">✓</div>
+          </div>
+          <div class="stat-card-value">96.2%</div>
+          <div class="stat-card-trend up">↑ 2.1% 较上月</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span class="stat-card-title">平均处理时长</span>
+            <div class="stat-card-icon orange">⏱</div>
+          </div>
+          <div class="stat-card-value">2.3h</div>
+          <div class="stat-card-trend up">↓ 0.5h 较上月</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span class="stat-card-title">客户满意度</span>
+            <div class="stat-card-icon purple">⭐</div>
+          </div>
+          <div class="stat-card-value">98.5%</div>
+          <div class="stat-card-trend up">↑ 1.2% 较上月</div>
+        </div>
+      </div>
+
+      <div class="row-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📈 订单类型分布</span>
+          </div>
+          <div class="card-body">
+            <div class="chart-placeholder">📊 饼图（可接入 ECharts）</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📊 人员效率排名</span>
+          </div>
+          <div class="card-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>排名</th>
+                  <th>姓名</th>
+                  <th>角色</th>
+                  <th>完成单数</th>
+                  <th>平均时长</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>🥇 1</td><td>屈波</td><td>监拆员</td><td>21</td><td>1.8h</td></tr>
+                <tr><td>🥈 2</td><td>张三</td><td>监拆员</td><td>18</td><td>2.1h</td></tr>
+                <tr><td>🥉 3</td><td>李四</td><td>探视员</td><td>9</td><td>2.5h</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📋 月度明细报表</span>
+          <button class="btn btn-primary btn-sm">📥 导出Excel</button>
+        </div>
+        <div class="card-body" style="padding:0">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>月份</th>
+                <th>监拆订单</th>
+                <th>探视订单</th>
+                <th>物损订单</th>
+                <th>完成率</th>
+                <th>平均时长</th>
+                <th>复勘率</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2026年3月</td>
+                <td>47</td>
+                <td>23</td>
+                <td>18</td>
+                <td>96.2%</td>
+                <td>2.3h</td>
+                <td>8.5%</td>
+              </tr>
+              <tr>
+                <td>2026年2月</td>
+                <td>38</td>
+                <td>19</td>
+                <td>15</td>
+                <td>94.1%</td>
+                <td>2.8h</td>
+                <td>10.2%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 数据导出 ==================== -->
+    <div id="page-export" class="page">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📥 数据导出</span>
+        </div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">导出类型</label>
+              <select class="form-control">
+                <option>订单数据</option>
+                <option>人员数据</option>
+                <option>客户数据</option>
+                <option>统计数据</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">文件格式</label>
+              <select class="form-control">
+                <option>Excel (.xlsx)</option>
+                <option>CSV</option>
+                <option>PDF</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">开始日期</label>
+              <input type="date" class="form-control">
+            </div>
+            <div class="form-group">
+              <label class="form-label">结束日期</label>
+              <input type="date" class="form-control">
+            </div>
+          </div>
+          <div class="action-bar">
+            <button class="btn btn-primary" onclick="showToast('导出任务已创建')">📥 生成导出文件</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📋 导出历史</span>
+        </div>
+        <div class="card-body" style="padding:0">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>导出时间</th>
+                <th>导出类型</th>
+                <th>数据范围</th>
+                <th>文件大小</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2026-03-30 15:30</td>
+                <td>订单数据</td>
+                <td>2026年3月</td>
+                <td>2.3 MB</td>
+                <td><span class="tag tag-green">已完成</span></td>
+                <td><button class="btn btn-sm btn-outline">下载</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 系统设置 ==================== -->
+    <div id="page-settings" class="page">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">⚙️ 系统配置</span>
+        </div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">系统名称</label>
+              <input type="text" class="form-control" value="车检监拆复勘系统">
+            </div>
+            <div class="form-group">
+              <label class="form-label">联系电话</label>
+              <input type="text" class="form-control" value="400-888-8888">
+            </div>
+            <div class="form-group">
+              <label class="form-label">订单超时时间（小时）</label>
+              <input type="number" class="form-control" value="24">
+            </div>
+            <div class="form-group">
+              <label class="form-label">自动分配开关</label>
+              <select class="form-control">
+                <option value="1">开启</option>
+                <option value="0">关闭</option>
+              </select>
+            </div>
+          </div>
+          <div class="action-bar">
+            <button class="btn btn-primary" onclick="showToast('配置已保存')">保存配置</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 操作日志 ==================== -->
+    <div id="page-logs" class="page">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📋 操作日志</span>
+        </div>
+        <div class="card-body" style="padding:0">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>时间</th>
+                <th>操作人</th>
+                <th>操作类型</th>
+                <th>操作内容</th>
+                <th>IP地址</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2026-03-31 15:30:22</td>
+                <td>管理员</td>
+                <td><span class="tag tag-blue">新增</span></td>
+                <td>新增监拆订单 JD2026033101</td>
+                <td>192.168.1.100</td>
+              </tr>
+              <tr>
+                <td>2026-03-31 14:20:15</td>
+                <td>齐鹏泽</td>
+                <td><span class="tag tag-green">审批</span></td>
+                <td>审批通过探视订单 TS2026033102</td>
+                <td>192.168.1.101</td>
+              </tr>
+              <tr>
+                <td>2026-03-31 13:10:08</td>
+                <td>屈波</td>
+                <td><span class="tag tag-orange">完成</span></td>
+                <td>完成监拆任务 JD2026033100</td>
+                <td>192.168.1.102</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 订单详情页 ==================== -->
+    <div id="page-order-detail" class="page">
+      <div class="detail-header">
+        <div class="detail-title">订单详情：<span id="detail-order-id">JD2026033101</span></div>
+        <div class="detail-meta">
+          <span>类型：<span class="tag tag-blue" id="detail-order-type">车辆监拆</span></span>
+          <span>状态：<span class="tag tag-orange" id="detail-order-status">待审批</span></span>
+          <span>创建时间：2026-03-31 09:30:00</span>
+        </div>
+      </div>
+
+      <!-- 基本信息 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📋 基本信息</span>
+        </div>
+        <div class="card-body">
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-item-label">报案号</span>
+              <span class="detail-item-value">P2026033154319</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">车牌号</span>
+              <span class="detail-item-value">鲁S·12345</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">车辆品牌</span>
+              <span class="detail-item-value">丰田 RAV4</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">车辆型号</span>
+              <span class="detail-item-value">2024款 2.0L CVT</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">修理厂</span>
+              <span class="detail-item-value">莱芜鑫鑫修理厂</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">定损员</span>
+              <span class="detail-item-value">齐鹏泽</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">监拆员</span>
+              <span class="detail-item-value">屈波</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-item-label">保险公司</span>
+              <span class="detail-item-value">太平洋财险</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 拆解部位 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🔧 拆解部位记录</span>
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>部位名称</th>
+                <th>是否拆解</th>
+                <th>是否更换</th>
+                <th>预估金额</th>
+                <th>照片</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>前保险杠</td>
+                <td><span class="tag tag-green">是</span></td>
+                <td><span class="tag tag-green">是</span></td>
+                <td>¥2,500</td>
+                <td><button class="btn btn-sm btn-outline">查看 (3张)</button></td>
+              </tr>
+              <tr>
+                <td>左前大灯</td>
+                <td><span class="tag tag-green">是</span></td>
+                <td><span class="tag tag-gray">否</span></td>
+                <td>¥0</td>
+                <td><button class="btn btn-sm btn-outline">查看 (2张)</button></td>
+              </tr>
+              <tr>
+                <td>发动机舱</td>
+                <td><span class="tag tag-green">是</span></td>
+                <td><span class="tag tag-gray">否</span></td>
+                <td>¥0</td>
+                <td><button class="btn btn-sm btn-outline">查看 (5张)</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 照片资料 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📷 照片资料</span>
+          <span style="font-size:13px;color:var(--text3)">共 24 张</span>
+        </div>
+        <div class="card-body">
+          <div class="photo-grid">
+            <div class="photo-item"><div class="photo-item-label">车辆外观</div></div>
+            <div class="photo-item"><div class="photo-item-label">车架号</div></div>
+            <div class="photo-item"><div class="photo-item-label">损伤部位</div></div>
+            <div class="photo-item"><div class="photo-item-label">拆解过程</div></div>
+            <div class="photo-item"><div class="photo-item-label">拆解过程</div></div>
+            <div class="photo-item"><div class="photo-item-label">配件拍照</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 操作记录 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📝 操作记录</span>
+        </div>
+        <div class="card-body" style="padding:0">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>时间</th>
+                <th>操作人</th>
+                <th>操作内容</th>
+                <th>备注</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2026-03-31 11:30</td>
+                <td>屈波</td>
+                <td>提交监拆报告</td>
+                <td>已完成所有拆解拍照</td>
+              </tr>
+              <tr>
+                <td>2026-03-31 10:15</td>
+                <td>屈波</td>
+                <td>开始监拆作业</td>
+                <td>已到达修理厂</td>
+              </tr>
+              <tr>
+                <td>2026-03-31 09:35</td>
+                <td>屈波</td>
+                <td>接单</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>2026-03-31 09:30</td>
+                <td>齐鹏泽</td>
+                <td>发布订单</td>
+                <td>—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="action-bar">
+        <button class="btn btn-outline" onclick="showPage('orders-jianzhai')">返回列表</button>
+        <button class="btn btn-primary" onclick="showToast('审批通过')">审批通过</button>
+        <button class="btn btn-danger" onclick="showToast('已驳回')">驳回</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+</div>
+
+<!-- 新建订单弹窗 -->
+<div id="modal-new-order" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">新建监拆订单</span>
+      <span class="modal-close" onclick="closeModal('modal-new-order')">×</span>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label required">报案号</label>
+          <input type="text" class="form-control" placeholder="请输入报案号">
+        </div>
+        <div class="form-group">
+          <label class="form-label required">保险公司</label>
+          <select class="form-control">
+            <option>请选择保险公司</option>
+            <option>太平洋财险</option>
+            <option>人保财险</option>
+            <option>平安财险</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label required">车牌号</label>
+          <input type="text" class="form-control" placeholder="请输入车牌号">
+        </div>
+        <div class="form-group">
+          <label class="form-label required">车辆品牌</label>
+          <input type="text" class="form-control" placeholder="请输入车辆品牌">
+        </div>
+        <div class="form-group">
+          <label class="form-label required">修理厂</label>
+          <select class="form-control">
+            <option>请选择修理厂</option>
+            <option>莱芜鑫鑫修理厂</option>
+            <option>莱芜顺达汽修</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label required">定损员</label>
+          <select class="form-control">
+            <option>请选择定损员</option>
+            <option>齐鹏泽</option>
+            <option>吴艳明</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">备注</label>
+          <textarea class="form-control" placeholder="请输入备注信息"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-new-order')">取消</button>
+      <button class="btn btn-primary" onclick="showToast('订单已创建');closeModal('modal-new-order')">创建</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast 通知 -->
+<div id="toast" class="toast"></div>
+
+<script>
+// 页面切换
+let currentPage = 'dashboard';
+const pageNames = {
+  'dashboard': '数据仪表盘',
+  'orders-jianzhai': '车辆监拆',
+  'orders-tanshi': '住院探视',
+  'orders-wusun': '物损清单',
+  'orders-fukan': '复勘管理',
+  'staff': '人员管理',
+  'approvers': '审批人员',
+  'insurance': '保险公司',
+  'garage': '修理厂',
+  'stats': '统计报表',
+  'export': '数据导出',
+  'settings': '系统设置',
+  'logs': '操作日志',
+  'order-detail': '订单详情'
+};
+
+function showPage(pageId) {
+  // 隐藏所有页面
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  // 显示目标页面
+  const targetPage = document.getElementById('page-' + pageId);
+  if (targetPage) {
+    targetPage.classList.add('active');
+    currentPage = pageId;
+  }
+  // 更新面包屑
+  const breadcrumb = document.getElementById('breadcrumb-current');
+  if (breadcrumb && pageNames[pageId]) {
+    breadcrumb.textContent = pageNames[pageId];
+  }
+  // 更新菜单激活状态
+  document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+  // 找到对应菜单项并激活
+  const menuItems = document.querySelectorAll('.menu-item');
+  menuItems.forEach(item => {
+    if (item.getAttribute('onclick') && item.getAttribute('onclick').includes(pageId)) {
+      item.classList.add('active');
+    }
+  });
+}
+
+// 显示订单详情
+function showOrderDetail(type) {
+  showPage('order-detail');
+}
+
+// 子菜单展开
+function toggleSubMenu(el) {
+  const sub = el.nextElementSibling;
+  if (sub && sub.classList.contains('menu-sub')) {
+    sub.classList.toggle('open');
+  }
+}
+
+// 弹窗
+function showModal(id) {
+  document.getElementById(id).classList.add('show');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+// Toast 通知
+let toastTimer = null;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.style.display = 'none'; }, 2500);
+}
+</script>
+</body>
+</html>
