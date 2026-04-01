@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>英语学习应用 - 交互原型</title>
+  <link rel="stylesheet" href="styles/design-system.css">
+  <link rel="stylesheet" href="styles/prototype.css">
+</head>
+<body>
+  <!-- 设备框架 -->
+  <div class="device-frame">
+    <!-- 状态栏 -->
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <div class="status-icons">
+        <span>📶</span>
+        <span>📡</span>
+        <span>🔋</span>
+      </div>
+    </div>
+
+    <!-- 应用头部 -->
+    <header class="app-header">
+      <div class="header-content">
+        <div class="logo">
+          <span class="logo-icon">📚</span>
+          <span class="logo-text">英语学习</span>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn" id="themeToggle" aria-label="切换主题">🌙</button>
+          <button class="icon-btn" aria-label="通知">🔔</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="app-main">
+      <!-- 页面容器 -->
+      <div id="pageContainer">
+        <!-- 首页 -->
+        <div class="page active" id="page-home">
+          <div class="page-content">
+            <!-- 连续学习徽章 -->
+            <div class="streak-section">
+              <div class="streak-badge">
+                <span class="streak-icon">🔥</span>
+                <div class="streak-info">
+                  <span class="streak-count">7</span>
+                  <span class="streak-label">连续学习天数</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 统计卡片网格 -->
+            <div class="stats-grid">
+              <div class="stats-card primary">
+                <div class="stats-icon">📖</div>
+                <div class="stats-value">1,234</div>
+                <div class="stats-label">已学单词</div>
+                <div class="stats-trend up">
+                  <span>↑</span> +45 本周
+                </div>
+              </div>
+              <div class="stats-card success">
+                <div class="stats-icon">🎯</div>
+                <div class="stats-value">85%</div>
+                <div class="stats-label">正确率</div>
+              </div>
+              <div class="stats-card warning">
+                <div class="stats-icon">⏰</div>
+                <div class="stats-value">23</div>
+                <div class="stats-label">待复习</div>
+              </div>
+            </div>
+
+            <!-- 快速操作 -->
+            <div class="quick-actions">
+              <h3 class="section-title">快速开始</h3>
+              <div class="action-grid">
+                <button class="action-btn primary" onclick="navigateTo('learn')">
+                  <span class="action-icon">🆕</span>
+                  <span class="action-text">新词学习</span>
+                  <span class="action-badge">5个待学</span>
+                </button>
+                <button class="action-btn secondary" onclick="navigateTo('review')">
+                  <span class="action-icon">🔄</span>
+                  <span class="action-text">今日复习</span>
+                  <span class="action-badge">23个待复习</span>
+                </button>
+                <button class="action-btn accent" onclick="navigateTo('test')">
+                  <span class="action-icon">📝</span>
+                  <span class="action-text">模拟测试</span>
+                </button>
+                <button class="action-btn" onclick="navigateTo('plan')">
+                  <span class="action-icon">📅</span>
+                  <span class="action-text">考试计划</span>
+                  <span class="action-badge">75天</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 考试倒计时 -->
+            <div class="exam-card">
+              <div class="exam-header">
+                <span class="exam-icon">🎯</span>
+                <div class="exam-info">
+                  <h3 class="exam-name">四六级考试</h3>
+                  <p class="exam-date">2026年6月15日</p>
+                </div>
+              </div>
+              <div class="exam-countdown">
+                <div class="countdown-item">
+                  <span class="countdown-value">75</span>
+                  <span class="countdown-label">天</span>
+                </div>
+              </div>
+              <div class="exam-progress">
+                <div class="progress-info">
+                  <span>词汇掌握</span>
+                  <span>2450/6000</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar" style="width: 40.8%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 学习页面 -->
+        <div class="page" id="page-learn">
+          <div class="page-content">
+            <div class="page-header">
+              <button class="back-btn" onclick="navigateTo('home')">←</button>
+              <h1 class="page-title">新词学习</h1>
+              <div class="study-progress">
+                <span class="current">3</span>
+                <span class="separator">/</span>
+                <span class="total">10</span>
+              </div>
+            </div>
+
+            <!-- 单词卡片 -->
+            <div class="word-card-container">
+              <div class="word-card" id="wordCard">
+                <div class="word-card-front">
+                  <div class="word-header">
+                    <div class="word-main">
+                      <h2 class="word">ephemeral</h2>
+                      <p class="phonetic">/ɪˈfem(ə)rəl/</p>
+                    </div>
+                    <button class="audio-btn" onclick="playAudio()">
+                      <span class="audio-icon">🔊</span>
+                    </button>
+                  </div>
+                  <div class="word-hint">
+                    <p>💡 点击卡片查看释义</p>
+                  </div>
+                </div>
+                <div class="word-card-back">
+                  <div class="word-meaning">
+                    <span class="part-of-speech">adj.</span>
+                    <span class="definition">短暂的，瞬息的</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 掌握程度评分 -->
+            <div class="mastery-section">
+              <p class="mastery-title">掌握程度（点击选择）</p>
+              <div class="mastery-options">
+                <button class="mastery-btn" data-level="1" onclick="nextWord()">
+                  <span class="mastery-emoji">😵</span>
+                  <span class="mastery-text">完全忘记</span>
+                </button>
+                <button class="mastery-btn" data-level="2" onclick="nextWord()">
+                  <span class="mastery-emoji">😕</span>
+                  <span class="mastery-text">不太熟</span>
+                </button>
+                <button class="mastery-btn" data-level="3" onclick="nextWord()">
+                  <span class="mastery-emoji">😐</span>
+                  <span class="mastery-text">一般</span>
+                </button>
+                <button class="mastery-btn" data-level="4" onclick="nextWord()">
+                  <span class="mastery-emoji">🙂</span>
+                  <span class="mastery-text">基本掌握</span>
+                </button>
+                <button class="mastery-btn active" data-level="5" onclick="nextWord()">
+                  <span class="mastery-emoji">😊</span>
+                  <span class="mastery-text">完全掌握</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 测试页面 -->
+        <div class="page" id="page-test">
+          <div class="page-content">
+            <div class="page-header">
+              <button class="back-btn" onclick="navigateTo('home')">←</button>
+              <h1 class="page-title">选择题测试</h1>
+              <div class="test-progress">
+                <span class="current">3</span>
+                <span class="separator">/</span>
+                <span class="total">10</span>
+              </div>
+            </div>
+
+            <!-- 测试题目 -->
+            <div class="test-question">
+              <p class="question-text">请选择正确的中文释义:</p>
+              <h2 class="question-word">ephemeral</h2>
+            </div>
+
+            <!-- 选项列表 -->
+            <div class="test-options">
+              <button class="test-option" data-option="A">
+                <span class="option-letter">A</span>
+                <span class="option-text">永恒的</span>
+              </button>
+              <button class="test-option correct" data-option="B">
+                <span class="option-letter">B</span>
+                <span class="option-text">短暂的</span>
+                <span class="option-check">✓</span>
+              </button>
+              <button class="test-option wrong" data-option="C">
+                <span class="option-letter">C</span>
+                <span class="option-text">巨大的</span>
+                <span class="option-cross">✗</span>
+              </button>
+              <button class="test-option" data-option="D">
+                <span class="option-letter">D</span>
+                <span class="option-text">微小的</span>
+              </button>
+            </div>
+
+            <!-- 答案解析 -->
+            <div class="answer-explanation">
+              <div class="explanation-header">
+                <span class="explanation-icon">💡</span>
+                <span class="explanation-title">答案解析</span>
+              </div>
+              <p class="explanation-text">
+                ephemeral 源自希腊语，意为"只持续一天"。<br>
+                常见搭配：ephemeral nature（短暂的本性）
+              </p>
+            </div>
+
+            <!-- 操作按钮 -->
+            <div class="action-bar">
+              <button class="btn btn-ghost">收藏</button>
+              <button class="btn btn-primary" onclick="nextQuestion()">下一题 →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 复习页面 -->
+        <div class="page" id="page-review">
+          <div class="page-content">
+            <div class="page-header">
+              <button class="back-btn" onclick="navigateTo('home')">←</button>
+              <h1 class="page-title">艾宾浩斯复习</h1>
+            </div>
+
+            <!-- 复习统计 -->
+            <div class="review-stats">
+              <div class="review-stat-item">
+                <span class="stat-value">23</span>
+                <span class="stat-label">今日待复习</span>
+              </div>
+              <div class="review-stat-item">
+                <span class="stat-value">8</span>
+                <span class="stat-label">已完成</span>
+              </div>
+              <div class="review-stat-item">
+                <span class="stat-value">15</span>
+                <span class="stat-label">剩余</span>
+              </div>
+            </div>
+
+            <!-- 复习列表 -->
+            <div class="review-list">
+              <h3 class="section-title">复习队列</h3>
+              <div class="review-item completed">
+                <div class="review-word">
+                  <span class="word-text">abandon</span>
+                  <span class="word-phonetic">/əˈbændən/</span>
+                </div>
+                <div class="review-status">
+                  <span class="status-badge success">已掌握</span>
+                  <span class="review-level">第5次复习</span>
+                </div>
+              </div>
+              <div class="review-item completed">
+                <div class="review-word">
+                  <span class="word-text">ability</span>
+                  <span class="word-phonetic">/əˈbɪləti/</span>
+                </div>
+                <div class="review-status">
+                  <span class="status-badge success">已掌握</span>
+                  <span class="review-level">第3次复习</span>
+                </div>
+              </div>
+              <div class="review-item current">
+                <div class="review-word">
+                  <span class="word-text">ephemeral</span>
+                  <span class="word-phonetic">/ɪˈfem(ə)rəl/</span>
+                </div>
+                <div class="review-status">
+                  <span class="status-badge warning">复习中</span>
+                  <span class="review-level">第2次复习</span>
+                </div>
+              </div>
+              <div class="review-item pending">
+                <div class="review-word">
+                  <span class="word-text">eternal</span>
+                  <span class="word-phonetic">/ɪˈtɜːnl/</span>
+                </div>
+                <div class="review-status">
+                  <span class="status-badge">待复习</span>
+                  <span class="review-level">第1次复习</span>
+                </div>
+              </div>
+              <div class="review-item pending">
+                <div class="review-word">
+                  <span class="word-text">ethereal</span>
+                  <span class="word-phonetic">/ɪˈθɪəriəl/</span>
+                </div>
+                <div class="review-status">
+                  <span class="status-badge">待复习</span>
+                  <span class="review-level">第1次复习</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 开始复习按钮 -->
+            <div class="action-bar">
+              <button class="btn btn-primary btn-full" onclick="startReview()">
+                开始复习 (15个单词)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 考试计划页面 -->
+        <div class="page" id="page-plan">
+          <div class="page-content">
+            <div class="page-header">
+              <button class="back-btn" onclick="navigateTo('home')">←</button>
+              <h1 class="page-title">考试计划</h1>
+            </div>
+
+            <!-- 考试倒计时卡片 -->
+            <div class="exam-countdown-card">
+              <div class="countdown-header">
+                <span class="countdown-icon">🎯</span>
+                <div class="countdown-info">
+                  <h2 class="countdown-title">2026年6月15日 - 四六级考试</h2>
+                  <p class="countdown-subtitle">距离考试还有</p>
+                </div>
+              </div>
+              <div class="countdown-display">
+                <div class="countdown-number">75</div>
+                <div class="countdown-unit">天</div>
+              </div>
+              <div class="exam-vocab-progress">
+                <div class="vocab-info">
+                  <span>已掌握词汇</span>
+                  <span class="vocab-count">2450 / 6000</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar" style="width: 40.8%;"></div>
+                </div>
+                <div class="vocab-percent">40.8%</div>
+              </div>
+            </div>
+
+            <!-- 每日目标设置 -->
+            <div class="daily-goals-card">
+              <h3 class="card-title">⚙️ 每日学习目标</h3>
+              <div class="goal-item">
+                <label class="goal-label">新词学习数量</label>
+                <div class="goal-slider">
+                  <input type="range" min="20" max="100" value="80" class="slider">
+                  <span class="goal-value">80个/天</span>
+                </div>
+              </div>
+              <div class="goal-item">
+                <label class="goal-label">复习单词数量</label>
+                <div class="goal-slider">
+                  <input type="range" min="10" max="50" value="50" class="slider">
+                  <span class="goal-value">50个/天</span>
+                </div>
+              </div>
+              <div class="goal-item">
+                <label class="goal-label">学习时间提醒</label>
+                <div class="goal-time">
+                  <span class="time-icon">🕐</span>
+                  <span class="time-value">每天 08:00</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 操作按钮 -->
+            <div class="action-bar">
+              <button class="btn btn-outline">查看详细计划</button>
+              <button class="btn btn-primary">保存设置</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 生词本页面 -->
+        <div class="page" id="page-vocabulary">
+          <div class="page-content">
+            <div class="page-header">
+              <button class="back-btn" onclick="navigateTo('home')">←</button>
+              <h1 class="page-title">生词本</h1>
+              <button class="icon-btn">🔍</button>
+            </div>
+
+            <!-- 分类标签 -->
+            <div class="category-tabs">
+              <button class="tab active">全部</button>
+              <button class="tab">学习中</button>
+              <button class="tab">已掌握</button>
+              <button class="tab">收藏</button>
+            </div>
+
+            <!-- 词汇列表 -->
+            <div class="vocab-list">
+              <div class="vocab-item">
+                <div class="vocab-info">
+                  <h3 class="vocab-word">ephemeral</h3>
+                  <p class="vocab-phonetic">/ɪˈfem(ə)rəl/</p>
+                  <p class="vocab-meaning">adj. 短暂的，瞬息的</p>
+                </div>
+                <div class="vocab-actions">
+                  <span class="mastery-level level-3">掌握度 3/5</span>
+                  <button class="icon-btn-small">🔊</button>
+                  <button class="icon-btn-small">⭐</button>
+                </div>
+              </div>
+              <div class="vocab-item">
+                <div class="vocab-info">
+                  <h3 class="vocab-word">eternal</h3>
+                  <p class="vocab-phonetic">/ɪˈtɜːnl/</p>
+                  <p class="vocab-meaning">adj. 永恒的，永久的</p>
+                </div>
+                <div class="vocab-actions">
+                  <span class="mastery-level level-2">掌握度 2/5</span>
+                  <button class="icon-btn-small">🔊</button>
+                  <button class="icon-btn-small">⭐</button>
+                </div>
+              </div>
+              <div class="vocab-item">
+                <div class="vocab-info">
+                  <h3 class="vocab-word">abandon</h3>
+                  <p class="vocab-phonetic">/əˈbændən/</p>
+                  <p class="vocab-meaning">v. 放弃，抛弃</p>
+                </div>
+                <div class="vocab-actions">
+                  <span class="mastery-level level-5">已掌握</span>
+                  <button class="icon-btn-small">🔊</button>
+                  <button class="icon-btn-small">⭐</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 个人中心页面 -->
+        <div class="page" id="page-profile">
+          <div class="page-content">
+            <div class="page-header">
+              <h1 class="page-title">我的</h1>
+              <button class="icon-btn">⚙️</button>
+            </div>
+
+            <!-- 学习数据 -->
+            <div class="learning-stats profile-first">
+              <div class="stat-item">
+                <span class="stat-value">1,234</span>
+                <span class="stat-label">已学单词</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">45</span>
+                <span class="stat-label">连续天数</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">85%</span>
+                <span class="stat-label">平均正确率</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">128</span>
+                <span class="stat-label">学习时长(h)</span>
+              </div>
+            </div>
+
+            <!-- 成就系统 -->
+            <div class="achievements-section">
+              <h3 class="section-title">🏆 成就徽章</h3>
+              <div class="achievements-grid">
+                <div class="achievement-item earned">
+                  <span class="achievement-icon">🌟</span>
+                  <span class="achievement-name">初学者</span>
+                </div>
+                <div class="achievement-item earned">
+                  <span class="achievement-icon">🔥</span>
+                  <span class="achievement-name">坚持7天</span>
+                </div>
+                <div class="achievement-item earned">
+                  <span class="achievement-icon">📚</span>
+                  <span class="achievement-name">100词</span>
+                </div>
+                <div class="achievement-item">
+                  <span class="achievement-icon">🎯</span>
+                  <span class="achievement-name">90%正确率</span>
+                </div>
+                <div class="achievement-item">
+                  <span class="achievement-icon">👑</span>
+                  <span class="achievement-name">词汇大师</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 功能菜单 -->
+            <div class="menu-list">
+              <div class="menu-item">
+                <span class="menu-icon">📊</span>
+                <span class="menu-text">学习统计</span>
+                <span class="menu-arrow">→</span>
+              </div>
+              <div class="menu-item">
+                <span class="menu-icon">🎯</span>
+                <span class="menu-text">学习计划</span>
+                <span class="menu-arrow">→</span>
+              </div>
+              <div class="menu-item">
+                <span class="menu-icon">🔔</span>
+                <span class="menu-text">提醒设置</span>
+                <span class="menu-arrow">→</span>
+              </div>
+              <div class="menu-item">
+                <span class="menu-icon">❓</span>
+                <span class="menu-text">帮助与反馈</span>
+                <span class="menu-arrow">→</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 底部导航 -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-page="home" onclick="navigateTo('home')">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-text">首页</span>
+      </button>
+      <button class="nav-item" data-page="learn" onclick="navigateTo('learn')">
+        <span class="nav-icon">📖</span>
+        <span class="nav-text">学习</span>
+      </button>
+      <button class="nav-item" data-page="vocabulary" onclick="navigateTo('vocabulary')">
+        <span class="nav-icon">📚</span>
+        <span class="nav-text">生词本</span>
+      </button>
+      <button class="nav-item" data-page="profile" onclick="navigateTo('profile')">
+        <span class="nav-icon">👤</span>
+        <span class="nav-text">我的</span>
+      </button>
+    </nav>
+
+    <!-- 底部指示条 -->
+    <div class="home-indicator"></div>
+  </div>
+
+  <script src="scripts/prototype.js"></script>
+</body>
+</html>
