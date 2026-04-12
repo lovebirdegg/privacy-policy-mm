@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>案件列表</title>
+<link rel="stylesheet" href="../common/style.css">
+</head>
+<body>
+<div class="phone-container">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>📶 5G 🔋</span>
+  </div>
+  <div class="header">
+    <a class="header-back" href="../home/index.html">‹</a>
+    <span class="header-title">案件列表</span>
+    <span class="header-action">🔍</span>
+  </div>
+
+  <div class="tab-bar">
+    <a class="tab-item active" href="cases.html">全部</a>
+    <a class="tab-item" href="cases.html?type=jianzhai">监拆</a>
+    <a class="tab-item" href="cases.html?type=tanshi">探视</a>
+    <a class="tab-item" href="cases.html?type=wusun">物损</a>
+  </div>
+
+  <div class="scroll-area" style="padding:12px 14px">
+    <!-- 监拆案件 -->
+    <a class="task-card" href="../jianzhai/detail.html?id=1">
+      <div class="task-card-header">
+        <div class="task-id">JD2026033101</div>
+        <span class="tag tag-green">已完成</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号：</span>鲁S·12345 <span class="task-label" style="margin-left:12px">类型：</span><span style="color:var(--blue)">车辆监拆</span></div>
+      <div class="task-info-row"><span class="task-label">修理厂：</span>莱芜鑫鑫修理厂</div>
+      <div class="task-info-row"><span class="task-label">定损员：</span>李四</div>
+      <div class="task-info-row"><span class="task-label">完成时间：</span>2026-03-30 16:20</div>
+    </a>
+
+    <!-- 探视案件 -->
+    <a class="task-card" href="../tanshi/detail.html?id=1">
+      <div class="task-card-header">
+        <div class="task-id">TS2026033101</div>
+        <span class="tag tag-blue">进行中</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">伤者：</span>张敏 <span class="task-label" style="margin-left:12px">类型：</span><span style="color:var(--green)">住院探视</span></div>
+      <div class="task-info-row"><span class="task-label">就诊医院：</span>莱芜区人民医院</div>
+      <div class="task-info-row"><span class="task-label">探视员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">接单时间：</span>2026-03-31 09:30</div>
+    </a>
+
+    <!-- 物损案件 -->
+    <a class="task-card" href="../wusun/detail.html?id=1">
+      <div class="task-card-header">
+        <div class="task-id">WS2026033101</div>
+        <span class="tag tag-orange">待分配</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">当事人：</span>王建国 <span class="task-label" style="margin-left:12px">类型：</span><span style="color:var(--orange)">物损清单</span></div>
+      <div class="task-info-row"><span class="task-label">出险地点：</span>济南市历下区XX路</div>
+      <div class="task-info-row"><span class="task-label">预估金额：</span><span style="color:var(--orange);font-weight:600">¥12,500</span></div>
+      <div class="task-info-row"><span class="task-label">发布时间：</span>2026-03-31 09:15</div>
+    </a>
+
+    <!-- 更多案件 -->
+    <a class="task-card" href="../jianzhai/detail.html?id=2">
+      <div class="task-card-header">
+        <div class="task-id">JD2026033102</div>
+        <span class="tag tag-blue">进行中</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号：</span>鲁A·88888 <span class="task-label" style="margin-left:12px">类型：</span><span style="color:var(--blue)">车辆监拆</span></div>
+      <div class="task-info-row"><span class="task-label">修理厂：</span>济南万通汽修</div>
+      <div class="task-info-row"><span class="task-label">监拆员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">接单时间：</span>2026-03-31 10:15</div>
+    </a>
+
+    <a class="task-card" href="../tanshi/detail.html?id=2">
+      <div class="task-card-header">
+        <div class="task-id">TS2026033102</div>
+        <span class="tag tag-green">已完成</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">伤者：</span>刘洋 <span class="task-label" style="margin-left:12px">类型：</span><span style="color:var(--green)">住院探视</span></div>
+      <div class="task-info-row"><span class="task-label">就诊医院：</span>济南市第三人民医院</div>
+      <div class="task-info-row"><span class="task-label">探视员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">完成时间：</span>2026-03-30 17:45</div>
+    </a>
+  </div>
+
+  <!-- 底部导航 -->
+  <div class="bottom-nav">
+    <a class="nav-item" href="../home/index.html">
+      <span class="nav-icon">🏠</span>
+      <span>首页</span>
+    </a>
+    <a class="nav-item active" href="cases.html">
+      <span class="nav-icon">📋</span>
+      <span>案件</span>
+    </a>
+    <a class="nav-item" href="stats.html">
+      <span class="nav-icon">📊</span>
+      <span>统计</span>
+    </a>
+    <a class="nav-item" href="profile.html">
+      <span class="nav-icon">👤</span>
+      <span>我的</span>
+    </a>
+  </div>
+</div>
+<script src="../common/script.js"></script>
+</body>
+</html>

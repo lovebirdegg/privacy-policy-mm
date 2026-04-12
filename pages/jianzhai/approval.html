@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>监拆审批 - 车检监拆复勘系统</title>
+<link rel="stylesheet" href="../common/style.css">
+</head>
+<body>
+<div class="phone-container">
+  <!-- 状态栏 -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>📶 5G 🔋</span>
+  </div>
+
+  <!-- 顶部导航 -->
+  <div class="header">
+    <a class="header-back" href="index.html">‹</a>
+    <span class="header-title">监拆审批</span>
+    <span class="header-action"></span>
+  </div>
+
+  <!-- 筛选区 -->
+  <div style="padding:12px 14px;background:white;border-bottom:1px solid var(--gray)">
+    <div style="display:flex;gap:8px">
+      <select style="flex:1;padding:8px 12px;border:1px solid var(--gray);border-radius:6px;font-size:13px;background:white">
+        <option>全部状态</option>
+        <option>待审批</option>
+        <option>已通过</option>
+        <option>已驳回</option>
+      </select>
+      <select style="flex:1;padding:8px 12px;border:1px solid var(--gray);border-radius:6px;font-size:13px;background:white">
+        <option>最近7天</option>
+        <option>最近30天</option>
+        <option>全部时间</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 内容区 -->
+  <div class="scroll-area" style="padding:12px 14px">
+    <!-- 待审批项 -->
+    <div class="task-card" style="border-left:4px solid #f59e0b">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:14px;font-weight:600">鲁A·12345</span>
+        <span style="font-size:11px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:10px">待审批</span>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">修理厂：莱芜顺达汽修</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">监拆员：张三</div>
+      <div style="font-size:12px;color:var(--text3)">提交时间：2026-04-12 14:30</div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button onclick="showToast('已通过审批')" style="flex:1;background:var(--blue);color:white;border:none;padding:8px;border-radius:6px;font-size:13px">通过</button>
+        <button onclick="showToast('已驳回')" style="flex:1;background:#ef4444;color:white;border:none;padding:8px;border-radius:6px;font-size:13px">驳回</button>
+        <button onclick="location.href='detail.html?id=A001'" style="background:var(--gray);color:var(--text2);border:none;padding:8px 12px;border-radius:6px;font-size:13px">查看</button>
+      </div>
+    </div>
+
+    <div class="task-card" style="border-left:4px solid #f59e0b">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:14px;font-weight:600">鲁B·67890</span>
+        <span style="font-size:11px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:10px">待审批</span>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">修理厂：莱芜宏达汽修</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">监拆员：张三</div>
+      <div style="font-size:12px;color:var(--text3)">提交时间：2026-04-12 10:15</div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button onclick="showToast('已通过审批')" style="flex:1;background:var(--blue);color:white;border:none;padding:8px;border-radius:6px;font-size:13px">通过</button>
+        <button onclick="showToast('已驳回')" style="flex:1;background:#ef4444;color:white;border:none;padding:8px;border-radius:6px;font-size:13px">驳回</button>
+        <button onclick="location.href='detail.html?id=B001'" style="background:var(--gray);color:var(--text2);border:none;padding:8px 12px;border-radius:6px;font-size:13px">查看</button>
+      </div>
+    </div>
+
+    <!-- 已通过 -->
+    <div class="task-card" style="border-left:4px solid var(--green)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:14px;font-weight:600">鲁C·11111</span>
+        <span style="font-size:11px;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:10px">已通过</span>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">修理厂：莱芜鑫源汽修</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">监拆员：张三</div>
+      <div style="font-size:12px;color:var(--text3)">审批时间：2026-04-11 16:20</div>
+    </div>
+
+    <!-- 已驳回 -->
+    <div class="task-card" style="border-left:4px solid #ef4444">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:14px;font-weight:600">鲁D·22222</span>
+        <span style="font-size:11px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:10px">已驳回</span>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">修理厂：莱芜永兴汽修</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">监拆员：张三</div>
+      <div style="font-size:12px;color:var(--text3)">驳回原因：照片不清晰，需补充</div>
+    </div>
+
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<script src="../common/script.js"></script>
+</body>
+</html>

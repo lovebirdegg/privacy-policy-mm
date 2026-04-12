@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>车检监拆复勘系统 - 首页</title>
+<link rel="stylesheet" href="../common/style.css">
+</head>
+<body>
+<div class="phone-container">
+  <!-- 状态栏 -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>📶 5G 🔋</span>
+  </div>
+
+  <!-- 顶部导航 -->
+  <div class="header">
+    <span></span>
+    <span class="header-title">首页</span>
+    <a class="header-action" href="../common/profile.html">👤</a>
+  </div>
+
+  <!-- 内容区 -->
+  <div class="scroll-area">
+    <!-- 顶部横幅 -->
+    <div style="background:linear-gradient(135deg,var(--blue),#5b8af0);padding:16px 14px 20px;margin-bottom:8px">
+      <div style="color:white;font-size:16px;font-weight:600;margin-bottom:12px">🚗 欢迎使用监拆复勘系统</div>
+      <div style="display:flex;gap:12px">
+        <div style="flex:1;background:rgba(255,255,255,0.15);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:22px;font-weight:700;color:white">47</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.8)">监拆完成</div>
+        </div>
+        <div style="flex:1;background:rgba(255,255,255,0.15);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:22px;font-weight:700;color:white">23</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.8)">探视完成</div>
+        </div>
+        <div style="flex:1;background:rgba(255,255,255,0.15);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:22px;font-weight:700;color:white">18</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.8)">物损完成</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 工作台入口 -->
+    <div style="padding:0 14px;margin-bottom:8px">
+      <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:10px">📋 工作台</div>
+      <div class="workbench-grid" style="padding:0;gap:10px">
+        <a class="workbench-card" href="../jianzhai/index.html">
+          <div class="workbench-icon blue">🚙</div>
+          <div class="workbench-name">车辆监拆</div>
+          <div class="workbench-count">12 待处理</div>
+          <div class="workbench-badge">12</div>
+        </a>
+        <a class="workbench-card" href="../tanshi/index.html">
+          <div class="workbench-icon green">🏥</div>
+          <div class="workbench-name">住院探视</div>
+          <div class="workbench-count">5 待处理</div>
+          <div class="workbench-badge">5</div>
+        </a>
+        <a class="workbench-card" href="../wusun/index.html">
+          <div class="workbench-icon orange">📦</div>
+          <div class="workbench-name">物损清单</div>
+          <div class="workbench-count">3 待处理</div>
+          <div class="workbench-badge">3</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 车辆监拆快捷操作 -->
+    <div class="card">
+      <a href="../jianzhai/index.html" style="display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--gray);text-decoration:none;color:inherit">
+        <span style="font-size:18px">🚗</span>
+        <span style="font-size:14px;font-weight:600;color:var(--blue)">车辆监拆</span>
+        <span style="margin-left:auto;color:var(--text3);font-size:14px">›</span>
+      </a>
+      <div class="module-grid">
+        <a class="module-item" href="../jianzhai/create.html">
+          <div class="module-icon-wrap blue">➕</div>
+          <span class="module-label">监拆发布</span>
+        </a>
+        <a class="module-item" href="../jianzhai/tasks.html">
+          <div class="module-icon-wrap blue">📋</div>
+          <span class="module-label">监拆任务</span>
+        </a>
+        <a class="module-item" href="../jianzhai/approval.html">
+          <div class="module-icon-wrap blue">✅</div>
+          <span class="module-label">监拆审批</span>
+        </a>
+        <a class="module-item" href="../jianzhai/fukan.html">
+          <div class="module-icon-wrap purple">🔍</div>
+          <span class="module-label">监拆复勘</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 住院探视快捷操作 -->
+    <div class="card">
+      <a href="../tanshi/index.html" style="display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--gray);text-decoration:none;color:inherit">
+        <span style="font-size:18px">🏥</span>
+        <span style="font-size:14px;font-weight:600;color:var(--green)">住院探视</span>
+        <span style="margin-left:auto;color:var(--text3);font-size:14px">›</span>
+      </a>
+      <div class="module-grid">
+        <a class="module-item" href="../tanshi/create.html">
+          <div class="module-icon-wrap green">➕</div>
+          <span class="module-label">探视发布</span>
+        </a>
+        <a class="module-item" href="../tanshi/tasks.html">
+          <div class="module-icon-wrap green">📋</div>
+          <span class="module-label">探视任务</span>
+        </a>
+        <a class="module-item" href="../tanshi/records.html">
+          <div class="module-icon-wrap teal">📄</div>
+          <span class="module-label">探视记录</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 物损清单快捷操作 -->
+    <div class="card">
+      <a href="../wusun/index.html" style="display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--gray);text-decoration:none;color:inherit">
+        <span style="font-size:18px">📦</span>
+        <span style="font-size:14px;font-weight:600;color:var(--orange)">物损清单</span>
+        <span style="margin-left:auto;color:var(--text3);font-size:14px">›</span>
+      </a>
+      <div class="module-grid">
+        <a class="module-item" href="../wusun/create.html">
+          <div class="module-icon-wrap orange">➕</div>
+          <span class="module-label">物损发布</span>
+        </a>
+        <a class="module-item" href="../wusun/tasks.html">
+          <div class="module-icon-wrap orange">📋</div>
+          <span class="module-label">物损任务</span>
+        </a>
+        <a class="module-item" href="../wusun/fukan.html">
+          <div class="module-icon-wrap purple">🔍</div>
+          <span class="module-label">物损复勘</span>
+        </a>
+        <a class="module-item" href="../wusun/records.html">
+          <div class="module-icon-wrap teal">📄</div>
+          <span class="module-label">物损记录</span>
+        </a>
+      </div>
+    </div>
+
+    <div style="height:20px"></div>
+  </div>
+
+  <!-- 底部导航 -->
+  <div class="bottom-nav">
+    <a class="nav-item active" href="index.html">
+      <span class="nav-icon">🏠</span>
+      <span>首页</span>
+    </a>
+    <a class="nav-item" href="../common/cases.html">
+      <span class="nav-icon">📋</span>
+      <span>案件</span>
+    </a>
+    <a class="nav-item" href="../common/stats.html">
+      <span class="nav-icon">📊</span>
+      <span>统计</span>
+    </a>
+    <a class="nav-item" href="../common/profile.html">
+      <span class="nav-icon">👤</span>
+      <span>我的</span>
+    </a>
+  </div>
+</div>
+
+<script src="../common/script.js"></script>
+</body>
+</html>

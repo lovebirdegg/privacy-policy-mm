@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>物损清单</title>
+<link rel="stylesheet" href="../common/style.css">
+</head>
+<body>
+<div class="phone-container">
+  <div class="status-bar" style="background:var(--orange)">
+    <span>9:41</span>
+    <span>📶 5G 🔋</span>
+  </div>
+  <div class="header orange">
+    <a class="header-back" href="../home/index.html">‹</a>
+    <span class="header-title">物损清单</span>
+    <a class="header-action" href="create.html">＋</a>
+  </div>
+
+  <!-- 统计概览 -->
+  <div style="background:var(--orange-light);padding:16px 14px;display:flex;gap:10px">
+    <div style="flex:1;background:white;border-radius:8px;padding:12px;text-align:center">
+      <div style="font-size:24px;font-weight:700;color:var(--orange)">3</div>
+      <div style="font-size:11px;color:var(--text2)">待处理</div>
+    </div>
+    <div style="flex:1;background:white;border-radius:8px;padding:12px;text-align:center">
+      <div style="font-size:24px;font-weight:700;color:var(--blue)">5</div>
+      <div style="font-size:11px;color:var(--text2)">进行中</div>
+    </div>
+    <div style="flex:1;background:white;border-radius:8px;padding:12px;text-align:center">
+      <div style="font-size:24px;font-weight:700;color:var(--green)">18</div>
+      <div style="font-size:11px;color:var(--text2)">已完成</div>
+    </div>
+  </div>
+
+  <!-- 快捷入口 -->
+  <div class="card">
+    <div class="card-title">快捷操作</div>
+    <div class="module-grid">
+      <a class="module-item" href="create.html">
+        <div class="module-icon-wrap orange">➕</div>
+        <span class="module-label">发布物损</span>
+      </a>
+      <a class="module-item" href="tasks.html">
+        <div class="module-icon-wrap orange">📋</div>
+        <span class="module-label">物损任务</span>
+      </a>
+      <a class="module-item" href="fukan.html">
+        <div class="module-icon-wrap purple">🔍</div>
+        <span class="module-label">物损复勘</span>
+      </a>
+      <a class="module-item" href="records.html">
+        <div class="module-icon-wrap teal">📄</div>
+        <span class="module-label">物损记录</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 最近任务 -->
+  <div style="padding:0 14px">
+    <div style="font-size:14px;font-weight:600;color:var(--text);margin:14px 0 10px">最近任务</div>
+    
+    <a class="task-card" href="detail.html?id=1">
+      <div class="task-card-header">
+        <div class="task-id">WS2026033101</div>
+        <span class="tag tag-red">待分配</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">当事人：</span>王建国</div>
+      <div class="task-info-row"><span class="task-label">物损类型：</span>财产损失</div>
+      <div class="task-info-row"><span class="task-label">预估金额：</span><span style="color:var(--orange);font-weight:600">¥12,500</span></div>
+      <div class="task-info-row"><span class="task-label">发布时间：</span>2026-03-31 09:15</div>
+    </a>
+
+    <a class="task-card" href="detail.html?id=2">
+      <div class="task-card-header">
+        <div class="task-id">WS2026033102</div>
+        <span class="tag tag-blue">进行中</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">当事人：</span>李秀梅</div>
+      <div class="task-info-row"><span class="task-label">物损类型：</span>设备损坏</div>
+      <div class="task-info-row"><span class="task-label">预估金额：</span><span style="color:var(--orange);font-weight:600">¥8,300</span></div>
+      <div class="task-info-row"><span class="task-label">勘察员：</span>张三 · 2026-03-30 14:22</div>
+    </a>
+
+    <a class="task-card" href="detail.html?id=3">
+      <div class="task-card-header">
+        <div class="task-id">WS2026033003</div>
+        <span class="tag tag-blue">待复勘</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">当事人：</span>赵志强</div>
+      <div class="task-info-row"><span class="task-label">物损类型：</span>房屋损坏</div>
+      <div class="task-info-row"><span class="task-label">预估金额：</span><span style="color:var(--orange);font-weight:600">¥35,000</span></div>
+      <div class="task-info-row"><span class="task-label">完成时间：</span>2026-03-30 17:45</div>
+    </a>
+  </div>
+
+  <div style="height:20px"></div>
+
+  <!-- 底部导航 -->
+  <div class="bottom-nav">
+    <a class="nav-item" href="../home/index.html">
+      <span class="nav-icon">🏠</span>
+      <span>首页</span>
+    </a>
+    <a class="nav-item" href="../common/cases.html">
+      <span class="nav-icon">📋</span>
+      <span>案件</span>
+    </a>
+    <a class="nav-item" href="../common/stats.html">
+      <span class="nav-icon">📊</span>
+      <span>统计</span>
+    </a>
+    <a class="nav-item" href="../common/profile.html">
+      <span class="nav-icon">👤</span>
+      <span>我的</span>
+    </a>
+  </div>
+</div>
+<script src="../common/script.js"></script>
+</body>
+</html>

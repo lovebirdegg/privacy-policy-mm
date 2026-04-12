@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>探视任务详情</title>
+<link rel="stylesheet" href="../common/style.css">
+</head>
+<body>
+<div class="phone-container">
+  <div class="status-bar green">
+    <span>9:41</span>
+    <span>📶 5G 🔋</span>
+  </div>
+  <div class="header green">
+    <a class="header-back" href="tasks.html">‹</a>
+    <span class="header-title">探视任务详情</span>
+    <a class="header-action" style="font-size:14px" href="media.html">媒体</a>
+  </div>
+
+  <div class="scroll-area" style="padding:12px 14px">
+    <!-- 案件信息 -->
+    <div class="card" style="margin:0 0 12px 0">
+      <div class="card-title">案件信息</div>
+      <div class="detail-row"><span class="detail-label">任务编号</span><span>TS2026033101</span></div>
+      <div class="detail-row"><span class="detail-label">报案号</span><span>P2026033154322</span></div>
+      <div class="detail-row"><span class="detail-label">伤者姓名</span><span>张敏</div>
+      <div class="detail-row"><span class="detail-label">联系电话</span><span>138****5678</span></div>
+      <div class="detail-row"><span class="detail-label">就诊医院</span><span>莱芜区人民医院</span></div>
+      <div class="detail-row"><span class="detail-label">科室/病区</span><span>骨科三病区</span></div>
+      <div class="detail-row"><span class="detail-label">床位号</span><span>305-2</span></div>
+      <div class="detail-row"><span class="detail-label">诊断结果</span><span>左腿骨折</span></div>
+      <div class="detail-row"><span class="detail-label">探视员</span><span>张三</span></div>
+    </div>
+
+    <!-- 必拍照片（8类） -->
+    <div class="card" style="margin:0 0 12px 0">
+      <div class="card-title">必拍照片（8类）</div>
+      
+      <div class="photo-collect-item">
+        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
+          <div class="photo-collect-title">
+            <span class="photo-collect-num green">1</span>
+            <span>医院外景</span>
+          </div>
+          <span class="photo-collect-status done">已拍 1/1</span>
+        </div>
+        <div class="photo-collect-body">
+          <div style="display:flex;gap:8px">
+            <div style="width:72px;height:72px;background:#ddd;border-radius:8px;cursor:pointer" onclick="showToast('查看照片')"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-collect-item">
+        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
+          <div class="photo-collect-title">
+            <span class="photo-collect-num green">2</span>
+            <span>科室</span>
+          </div>
+          <span class="photo-collect-status done">已拍 1/1</span>
+        </div>
+        <div class="photo-collect-body">
+          <div style="display:flex;gap:8px">
+            <div style="width:72px;height:72px;background:#ccc;border-radius:8px;cursor:pointer" onclick="showToast('查看照片')"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-collect-item">
+        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
+          <div class="photo-collect-title">
+            <span class="photo-collect-num green">3</span>
+            <span>病区</span>
+          </div>
+          <span class="photo-collect-status pending">未拍</span>
+        </div>
+        <div class="photo-collect-body" style="display:none">
+          <div style="display:flex;gap:8px">
+            <div style="width:72px;height:72px;border:1.5px dashed var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--green)" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-collect-item">
+        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
+          <div class="photo-collect-title">
+            <span class="photo-collect-num green">4</span>
+            <span>床位号</span>
+          </div>
+          <span class="photo-collect-status pending">未拍</span>
+        </div>
+        <div class="photo-collect-body" style="display:none">
+          <div style="display:flex;gap:8px">
+            <div style="width:72px;height:72px;border:1.5px dashed var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--green)" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-collect-item">
+        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
+          <div class="photo-collect-title">
+            <span class="photo-collect-num green">5</span>
+            <span>伤者整体</span>
+          </div>
+          <span class="photo-collect-status pending">未拍</span>
+        </div>
+        <div class="photo-collect-body" style="display:none">
+          <div style="display:flex;gap:8px">
+            <div style="width:72px;height:72px;border:1.5px dashed var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--green)" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-collect-item">
+        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
+          <div class="photo-collect-title">
+            <span class="photo-collect-num green">6</span>
+            <span>受伤部位</span>
+          </div>
+          <span class="photo-collect-status pending">未拍</span>
+        </div>
+        <div class="photo-collect-body" style="display:none">
+          <div style="display:flex;gap:8px">
+            <div style="width:72px;height:72px;border:1.5px dashed var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--green)" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-collect-item">
+        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
+          <div class="photo-collect-title">
+            <span class="photo-collect-num green">7</span>
+            <span>探视人员与伤者合影</span>
+          </div>
+          <span class="photo-collect-status pending">未拍</span>
+        </div>
+        <div class="photo-collect-body" style="display:none">
+          <div style="display:flex;gap:8px">
+            <div style="width:72px;height:72px;border:1.5px dashed var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--green)" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-collect-item">
+        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
+          <div class="photo-collect-title">
+            <span class="photo-collect-num green">8</span>
+            <span>理赔手册与伤者合影</span>
+          </div>
+          <span class="photo-collect-status pending">未拍</span>
+        </div>
+        <div class="photo-collect-body" style="display:none">
+          <div style="display:flex;gap:8px">
+            <div style="width:72px;height:72px;border:1.5px dashed var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--green)" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 全程录像 -->
+    <div class="card" style="margin:0 0 12px 0">
+      <div class="card-title">全程录像</div>
+      <div style="padding:12px 14px">
+        <div style="background:var(--green-light);border:1.5px dashed var(--green);border-radius:8px;padding:16px;text-align:center;cursor:pointer" onclick="showToast('启动记录仪')">
+          <div style="font-size:32px;margin-bottom:6px">🎥</div>
+          <div style="font-size:13px;color:var(--green);font-weight:600">点击开始录制</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px">从探视开始至结束全程录像</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 现场核实信息 -->
+    <div class="card" style="margin:0 0 12px 0">
+      <div class="card-title">现场核实信息</div>
+      <div style="padding:0 14px 12px">
+        <div class="form-item" style="padding-left:0;padding-right:0">
+          <label class="form-label">实际伤情</label>
+          <textarea class="form-textarea" placeholder="请描述实际核实到的伤情"></textarea>
+        </div>
+        <div class="form-item" style="padding-left:0;padding-right:0">
+          <label class="form-label">探视结论</label>
+          <div class="form-select" onclick="showToast('选择结论')">请选择 <span class="arr">›</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 告知事项 -->
+    <div class="card" style="margin:0 0 80px 0">
+      <div class="card-title">告知事项</div>
+      <div style="padding:12px 14px;font-size:13px;color:var(--text2);line-height:1.8">
+        <div style="margin-bottom:8px">✓ 已告知伤者理赔流程</div>
+        <div style="margin-bottom:8px">✓ 已告知伤者注意事项</div>
+        <div style="margin-bottom:8px">✓ 已提供理赔手册</div>
+        <div>✓ 已确认联系方式</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-action">
+    <button class="btn btn-full btn-green" onclick="showToast('探视任务已完成！');location.href='index.html'">完成探视</button>
+  </div>
+</div>
+<script src="../common/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>车辆监拆</title>
+<link rel="stylesheet" href="../common/style.css">
+</head>
+<body>
+<div class="phone-container">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>📶 5G 🔋</span>
+  </div>
+  <div class="header">
+    <a class="header-back" href="../home/index.html">‹</a>
+    <span class="header-title">车辆监拆</span>
+    <a class="header-action" href="create.html">＋</a>
+  </div>
+
+  <!-- 统计概览 -->
+  <div style="background:var(--blue-light);padding:16px 14px;display:flex;gap:10px">
+    <div style="flex:1;background:white;border-radius:8px;padding:12px;text-align:center">
+      <div style="font-size:24px;font-weight:700;color:var(--blue)">12</div>
+      <div style="font-size:11px;color:var(--text2)">待处理</div>
+    </div>
+    <div style="flex:1;background:white;border-radius:8px;padding:12px;text-align:center">
+      <div style="font-size:24px;font-weight:700;color:var(--orange)">5</div>
+      <div style="font-size:11px;color:var(--text2)">进行中</div>
+    </div>
+    <div style="flex:1;background:white;border-radius:8px;padding:12px;text-align:center">
+      <div style="font-size:24px;font-weight:700;color:var(--green)">47</div>
+      <div style="font-size:11px;color:var(--text2)">已完成</div>
+    </div>
+  </div>
+
+  <!-- 快捷入口 -->
+  <div class="card">
+    <div class="card-title">快捷操作</div>
+    <div class="module-grid">
+      <a class="module-item" href="create.html">
+        <div class="module-icon-wrap blue">➕</div>
+        <span class="module-label">发布订单</span>
+      </a>
+      <a class="module-item" href="tasks.html">
+        <div class="module-icon-wrap blue">📋</div>
+        <span class="module-label">任务中心</span>
+      </a>
+      <a class="module-item" href="approval.html">
+        <div class="module-icon-wrap blue">✅</div>
+        <span class="module-label">审批管理</span>
+      </a>
+      <a class="module-item" href="fukan.html">
+        <div class="module-icon-wrap purple">🔍</div>
+        <span class="module-label">复勘任务</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 最近任务 -->
+  <div style="padding:0 14px">
+    <div style="font-size:14px;font-weight:600;color:var(--text);margin:14px 0 10px">最近任务</div>
+    
+    <a class="task-card" href="detail.html?id=1">
+      <div class="task-card-header">
+        <div class="task-id">JD2026033101</div>
+        <span class="tag tag-orange">待审批</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号：</span>鲁S·12345</div>
+      <div class="task-info-row"><span class="task-label">修理厂：</span>莱芜鑫鑫修理厂</div>
+      <div class="task-info-row"><span class="task-label">定损员：</span>李四 · 2026-03-31 09:30</div>
+    </a>
+
+    <a class="task-card" href="detail.html?id=2">
+      <div class="task-card-header">
+        <div class="task-id">JD2026033102</div>
+        <span class="tag tag-blue">进行中</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号：</span>鲁A·88888</div>
+      <div class="task-info-row"><span class="task-label">修理厂：</span>济南万通汽修</div>
+      <div class="task-info-row"><span class="task-label">监拆员：</span>张三 · 2026-03-31 10:15</div>
+    </a>
+
+    <a class="task-card" href="detail.html?id=3">
+      <div class="task-card-header">
+        <div class="task-id">JD2026033103</div>
+        <span class="tag tag-red">待分配</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号：</span>鲁S·66666</div>
+      <div class="task-info-row"><span class="task-label">修理厂：</span>莱芜顺达汽修</div>
+      <div class="task-info-row"><span class="task-label">定损员：</span>李四 · 2026-03-31 11:00</div>
+    </a>
+  </div>
+
+  <div style="height:20px"></div>
+
+  <!-- 底部导航 -->
+  <div class="bottom-nav">
+    <a class="nav-item" href="../home/index.html">
+      <span class="nav-icon">🏠</span>
+      <span>首页</span>
+    </a>
+    <a class="nav-item" href="../common/cases.html">
+      <span class="nav-icon">📋</span>
+      <span>案件</span>
+    </a>
+    <a class="nav-item" href="../common/stats.html">
+      <span class="nav-icon">📊</span>
+      <span>统计</span>
+    </a>
+    <a class="nav-item" href="../common/profile.html">
+      <span class="nav-icon">👤</span>
+      <span>我的</span>
+    </a>
+  </div>
+</div>
+<script src="../common/script.js"></script>
+</body>
+</html>

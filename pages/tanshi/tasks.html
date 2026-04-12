@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>探视任务中心</title>
+<link rel="stylesheet" href="../common/style.css">
+</head>
+<body>
+<div class="phone-container">
+  <div class="status-bar green">
+    <span>9:41</span>
+    <span>📶 5G 🔋</span>
+  </div>
+  <div class="header green">
+    <a class="header-back" href="index.html">‹</a>
+    <span class="header-title">探视任务中心</span>
+    <a class="header-action" href="create.html">＋</a>
+  </div>
+
+  <div class="tab-bar">
+    <a class="tab-item active-green" href="tasks.html" style="color:var(--green);border-bottom-color:var(--green)">全部</a>
+    <a class="tab-item" href="tasks.html?status=pending">待接单</a>
+    <a class="tab-item" href="tasks.html?status=doing">进行中</a>
+    <a class="tab-item" href="tasks.html?status=done">已完成</a>
+  </div>
+
+  <div class="scroll-area" style="padding:12px 14px">
+    <a class="task-card" href="detail.html?id=1">
+      <div class="task-card-header">
+        <div class="task-id">TS2026033101</div>
+        <span class="tag tag-blue">进行中</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">伤者：</span>张敏</div>
+      <div class="task-info-row"><span class="task-label">医院：</span>莱芜区人民医院</div>
+      <div class="task-info-row"><span class="task-label">探视员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">接单时间：</span>2026-03-31 09:30</div>
+    </a>
+
+    <a class="task-card" href="detail.html?id=2">
+      <div class="task-card-header">
+        <div class="task-id">TS2026033102</div>
+        <span class="tag tag-orange">待审批</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">伤者：</span>刘洋</div>
+      <div class="task-info-row"><span class="task-label">医院：</span>济南市第三人民医院</div>
+      <div class="task-info-row"><span class="task-label">探视员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">提交时间：</span>2026-03-31 14:20</div>
+    </a>
+
+    <a class="task-card" href="detail.html?id=3">
+      <div class="task-card-header">
+        <div class="task-id">TS2026033103</div>
+        <span class="tag tag-red">待分配</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">伤者：</span>王芳</div>
+      <div class="task-info-row"><span class="task-label">医院：</span>泰安市中心医院</div>
+      <div class="task-info-row"><span class="task-label">发布时间：</span>2026-03-31 11:00</div>
+      <div style="display:flex;justify-content:flex-end;margin-top:8px">
+        <button class="btn btn-green btn-sm" onclick="event.preventDefault();showToast('已接单！')">接单</button>
+      </div>
+    </a>
+
+    <a class="task-card" href="detail.html?id=4">
+      <div class="task-card-header">
+        <div class="task-id">TS2026033004</div>
+        <span class="tag tag-green">已完成</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">伤者：</span>赵强</div>
+      <div class="task-info-row"><span class="task-label">医院：</span>莱芜区人民医院</div>
+      <div class="task-info-row"><span class="task-label">探视员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">完成时间：</span>2026-03-30 16:45</div>
+    </a>
+  </div>
+</div>
+<script src="../common/script.js"></script>
+</body>
+</html>

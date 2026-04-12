@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>监拆任务中心</title>
+<link rel="stylesheet" href="../common/style.css">
+</head>
+<body>
+<div class="phone-container">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>📶 5G 🔋</span>
+  </div>
+  <div class="header">
+    <a class="header-back" href="index.html">‹</a>
+    <span class="header-title">监拆任务中心</span>
+    <a class="header-action" href="create.html">＋</a>
+  </div>
+
+  <div class="tab-bar">
+    <a class="tab-item active" href="tasks.html">全部</a>
+    <a class="tab-item" href="tasks.html?status=pending">待接单</a>
+    <a class="tab-item" href="tasks.html?status=doing">进行中</a>
+    <a class="tab-item" href="tasks.html?status=done">已完成</a>
+  </div>
+
+  <div class="scroll-area" style="padding:12px 14px">
+    <a class="task-card" href="detail.html?id=1">
+      <div class="task-card-header">
+        <div class="task-id">JD2026033101</div>
+        <span class="tag tag-orange">待审批</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号：</span>鲁S·12345</div>
+      <div class="task-info-row"><span class="task-label">修理厂：</span>莱芜鑫鑫修理厂</div>
+      <div class="task-info-row"><span class="task-label">定损员：</span>李四 · 监拆员：张三</div>
+      <div class="task-info-row"><span class="task-label">发布时间：</span>2026-03-31 09:30</div>
+      <div style="display:flex;justify-content:flex-end;margin-top:8px">
+        <button class="btn btn-primary btn-sm" onclick="event.preventDefault();showToast('已查看')">查看详情</button>
+      </div>
+    </a>
+
+    <a class="task-card" href="detail.html?id=2">
+      <div class="task-card-header">
+        <div class="task-id">JD2026033102</div>
+        <span class="tag tag-blue">进行中</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号：</span>鲁A·88888</div>
+      <div class="task-info-row"><span class="task-label">修理厂：</span>济南万通汽修</div>
+      <div class="task-info-row"><span class="task-label">定损员：</span>王五 · 监拆员：张三</div>
+      <div class="task-info-row"><span class="task-label">接单时间：</span>2026-03-31 10:15</div>
+    </a>
+
+    <a class="task-card" href="detail.html?id=3">
+      <div class="task-card-header">
+        <div class="task-id">JD2026033103</div>
+        <span class="tag tag-red">待分配</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号：</span>鲁S·66666</div>
+      <div class="task-info-row"><span class="task-label">修理厂：</span>莱芜顺达汽修</div>
+      <div class="task-info-row"><span class="task-label">定损员：</span>李四</div>
+      <div class="task-info-row"><span class="task-label">发布时间：</span>2026-03-31 11:00</div>
+      <div style="display:flex;justify-content:flex-end;margin-top:8px">
+        <button class="btn btn-primary btn-sm" onclick="event.preventDefault();showToast('已接单！')">接单</button>
+      </div>
+    </a>
+
+    <a class="task-card" href="detail.html?id=4">
+      <div class="task-card-header">
+        <div class="task-id">JD2026033104</div>
+        <span class="tag tag-green">已完成</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号：</span>鲁S·99999</div>
+      <div class="task-info-row"><span class="task-label">修理厂：</span>莱芜鑫鑫修理厂</div>
+      <div class="task-info-row"><span class="task-label">定损员：</span>王五 · 监拆员：张三</div>
+      <div class="task-info-row"><span class="task-label">完成时间：</span>2026-03-30 14:20</div>
+    </a>
+
+    <a class="task-card" href="detail.html?id=5">
+      <div class="task-card-header">
+        <div class="task-id">JD2026033005</div>
+        <span class="tag tag-blue">待复勘</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号：</span>鲁S·11111</div>
+      <div class="task-info-row"><span class="task-label">修理厂：</span>莱芜鑫鑫修理厂</div>
+      <div class="task-info-row"><span class="task-label">定损员：</span>李四 · 监拆员：张三</div>
+      <div class="task-info-row"><span class="task-label">完成时间：</span>2026-03-30 16:45</div>
+    </a>
+  </div>
+</div>
+<script src="../common/script.js"></script>
+</body>
+</html>

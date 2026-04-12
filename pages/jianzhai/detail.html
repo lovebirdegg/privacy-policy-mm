@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>监拆任务详情</title>
+<link rel="stylesheet" href="../common/style.css">
+</head>
+<body>
+<div class="phone-container">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>📶 5G 🔋</span>
+  </div>
+  <div class="header">
+    <a class="header-back" href="tasks.html">‹</a>
+    <span class="header-title">监拆任务详情</span>
+    <a class="header-action" style="font-size:14px" href="media.html">媒体</a>
+  </div>
+
+  <div class="scroll-area" style="padding:12px 14px">
+    <!-- 案件信息 -->
+    <div class="card" style="margin:0 0 12px 0">
+      <div class="card-title">案件信息</div>
+      <div class="detail-row"><span class="detail-label">任务编号</span><span>JD2026033101</span></div>
+      <div class="detail-row"><span class="detail-label">报案号</span><span>P2026033154319</span></div>
+      <div class="detail-row"><span class="detail-label">车牌号</span><span>鲁S·12345</span></div>
+      <div class="detail-row"><span class="detail-label">车辆品牌</span><span>丰田 RAV4</span></div>
+      <div class="detail-row"><span class="detail-label">修理厂</span><span>莱芜鑫鑫修理厂</span></div>
+      <div class="detail-row"><span class="detail-label">定损员</span><span>李四</span></div>
+      <div class="detail-row"><span class="detail-label">监拆员</span><span>张三</span></div>
+      <div class="detail-row"><span class="detail-label">任务状态</span><span style="color:#18a058;font-weight:600">进行中</span></div>
+    </div>
+
+    <!-- 拆解部位记录 -->
+    <div class="card" style="margin:0 0 12px 0">
+      <div class="card-title">拆解部位记录</div>
+      
+      <div class="photo-collect-item">
+        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
+          <div class="photo-collect-title">
+            <span class="photo-collect-num">1</span>
+            <span>车辆外观（四面）</span>
+          </div>
+          <span class="photo-collect-status done">已拍 4/4</span>
+        </div>
+        <div class="photo-collect-body">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <div style="width:72px;height:72px;background:#ddd;border-radius:8px;cursor:pointer" onclick="showToast('查看照片')"></div>
+            <div style="width:72px;height:72px;background:#ccc;border-radius:8px;cursor:pointer" onclick="showToast('查看照片')"></div>
+            <div style="width:72px;height:72px;background:#e0e0e0;border-radius:8px;cursor:pointer" onclick="showToast('查看照片')"></div>
+            <div style="width:72px;height:72px;background:#d5d5d5;border-radius:8px;cursor:pointer" onclick="showToast('查看照片')"></div>
+            <div style="width:72px;height:72px;border:1.5px dashed var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--blue)" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-collect-item">
+        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
+          <div class="photo-collect-title">
+            <span class="photo-collect-num">2</span>
+            <span>车架号/VIN码</span>
+          </div>
+          <span class="photo-collect-status pending">未拍</span>
+        </div>
+        <div class="photo-collect-body" style="display:none">
+          <div style="display:flex;gap:8px">
+            <div style="width:72px;height:72px;border:1.5px dashed var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--blue)" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-collect-item">
+        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
+          <div class="photo-collect-title">
+            <span class="photo-collect-num">3</span>
+            <span>损伤部位特写</span>
+          </div>
+          <span class="photo-collect-status pending">未拍</span>
+        </div>
+        <div class="photo-collect-body" style="display:none">
+          <div style="display:flex;gap:8px">
+            <div style="width:72px;height:72px;border:1.5px dashed var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--blue)" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-collect-item">
+        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
+          <div class="photo-collect-title">
+            <span class="photo-collect-num">4</span>
+            <span>拆解过程（关键节点）</span>
+          </div>
+          <span class="photo-collect-status pending">未拍</span>
+        </div>
+        <div class="photo-collect-body" style="display:none">
+          <div style="display:flex;gap:8px">
+            <div style="width:72px;height:72px;border:1.5px dashed var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--blue)" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 现场录像 -->
+    <div class="card" style="margin:0 0 80px 0">
+      <div class="card-title">现场录像</div>
+      <div style="padding:12px 14px">
+        <div style="background:var(--blue-light);border:1.5px dashed var(--blue);border-radius:8px;padding:16px;text-align:center;cursor:pointer" onclick="showToast('启动记录仪')">
+          <div style="font-size:32px;margin-bottom:6px">🎥</div>
+          <div style="font-size:13px;color:var(--blue);font-weight:600">点击开始录制</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px">全程记录监拆过程</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-action">
+    <button class="btn btn-full btn-primary" onclick="showToast('监拆任务已完成！');location.href='index.html'">完成监拆</button>
+  </div>
+</div>
+<script src="../common/script.js"></script>
+</body>
+</html>

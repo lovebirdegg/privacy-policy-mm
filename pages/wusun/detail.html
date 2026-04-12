@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>物损任务详情</title>
+<link rel="stylesheet" href="../common/style.css">
+</head>
+<body>
+<div class="phone-container">
+  <div class="status-bar" style="background:var(--orange)">
+    <span>9:41</span>
+    <span>📶 5G 🔋</span>
+  </div>
+  <div class="header orange">
+    <a class="header-back" href="tasks.html">‹</a>
+    <span class="header-title">物损任务详情</span>
+    <a class="header-action" style="font-size:14px" href="media.html">报告</a>
+  </div>
+
+  <div class="scroll-area" style="padding:12px 14px">
+    <!-- 案件信息 -->
+    <div class="card" style="margin:0 0 12px 0">
+      <div class="card-title">案件信息</div>
+      <div class="detail-row"><span class="detail-label">物损编号</span><span>WS2026033101</span></div>
+      <div class="detail-row"><span class="detail-label">报案号</span><span>P2026033154325</span></div>
+      <div class="detail-row"><span class="detail-label">当事人</span><span>王建国</span></div>
+      <div class="detail-row"><span class="detail-label">联系电话</span><span>138****5678</span></div>
+      <div class="detail-row"><span class="detail-label">出险地点</span><span>济南市历下区XX路</span></div>
+      <div class="detail-row"><span class="detail-label">预估金额</span><span style="color:var(--orange);font-weight:700">¥12,500</span></div>
+    </div>
+
+    <!-- 物损清单与拍照 -->
+    <div class="card" style="margin:0 0 12px 0">
+      <div style="font-weight:700;font-size:14px;padding:12px 14px;border-bottom:1px solid var(--gray)">物损清单（逐项拍照）</div>
+
+      <!-- 物损项 1 -->
+      <div class="wusun-item" style="border-bottom:1px solid var(--gray)">
+        <div class="wusun-header" onclick="toggleWusunItem(this)">
+          <div>
+            <div class="wusun-name">1. 铝合金门窗</div>
+            <div class="wusun-meta">估损：¥4,200 · 全损</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="font-size:11px;background:#fff3cd;color:#d4a017;padding:2px 8px;border-radius:10px">未拍照</div>
+            <span style="color:var(--text3)">›</span>
+          </div>
+        </div>
+        <div class="wusun-photo-row" style="display:none;padding:10px 14px;background:#fafafa">
+          <div style="font-size:12px;color:var(--text2);margin-bottom:8px">请对该物损项拍照留证（至少1张）</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <div style="width:72px;height:72px;border:1.5px dashed var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:24px;color:var(--orange)" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 物损项 2 -->
+      <div class="wusun-item" style="border-bottom:1px solid var(--gray)">
+        <div class="wusun-header" onclick="toggleWusunItem(this)">
+          <div>
+            <div class="wusun-name">2. 室内地板</div>
+            <div class="wusun-meta">估损：¥3,800 · 部分损坏</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="font-size:11px;background:var(--green-light);color:var(--green);padding:2px 8px;border-radius:10px">已拍照 2张</div>
+            <span style="color:var(--text3)">›</span>
+          </div>
+        </div>
+        <div class="wusun-photo-row" style="display:none;padding:10px 14px;background:#fafafa">
+          <div style="font-size:12px;color:var(--text2);margin-bottom:8px">已上传2张照片</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <div style="width:72px;height:72px;border-radius:8px;background:#e0e0e0;cursor:pointer" onclick="showToast('查看照片')"></div>
+            <div style="width:72px;height:72px;border-radius:8px;background:#e0e0e0;cursor:pointer" onclick="showToast('查看照片')"></div>
+            <div style="width:72px;height:72px;border:1.5px dashed var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:24px;color:var(--orange)" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 物损项 3 -->
+      <div class="wusun-item" style="border-bottom:1px solid var(--gray)">
+        <div class="wusun-header" onclick="toggleWusunItem(this)">
+          <div>
+            <div class="wusun-name">3. 家用电器</div>
+            <div class="wusun-meta">估损：¥4,500 · 全损</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="font-size:11px;background:#fff3cd;color:#d4a017;padding:2px 8px;border-radius:10px">未拍照</div>
+            <span style="color:var(--text3)">›</span>
+          </div>
+        </div>
+        <div class="wusun-photo-row" style="display:none;padding:10px 14px;background:#fafafa">
+          <div style="font-size:12px;color:var(--text2);margin-bottom:8px">请对该物损项拍照留证（至少1张）</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <div style="width:72px;height:72px;border:1.5px dashed var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:24px;color:var(--orange)" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 添加物损项 -->
+      <div style="padding:12px 14px">
+        <button style="width:100%;background:var(--orange-light);color:var(--orange);border:1.5px dashed var(--orange);border-radius:8px;padding:10px;font-size:13px;cursor:pointer" onclick="showToast('添加新物损项')">＋ 添加物损项</button>
+      </div>
+    </div>
+
+    <!-- 现场视频录制 -->
+    <div class="card" style="margin:0 0 12px 0">
+      <div class="card-title">现场视频录制</div>
+      <div style="padding:12px 14px">
+        <div style="background:var(--orange-light);border:1.5px dashed var(--orange);border-radius:8px;padding:16px;text-align:center;cursor:pointer" onclick="showToast('启动记录仪录像')">
+          <div style="font-size:32px;margin-bottom:6px">🎥</div>
+          <div style="font-size:13px;color:var(--orange);font-weight:600">点击开始录制</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px">通过记录仪录制现场视频，全程留证</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 现场核实信息 -->
+    <div class="card" style="margin:0 0 12px 0">
+      <div class="card-title">现场核实信息</div>
+      <div style="padding:0 14px 12px">
+        <div class="form-item" style="padding-left:0;padding-right:0">
+          <label class="form-label">实际损失金额</label>
+          <input class="form-input" type="number" placeholder="请填写核实后的实际损失金额">
+        </div>
+        <div class="form-item" style="padding-left:0;padding-right:0">
+          <label class="form-label">损失认定结论</label>
+          <div class="form-select" onclick="showToast('选择结论')">请选择 <span class="arr">›</span></div>
+        </div>
+        <div class="form-item" style="padding-left:0;padding-right:0">
+          <label class="form-label">核实说明</label>
+          <textarea class="form-textarea" placeholder="请填写现场核实情况说明"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 复勘信息（物损有复勘流程） -->
+    <div class="card" style="margin:0 0 80px 0;border:1.5px solid var(--blue-light)">
+      <div style="font-weight:700;font-size:14px;padding:12px 14px;border-bottom:1px solid var(--gray);display:flex;align-items:center;gap:8px">
+        <span style="background:var(--blue);color:white;font-size:11px;padding:2px 8px;border-radius:10px">复勘</span>
+        <span>复勘流程</span>
+      </div>
+      <div style="padding:12px 14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="font-size:13px;color:var(--text2)">当前状态：<span style="color:var(--blue);font-weight:600">待复勘</span></div>
+          <button style="background:var(--blue);color:white;border:none;border-radius:6px;padding:5px 14px;font-size:12px;cursor:pointer" onclick="showToast('申请复勘已提交')">申请复勘</button>
+        </div>
+        <div style="font-size:12px;color:var(--text3)">物损复勘由核赔员对定损金额及物损情况进行二次核实，如有异议可发起复勘流程。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-action">
+    <button class="btn btn-full btn-orange" onclick="showToast('物损勘察已完成！');location.href='index.html'">完成物损勘察</button>
+  </div>
+</div>
+<script src="../common/script.js"></script>
+</body>
+</html>

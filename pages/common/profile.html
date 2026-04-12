@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>个人中心</title>
+<link rel="stylesheet" href="../common/style.css">
+</head>
+<body>
+<div class="phone-container">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>📶 5G 🔋</span>
+  </div>
+  <div class="header">
+    <a class="header-back" href="../home/index.html">‹</a>
+    <span class="header-title">个人中心</span>
+    <span class="header-action"></span>
+  </div>
+
+  <div class="scroll-area">
+    <!-- 用户信息卡片 -->
+    <div style="background:linear-gradient(135deg,var(--blue),#5b8af0);padding:28px 20px 20px;display:flex;align-items:center;gap:14px">
+      <div style="width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;font-size:28px">👤</div>
+      <div>
+        <div style="color:white;font-size:18px;font-weight:700">张三</div>
+        <div style="color:rgba(255,255,255,0.8);font-size:13px;margin-top:2px">监拆员 · 莱芜地区</div>
+        <div style="color:rgba(255,255,255,0.6);font-size:11px;margin-top:2px">太平洋财险 合作人员</div>
+      </div>
+    </div>
+
+    <div style="padding:14px">
+      <!-- 本月业绩 -->
+      <div class="card" style="margin:0 0 12px 0">
+        <div class="card-title">本月业绩</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);padding:10px 14px;gap:8px">
+          <div style="text-align:center">
+            <div style="font-size:22px;font-weight:700;color:var(--blue)">21</div>
+            <div style="font-size:11px;color:var(--text2)">监拆</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:22px;font-weight:700;color:var(--green)">9</div>
+            <div style="font-size:11px;color:var(--text2)">探视</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:22px;font-weight:700;color:var(--orange)">7</div>
+            <div style="font-size:11px;color:var(--text2)">物损</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 功能菜单 -->
+      <div class="card" style="margin:0 0 12px 0">
+        <a class="menu-item" href="#" onclick="showToast('账户设置')">
+          <span>👤 账户设置</span><span style="color:var(--text3)">›</span>
+        </a>
+        <a class="menu-item" href="#" onclick="showToast('通知设置')">
+          <span>🔔 通知设置</span><span style="color:var(--text3)">›</span>
+        </a>
+        <a class="menu-item" href="#" onclick="showToast('操作记录')">
+          <span>📋 操作记录</span><span style="color:var(--text3)">›</span>
+        </a>
+        <a class="menu-item" href="#" onclick="showToast('帮助中心')">
+          <span>❓ 帮助中心</span><span style="color:var(--text3)">›</span>
+        </a>
+        <a class="menu-item" style="border-bottom:none" href="#" onclick="showToast('关于系统')">
+          <span>ℹ️ 关于系统</span><span style="color:var(--text3)">›</span>
+        </a>
+      </div>
+
+      <!-- 退出登录 -->
+      <button style="width:100%;background:white;color:#e03e3e;border:1px solid #e03e3e;border-radius:10px;padding:12px;font-size:15px;cursor:pointer;margin-bottom:20px" onclick="showToast('退出登录')">退出登录</button>
+    </div>
+  </div>
+
+  <!-- 底部导航 -->
+  <div class="bottom-nav">
+    <a class="nav-item" href="../home/index.html">
+      <span class="nav-icon">🏠</span>
+      <span>首页</span>
+    </a>
+    <a class="nav-item" href="cases.html">
+      <span class="nav-icon">📋</span>
+      <span>案件</span>
+    </a>
+    <a class="nav-item" href="stats.html">
+      <span class="nav-icon">📊</span>
+      <span>统计</span>
+    </a>
+    <a class="nav-item active" href="profile.html">
+      <span class="nav-icon">👤</span>
+      <span>我的</span>
+    </a>
+  </div>
+</div>
+<script src="../common/script.js"></script>
+</body>
+</html>

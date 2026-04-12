@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>监拆复勘 - 车检监拆复勘系统</title>
+<link rel="stylesheet" href="../common/style.css">
+</head>
+<body>
+<div class="phone-container">
+  <!-- 状态栏 -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>📶 5G 🔋</span>
+  </div>
+
+  <!-- 顶部导航 -->
+  <div class="header">
+    <a class="header-back" href="index.html">‹</a>
+    <span class="header-title">监拆复勘</span>
+    <span class="header-action"></span>
+  </div>
+
+  <!-- 筛选区 -->
+  <div style="padding:12px 14px;background:white;border-bottom:1px solid var(--gray)">
+    <div style="display:flex;gap:8px">
+      <select style="flex:1;padding:8px 12px;border:1px solid var(--gray);border-radius:6px;font-size:13px;background:white">
+        <option>全部状态</option>
+        <option>待复勘</option>
+        <option>复勘中</option>
+        <option>已完成</option>
+      </select>
+      <select style="flex:1;padding:8px 12px;border:1px solid var(--gray);border-radius:6px;font-size:13px;background:white">
+        <option>最近7天</option>
+        <option>最近30天</option>
+        <option>全部时间</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 内容区 -->
+  <div class="scroll-area" style="padding:12px 14px">
+    <!-- 待复勘 -->
+    <div class="task-card" style="border-left:4px solid var(--blue)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:14px;font-weight:600">鲁A·12345</span>
+        <span style="font-size:11px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:10px">待复勘</span>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">修理厂：莱芜顺达汽修</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">监拆完成：2026-04-12 15:00</div>
+      <div style="font-size:12px;color:var(--text3)">维修项目：发动机拆解、变速箱检修</div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button onclick="location.href='detail.html?id=A001&mode=fukan'" style="flex:1;background:var(--blue);color:white;border:none;padding:8px;border-radius:6px;font-size:13px">开始复勘</button>
+        <button onclick="location.href='detail.html?id=A001'" style="background:var(--gray);color:var(--text2);border:none;padding:8px 12px;border-radius:6px;font-size:13px">查看监拆</button>
+      </div>
+    </div>
+
+    <div class="task-card" style="border-left:4px solid var(--blue)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:14px;font-weight:600">鲁E·33333</span>
+        <span style="font-size:11px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:10px">待复勘</span>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">修理厂：莱芜诚信汽修</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">监拆完成：2026-04-11 17:30</div>
+      <div style="font-size:12px;color:var(--text3)">维修项目：前保险杠更换、大灯维修</div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button onclick="location.href='detail.html?id=E001&mode=fukan'" style="flex:1;background:var(--blue);color:white;border:none;padding:8px;border-radius:6px;font-size:13px">开始复勘</button>
+        <button onclick="location.href='detail.html?id=E001'" style="background:var(--gray);color:var(--text2);border:none;padding:8px 12px;border-radius:6px;font-size:13px">查看监拆</button>
+      </div>
+    </div>
+
+    <!-- 复勘中 -->
+    <div class="task-card" style="border-left:4px solid #f59e0b">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:14px;font-weight:600">鲁B·67890</span>
+        <span style="font-size:11px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:10px">复勘中</span>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">修理厂：莱芜宏达汽修</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">复勘员：李四</div>
+      <div style="font-size:12px;color:var(--text3)">开始时间：2026-04-12 09:00</div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button onclick="location.href='detail.html?id=B001&mode=fukan'" style="flex:1;background:var(--blue);color:white;border:none;padding:8px;border-radius:6px;font-size:13px">继续复勘</button>
+      </div>
+    </div>
+
+    <!-- 已完成 -->
+    <div class="task-card" style="border-left:4px solid var(--green)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:14px;font-weight:600">鲁C·11111</span>
+        <span style="font-size:11px;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:10px">已完成</span>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">修理厂：莱芜鑫源汽修</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">复勘员：王五</div>
+      <div style="font-size:12px;color:var(--text3)">完成时间：2026-04-11 16:20</div>
+    </div>
+
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<script src="../common/script.js"></script>
+</body>
+</html>
