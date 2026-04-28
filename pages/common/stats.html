@@ -5,66 +5,205 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>统计报表</title>
 <link rel="stylesheet" href="../common/style.css">
+<style>
+  /* 月份选择器 */
+  .month-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: white;
+    border-bottom: 1px solid var(--gray);
+  }
+  .month-btn {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--blue-light);
+    color: var(--blue);
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .month-label {
+    font-size: 15px; font-weight: 600; color: var(--text); min-width: 80px; text-align: center;
+  }
+
+  /* 概览大卡片 */
+  .stat-overview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .stat-box {
+    background: white;
+    border-radius: var(--radius);
+    padding: 14px 12px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .stat-box.blue::before   { background: var(--blue); }
+  .stat-box.green::before  { background: var(--green); }
+  .stat-box.orange::before { background: var(--orange); }
+  .stat-box.purple::before { background: var(--purple); }
+  .stat-num {
+    font-size: 30px; font-weight: 800; line-height: 1.1;
+  }
+  .stat-label { font-size: 12px; color: var(--text2); margin-top: 5px; }
+  .stat-sub   { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+  /* 进度条 */
+  .prog-row { margin-bottom: 14px; }
+  .prog-row:last-child { margin-bottom: 0; }
+  .prog-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 13px; }
+  .prog-count { font-weight: 700; }
+  .prog-bar-wrap {
+    height: 8px; background: var(--gray); border-radius: 4px; overflow: hidden;
+  }
+  .prog-bar-fill {
+    height: 100%; border-radius: 4px; transition: width 0.4s ease;
+  }
+  .prog-bar-fill.blue   { background: linear-gradient(90deg, var(--blue), #7ba8fc); }
+  .prog-bar-fill.green  { background: linear-gradient(90deg, var(--green), #4dcb8e); }
+  .prog-bar-fill.orange { background: linear-gradient(90deg, var(--orange), #ffc75a); }
+
+  /* 效率指标 */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 4px 14px 12px;
+  }
+  .kpi-item {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray);
+  }
+  .kpi-item:nth-last-child(-n+2) { border-bottom: none; }
+  .kpi-value { font-size: 20px; font-weight: 800; }
+  .kpi-name  { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+  /* 排名 */
+  .rank-item {
+    display: flex; align-items: center;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--gray);
+    gap: 10px;
+  }
+  .rank-item:last-child { border-bottom: none; }
+  .rank-badge {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800;
+    flex-shrink: 0;
+  }
+  .rank-badge.r1 { background: #fff7e0; color: #d4a000; }
+  .rank-badge.r2 { background: #f0f0f0; color: #888; }
+  .rank-badge.r3 { background: #fff2ee; color: #c05c30; }
+  .rank-name  { flex: 1; font-size: 14px; font-weight: 500; }
+  .rank-right { text-align: right; }
+  .rank-count { font-size: 15px; font-weight: 700; color: var(--text); }
+  .rank-avg   { font-size: 11px; color: var(--text3); margin-top: 1px; }
+  .rank-you   {
+    font-size: 10px; background: var(--blue-light); color: var(--blue);
+    padding: 1px 6px; border-radius: 10px; margin-left: 4px; vertical-align: middle;
+  }
+</style>
 </head>
 <body>
 <div class="phone-container">
+  <!-- 状态栏 -->
   <div class="status-bar">
     <span>9:41</span>
-    <span>📶 5G 🔋</span>
-  </div>
-  <div class="header">
-    <a class="header-back" href="../home/index.html">‹</a>
-    <span class="header-title">统计报表</span>
-    <span class="header-action"></span>
+    <span style="display:flex;align-items:center;gap:4px">
+      <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><rect x="0" y="4" width="3" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="4" y="2.5" width="3" height="8.5" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="8" y="1" width="3" height="10" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="12" y="0" width="3" height="11" rx="1" fill="rgba(255,255,255,0.95)"/></svg>
+      <span style="font-size:11px;letter-spacing:0.5px">5G</span>
+      <svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="19" height="10" rx="2" stroke="rgba(255,255,255,0.6)" stroke-width="1"/><rect x="2" y="2" width="14" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><path d="M21 3.5v4a2 2 0 0 0 0-4z" fill="rgba(255,255,255,0.6)"/></svg>
+    </span>
   </div>
 
+  <!-- 顶部标题栏 -->
+  <div class="header">
+    <span class="header-back" style="visibility:hidden">‹</span>
+    <span class="header-title">统计报表</span>
+    <span class="header-action" style="width:28px"></span>
+  </div>
+
+  <!-- 月份选择器 -->
+  <div class="month-selector">
+    <button class="month-btn">‹</button>
+    <span class="month-label">2026年 3月</span>
+    <button class="month-btn">›</button>
+  </div>
+
+  <!-- 内容区 -->
   <div class="scroll-area" style="padding:12px 14px">
-    <!-- 统计概览 -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
-      <div style="background:white;border-radius:10px;padding:14px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06)">
-        <div style="font-size:28px;font-weight:700;color:var(--blue)">47</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:4px">车辆监拆</div>
+
+    <!-- 概览 -->
+    <div class="stat-overview">
+      <div class="stat-box blue">
+        <div class="stat-num" style="color:var(--blue)">47</div>
+        <div class="stat-label">监拆复勘</div>
+        <div class="stat-sub">已完成 38 单</div>
       </div>
-      <div style="background:white;border-radius:10px;padding:14px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06)">
-        <div style="font-size:28px;font-weight:700;color:var(--green)">23</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:4px">住院探视</div>
+      <div class="stat-box green">
+        <div class="stat-num" style="color:var(--green)">23</div>
+        <div class="stat-label">人伤理赔</div>
+        <div class="stat-sub">已完成 20 单</div>
       </div>
-      <div style="background:white;border-radius:10px;padding:14px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06)">
-        <div style="font-size:28px;font-weight:700;color:var(--orange)">18</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:4px">物损清单</div>
+      <div class="stat-box orange">
+        <div class="stat-num" style="color:var(--orange-dark)">18</div>
+        <div class="stat-label">物鉴理赔</div>
+        <div class="stat-sub">已完成 15 单</div>
       </div>
-      <div style="background:white;border-radius:10px;padding:14px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06)">
-        <div style="font-size:28px;font-weight:700;color:var(--purple)">88</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:4px">总计</div>
+      <div class="stat-box purple">
+        <div class="stat-num" style="color:var(--purple)">88</div>
+        <div class="stat-label">本月总计</div>
+        <div class="stat-sub">较上月 ↑12%</div>
       </div>
     </div>
 
     <!-- 本月完成情况 -->
     <div class="card" style="margin:0 0 12px 0">
       <div class="card-title">本月完成情况</div>
-      <div style="padding:0 14px 12px">
-        <div style="margin-bottom:14px">
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px">
-            <span>车辆监拆</span><span style="color:var(--blue);font-weight:600">21 单</span>
+      <div style="padding:6px 14px 14px">
+        <div class="prog-row">
+          <div class="prog-meta">
+            <span>监拆复勘</span>
+            <span class="prog-count" style="color:var(--blue)">21 单</span>
           </div>
-          <div class="progress">
-            <div class="progress-bar blue" style="width:65%"></div>
-          </div>
-        </div>
-        <div style="margin-bottom:14px">
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px">
-            <span>住院探视</span><span style="color:var(--green);font-weight:600">9 单</span>
-          </div>
-          <div class="progress">
-            <div class="progress-bar green" style="width:40%"></div>
+          <div class="prog-bar-wrap">
+            <div class="prog-bar-fill blue" style="width:65%"></div>
           </div>
         </div>
-        <div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px">
-            <span>物损清单</span><span style="color:var(--orange);font-weight:600">7 单</span>
+        <div class="prog-row">
+          <div class="prog-meta">
+            <span>人伤理赔</span>
+            <span class="prog-count" style="color:var(--green)">9 单</span>
           </div>
-          <div class="progress">
-            <div class="progress-bar orange" style="width:30%"></div>
+          <div class="prog-bar-wrap">
+            <div class="prog-bar-fill green" style="width:40%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-meta">
+            <span>物鉴理赔</span>
+            <span class="prog-count" style="color:var(--orange-dark)">7 单</span>
+          </div>
+          <div class="prog-bar-wrap">
+            <div class="prog-bar-fill orange" style="width:30%"></div>
           </div>
         </div>
       </div>
@@ -73,68 +212,74 @@
     <!-- 效率指标 -->
     <div class="card" style="margin:0 0 12px 0">
       <div class="card-title">效率指标</div>
-      <div class="detail-row"><span class="detail-label">平均处理时长</span><span style="font-weight:600">2.3 小时/单</span></div>
-      <div class="detail-row"><span class="detail-label">按时完成率</span><span style="color:var(--green);font-weight:600">96.2%</span></div>
-      <div class="detail-row"><span class="detail-label">复勘率</span><span style="color:var(--blue);font-weight:600">8.5%</span></div>
-      <div class="detail-row"><span class="detail-label">照片合格率</span><span style="color:var(--green);font-weight:600">99.1%</span></div>
-    </div>
-
-    <!-- 个人排名 -->
-    <div class="card" style="margin:0 0 12px 0">
-      <div class="card-title">个人效率排名</div>
-      <div style="padding:0 14px 12px">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gray)">
-          <div style="display:flex;align-items:center;gap:10px">
-            <span style="font-size:18px">🥇</span>
-            <span>张三</span>
-          </div>
-          <div style="text-align:right">
-            <div style="font-weight:600">21单</div>
-            <div style="font-size:11px;color:var(--text3)">平均1.8h</div>
-          </div>
+      <div class="kpi-grid">
+        <div class="kpi-item">
+          <div class="kpi-value" style="color:var(--blue)">2.3<span style="font-size:12px;font-weight:500;color:var(--text2)"> h/单</span></div>
+          <div class="kpi-name">平均处理时长</div>
         </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gray)">
-          <div style="display:flex;align-items:center;gap:10px">
-            <span style="font-size:18px">🥈</span>
-            <span>张三</span>
-          </div>
-          <div style="text-align:right">
-            <div style="font-weight:600">18单</div>
-            <div style="font-size:11px;color:var(--text3)">平均2.1h</div>
-          </div>
+        <div class="kpi-item">
+          <div class="kpi-value" style="color:var(--green)">96.2<span style="font-size:12px;font-weight:500;color:var(--text2)">%</span></div>
+          <div class="kpi-name">按时完成率</div>
         </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0">
-          <div style="display:flex;align-items:center;gap:10px">
-            <span style="font-size:18px">🥉</span>
-            <span>李四</span>
-          </div>
-          <div style="text-align:right">
-            <div style="font-weight:600">9单</div>
-            <div style="font-size:11px;color:var(--text3)">平均2.5h</div>
-          </div>
+        <div class="kpi-item">
+          <div class="kpi-value" style="color:var(--orange-dark)">8.5<span style="font-size:12px;font-weight:500;color:var(--text2)">%</span></div>
+          <div class="kpi-name">复勘率</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-value" style="color:var(--green)">99.1<span style="font-size:12px;font-weight:500;color:var(--text2)">%</span></div>
+          <div class="kpi-name">照片合格率</div>
         </div>
       </div>
     </div>
 
-    <div style="height:20px"></div>
+    <!-- 个人排名 -->
+    <div class="card" style="margin:0 0 12px 0">
+      <div class="card-title">本月效率排名</div>
+      <div class="rank-item">
+        <div class="rank-badge r1">1</div>
+        <div class="rank-name">张三<span class="rank-you">我</span></div>
+        <div class="rank-right">
+          <div class="rank-count">21单</div>
+          <div class="rank-avg">平均1.8h</div>
+        </div>
+      </div>
+      <div class="rank-item">
+        <div class="rank-badge r2">2</div>
+        <div class="rank-name">王磊</div>
+        <div class="rank-right">
+          <div class="rank-count">18单</div>
+          <div class="rank-avg">平均2.1h</div>
+        </div>
+      </div>
+      <div class="rank-item">
+        <div class="rank-badge r3">3</div>
+        <div class="rank-name">李四</div>
+        <div class="rank-right">
+          <div class="rank-count">9单</div>
+          <div class="rank-avg">平均2.5h</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:16px"></div>
   </div>
 
   <!-- 底部导航 -->
   <div class="bottom-nav">
     <a class="nav-item" href="../home/index.html">
-      <span class="nav-icon">🏠</span>
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" width="22" height="22"><path d="M3 12L12 4l9 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-5h4v5h4a1 1 0 0 0 1-1v-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span>首页</span>
     </a>
     <a class="nav-item" href="cases.html">
-      <span class="nav-icon">📋</span>
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" width="22" height="22"><rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       <span>案件</span>
     </a>
     <a class="nav-item active" href="stats.html">
-      <span class="nav-icon">📊</span>
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" width="22" height="22"><rect x="3" y="13" width="4" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="10" y="8" width="4" height="13" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="17" y="4" width="4" height="17" rx="1" stroke="currentColor" stroke-width="1.6"/></svg>
       <span>统计</span>
     </a>
     <a class="nav-item" href="profile.html">
-      <span class="nav-icon">👤</span>
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" width="22" height="22"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
       <span>我的</span>
     </a>
   </div>

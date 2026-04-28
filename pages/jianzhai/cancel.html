@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>取消订单</title>
+<link rel="stylesheet" href="../common/style.css">
+<style>
+.status-bar { background: var(--blue); }
+.header { background: var(--blue); }
+.btn-primary { background: var(--blue); }
+.btn-cancel { background: #f5f5f5; color: var(--text2); }
+
+/* 任务信息行 */
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--gray);
+  font-size: 14px;
+}
+.info-label { color: var(--text2); }
+.info-value { color: var(--text); font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="phone-container">
+  <div class="status-bar blue"><span>9:41</span><span>📶 5G 🔋</span></div>
+  <div class="header blue">
+    <a class="header-back" href="tasks.html">‹</a>
+    <span class="header-title">取消订单</span>
+    <span style="width:32px"></span>
+  </div>
+
+  <div class="scroll-area" style="padding:10px 12px">
+    <!-- 任务信息 -->
+    <div class="card" style="margin:0 0 10px">
+      <div class="card-title"><span class="card-title-dot blue"></span>监拆任务信息</div>
+      <div class="info-row">
+        <span class="info-label">案件号</span>
+        <span class="info-value">JD2026041502</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">车牌号</span>
+        <span class="info-value">鲁A·88888</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">修理厂</span>
+        <span class="info-value">济南万通汽修</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">预约时间</span>
+        <span class="info-value">04-16 14:00</span>
+      </div>
+      <div class="info-row" style="border-bottom:none">
+        <span class="info-label">接单时间</span>
+        <span class="info-value">2026-04-15 10:15</span>
+      </div>
+    </div>
+
+    <!-- 取消原因 -->
+    <div class="card" style="margin:0 0 10px">
+      <div class="card-title"><span class="card-title-dot blue"></span>取消原因</div>
+      <div class="form-item">
+        <label class="form-label form-label-req">选择取消原因</label>
+        <div class="form-select" onclick="showToast('选择取消原因')">请选择 <span class="arr">›</span></div>
+      </div>
+      <div class="form-item" style="align-items:flex-start;border-bottom:none">
+        <label class="form-label">详细说明</label>
+        <textarea class="form-textarea" placeholder="请详细说明取消原因..."></textarea>
+      </div>
+    </div>
+
+    <!-- 取消须知 -->
+    <div class="card" style="margin:0 0 80px">
+      <div class="card-title"><span class="card-title-dot orange"></span>⚠️ 取消须知</div>
+      <div style="padding:0 14px 14px;font-size:14px;color:var(--text2);line-height:1.8">
+        <p style="margin:0 0 8px">1. 取消订单后，此任务将重新进入待接单状态</p>
+        <p style="margin:0 0 8px">2. 频繁取消订单可能影响您的接单权重</p>
+        <p style="margin:0 0 8px">3. 如有紧急情况，请联系管理员处理</p>
+        <p style="margin:0">4. 取消申请提交后将由管理员审核</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-action" style="gap:10px">
+    <button class="btn btn-full btn-cancel" onclick="location.href='tasks.html'">返回任务列表</button>
+    <button class="btn btn-full btn-primary" onclick="showToast('取消申请已提交！');setTimeout(()=>location.href='tasks.html',1000)">确认取消订单</button>
+  </div>
+</div>
+<div class="toast"></div>
+<script src="../common/script.js"></script>
+</body>
+</html>

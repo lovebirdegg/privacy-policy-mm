@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>监拆全部任务</title>
+<link rel="stylesheet" href="../common/style.css">
+</head>
+<body>
+<div class="phone-container">
+  <!-- 状态栏 -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <span style="display:flex;align-items:center;gap:4px">
+      <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><rect x="0" y="4" width="3" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="4" y="2.5" width="3" height="8.5" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="8" y="1" width="3" height="10" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="12" y="0" width="3" height="11" rx="1" fill="rgba(255,255,255,0.95)"/></svg>
+      <span style="font-size:11px;letter-spacing:0.5px">5G</span>
+      <svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="19" height="10" rx="2" stroke="rgba(255,255,255,0.6)" stroke-width="1"/><rect x="2" y="2" width="14" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><path d="M21 3.5v4a2 2 0 0 0 0-4z" fill="rgba(255,255,255,0.6)"/></svg>
+    </span>
+  </div>
+
+  <!-- 顶部标题栏 -->
+  <div class="header">
+    <a class="header-back" href="index.html">‹</a>
+    <span class="header-title">监拆全部任务</span>
+    <span style="width:28px"></span>
+  </div>
+
+  <!-- Tab 切换 -->
+  <div class="tab-bar">
+    <a class="tab-item active" href="records.html">全部</a>
+    <a class="tab-item" href="records.html?type=pending">待审批</a>
+    <a class="tab-item" href="records.html?type=doing">进行中</a>
+    <a class="tab-item" href="records.html?type=done">已完成</a>
+  </div>
+
+  <!-- 搜索 -->
+  <div class="search-bar">
+    <div class="search-input-wrap">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="#bbb" stroke-width="1.4"/><path d="M10.5 10.5L14 14" stroke="#bbb" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <input type="text" placeholder="搜索车牌、案件编号...">
+    </div>
+  </div>
+
+  <!-- 列表 -->
+  <div class="scroll-area" style="padding:12px 14px">
+
+    <!-- 待审批 -->
+    <a class="task-card" style="border-left-color:var(--orange)" href="detail.html">
+      <div class="task-card-header">
+        <div class="task-id">JD2026033101</div>
+        <span class="tag tag-orange">待审批</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号</span>鲁S·12345</div>
+      <div class="task-info-row"><span class="task-label">修理厂</span>莱芜鑫鑫修理厂</div>
+      <div class="task-info-row"><span class="task-label">定损员</span>李四 · 2026-03-31 09:30</div>
+    </a>
+
+    <!-- 进行中 -->
+    <a class="task-card status-pending" href="detail.html">
+      <div class="task-card-header">
+        <div class="task-id">JD2026033102</div>
+        <span class="tag tag-blue">进行中</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号</span>鲁A·88888</div>
+      <div class="task-info-row"><span class="task-label">修理厂</span>济南万通汽修</div>
+      <div class="task-info-row"><span class="task-label">监拆员</span>张三 · 2026-03-31 10:15</div>
+    </a>
+
+    <!-- 待分配 -->
+    <a class="task-card" style="border-left-color:var(--red)" href="detail.html">
+      <div class="task-card-header">
+        <div class="task-id">JD2026033103</div>
+        <span class="tag tag-red">待分配</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号</span>鲁S·66666</div>
+      <div class="task-info-row"><span class="task-label">修理厂</span>莱芜顺达汽修</div>
+      <div class="task-info-row"><span class="task-label">定损员</span>李四 · 2026-03-31 11:00</div>
+    </a>
+
+    <!-- 已完成 -->
+    <a class="task-card status-done" href="detail.html">
+      <div class="task-card-header">
+        <div class="task-id">JD2026032801</div>
+        <span class="tag tag-green">已完成</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号</span>鲁Q·11111</div>
+      <div class="task-info-row"><span class="task-label">修理厂</span>莱芜宏发汽修</div>
+      <div class="task-info-row"><span class="task-label">监拆员</span>王五 · 2026-03-28 15:30</div>
+    </a>
+
+    <!-- 已完成 -->
+    <a class="task-card status-done" href="detail.html">
+      <div class="task-card-header">
+        <div class="task-id">JD2026032701</div>
+        <span class="tag tag-green">已完成</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号</span>鲁T·22222</div>
+      <div class="task-info-row"><span class="task-label">修理厂</span>济南诚信汽修</div>
+      <div class="task-info-row"><span class="task-label">监拆员</span>李四 · 2026-03-27 14:00</div>
+    </a>
+
+    <div style="height:16px"></div>
+  </div>
+</div>
+<div class="toast"></div>
+<script src="../common/script.js"></script>
+</body>
+</html>

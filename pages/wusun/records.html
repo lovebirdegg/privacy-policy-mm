@@ -3,92 +3,87 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>物损记录 - 车检监拆复勘系统</title>
+<title>物损记录</title>
 <link rel="stylesheet" href="../common/style.css">
 </head>
 <body>
 <div class="phone-container">
-  <!-- 状态栏 -->
-  <div class="status-bar">
-    <span>9:41</span>
-    <span>📶 5G 🔋</span>
-  </div>
-
-  <!-- 顶部导航 -->
+  <div class="status-bar"><span>9:41</span><span>📶 5G 🔋</span></div>
   <div class="header">
     <a class="header-back" href="index.html">‹</a>
     <span class="header-title">物损记录</span>
-    <span class="header-action"></span>
+    <span style="width:32px"></span>
   </div>
 
-  <!-- 搜索筛选 -->
-  <div style="padding:12px 14px;background:white;border-bottom:1px solid var(--gray)">
-    <input type="text" placeholder="搜索报案号/物损项目..." style="width:100%;padding:10px 12px;border:1px solid var(--gray);border-radius:8px;font-size:13px">
-    <div style="display:flex;gap:8px;margin-top:10px">
-      <select style="flex:1;padding:8px 12px;border:1px solid var(--gray);border-radius:6px;font-size:13px;background:white">
-        <option>全部状态</option>
-        <option>已完成</option>
-        <option>待复勘</option>
+  <div class="search-bar">
+    <div class="search-input-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" placeholder="搜索当事人姓名、报案号...">
+    </div>
+    <div class="filter-row">
+      <select class="filter-select">
+        <option>全部类型</option>
+        <option>财产损失</option>
+        <option>设备损坏</option>
+        <option>房屋损坏</option>
       </select>
-      <select style="flex:1;padding:8px 12px;border:1px solid var(--gray);border-radius:6px;font-size:13px;background:white">
-        <option>最近7天</option>
+      <select class="filter-select">
         <option>最近30天</option>
+        <option>最近7天</option>
         <option>全部时间</option>
       </select>
     </div>
   </div>
 
-  <!-- 内容区 -->
-  <div class="scroll-area" style="padding:12px 14px">
-    <!-- 记录项 -->
-    <div class="task-card" onclick="location.href='detail.html?id=WS001'">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <span style="font-size:14px;font-weight:600">WS20260412001</span>
-        <span style="font-size:11px;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:10px">已完成</span>
+  <div class="scroll-area" style="padding:10px 12px">
+    <a class="task-card status-done" href="detail.html">
+      <div class="task-card-header">
+        <div class="task-id">王建国</div>
+        <span class="tag tag-green">已完成</span>
       </div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">📋 报案号：BA20260410001</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">📦 物损项目：护栏、路灯杆、绿化带</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">👤 登记员：张三</div>
-      <div style="font-size:12px;color:var(--text3)">登记时间：2026-04-12 14:30</div>
-    </div>
+      <div class="task-info-row"><span class="task-label">类型：</span>财产损失</div>
+      <div class="task-info-row"><span class="task-label">实际金额：</span><span style="color:var(--orange);font-weight:600">¥11,800</span></div>
+      <div class="task-info-row"><span class="task-label">勘察员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">完成时间：</span>2026-04-12 10:30</div>
+    </a>
 
-    <div class="task-card" onclick="location.href='detail.html?id=WS002'">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <span style="font-size:14px;font-weight:600">WS20260412002</span>
-        <span style="font-size:11px;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:10px">已完成</span>
+    <a class="task-card status-done" href="detail.html">
+      <div class="task-card-header">
+        <div class="task-id">李秀梅</div>
+        <span class="tag tag-green">已完成</span>
       </div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">📋 报案号：BA20260409002</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">📦 物损项目：墙体、门窗</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">👤 登记员：张三</div>
-      <div style="font-size:12px;color:var(--text3)">登记时间：2026-04-11 16:00</div>
-    </div>
+      <div class="task-info-row"><span class="task-label">类型：</span>设备损坏</div>
+      <div class="task-info-row"><span class="task-label">实际金额：</span><span style="color:var(--orange);font-weight:600">¥7,500</span></div>
+      <div class="task-info-row"><span class="task-label">勘察员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">完成时间：</span>2026-04-11 15:20</div>
+    </a>
 
-    <div class="task-card" onclick="location.href='detail.html?id=WS003'">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <span style="font-size:14px;font-weight:600">WS20260411001</span>
-        <span style="font-size:11px;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:10px">已完成</span>
+    <a class="task-card status-done" href="detail.html">
+      <div class="task-card-header">
+        <div class="task-id">赵志强</div>
+        <span class="tag tag-teal">待复勘</span>
       </div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">📋 报案号：BA20260408001</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">📦 物损项目：地下管道</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">👤 登记员：张三</div>
-      <div style="font-size:12px;color:var(--text3)">登记时间：2026-04-10 11:20</div>
-    </div>
+      <div class="task-info-row"><span class="task-label">类型：</span>房屋损坏</div>
+      <div class="task-info-row"><span class="task-label">预估金额：</span><span style="color:var(--orange);font-weight:600">¥35,000</span></div>
+      <div class="task-info-row"><span class="task-label">勘察员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">完成时间：</span>2026-03-30 17:45</div>
+    </a>
 
-    <div class="task-card" onclick="location.href='detail.html?id=WS004'">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <span style="font-size:14px;font-weight:600">WS20260410001</span>
-        <span style="font-size:11px;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:10px">已完成</span>
+    <a class="task-card status-done" href="detail.html">
+      <div class="task-card-header">
+        <div class="task-id">孙小明</div>
+        <span class="tag tag-green">已完成</span>
       </div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">📋 报案号：BA20260405001</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">📦 物损项目：广告牌、人行道</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">👤 登记员：张三</div>
-      <div style="font-size:12px;color:var(--text3)">登记时间：2026-04-09 15:45</div>
-    </div>
+      <div class="task-info-row"><span class="task-label">类型：</span>财产损失</div>
+      <div class="task-info-row"><span class="task-label">实际金额：</span><span style="color:var(--orange);font-weight:600">¥6,200</span></div>
+      <div class="task-info-row"><span class="task-label">勘察员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">完成时间：</span>2026-03-28 16:00</div>
+    </a>
 
     <div style="height:20px"></div>
   </div>
 </div>
-
+<div class="toast"></div>
 <script src="../common/script.js"></script>
 </body>
 </html>

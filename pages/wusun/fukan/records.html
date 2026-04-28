@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>复勘全部任务</title>
+<link rel="stylesheet" href="../../common/style.css">
+<style>
+  .btn-primary.orange { background: var(--orange); color: white; border: none; }
+  .btn-primary.orange:active { background: #c24d00; }
+</style>
+</head>
+<body>
+<div class="phone-container">
+  <div class="status-bar orange">
+    <span>9:41</span>
+    <span style="display:flex;align-items:center;gap:4px">
+      <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><rect x="0" y="4" width="3" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="4" y="2.5" width="3" height="8.5" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="8" y="1" width="3" height="10" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="12" y="0" width="3" height="11" rx="1" fill="rgba(255,255,255,0.95)"/></svg>
+      <span style="font-size:11px;letter-spacing:0.5px">5G</span>
+      <svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="19" height="10" rx="2" stroke="rgba(255,255,255,0.6)" stroke-width="1"/><rect x="2" y="2" width="14" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><path d="M21 3.5v4a2 2 0 0 0 0-4z" fill="rgba(255,255,255,0.6)"/></svg>
+    </span>
+  </div>
+
+  <div class="header" style="background:var(--orange)">
+    <a class="header-back" href="../index.html">‹</a>
+    <span class="header-title" style="color:white">复勘全部任务</span>
+    <span style="width:28px"></span>
+  </div>
+
+  <div class="tab-bar">
+    <a class="tab-item active" href="records.html">全部</a>
+    <a class="tab-item" href="records.html?type=pending">待复勘</a>
+    <a class="tab-item" href="records.html?type=doing">复勘中</a>
+    <a class="tab-item" href="records.html?type=done">已完成</a>
+  </div>
+
+  <div class="scroll-area" style="padding:12px 14px">
+
+    <a class="task-card" style="border-left-color:var(--blue)" href="#">
+      <div class="task-card-header">
+        <div class="task-id">WF2026041201</div>
+        <span class="tag tag-blue">待复勘</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">当事人</span>王建国</div>
+      <div class="task-info-row"><span class="task-label">物损类型</span>财产损失</div>
+      <div class="task-info-row"><span class="task-label">预估金额</span><span style="color:var(--orange);font-weight:600">¥12,500</span></div>
+      <div class="task-info-row"><span class="task-label">发布时间</span>2026-04-12 10:00</div>
+    </a>
+
+    <a class="task-card" style="border-left-color:var(--orange)" href="#">
+      <div class="task-card-header">
+        <div class="task-id">WF2026041202</div>
+        <span class="tag tag-orange">复勘中</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">当事人</span>李秀梅</div>
+      <div class="task-info-row"><span class="task-label">物损类型</span>设备损坏</div>
+      <div class="task-info-row"><span class="task-label">复勘员</span>张三</div>
+      <div class="task-info-row"><span class="task-label">开始时间</span>2026-04-12 10:30</div>
+    </a>
+
+    <a class="task-card" style="border-left-color:var(--green)" href="#">
+      <div class="task-card-header">
+        <div class="task-id">WF2026041101</div>
+        <span class="tag tag-green">已完成</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">当事人</span>赵志强</div>
+      <div class="task-info-row"><span class="task-label">物损类型</span>房屋损坏</div>
+      <div class="task-info-row"><span class="task-label">复勘员</span>李四</div>
+      <div class="task-info-row"><span class="task-label">完成时间</span>2026-04-11 17:45</div>
+    </a>
+
+    <a class="task-card" style="border-left-color:var(--green)" href="#">
+      <div class="task-card-header">
+        <div class="task-id">WF2026041001</div>
+        <span class="tag tag-green">已完成</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">当事人</span>刘晓东</div>
+      <div class="task-info-row"><span class="task-label">物损类型</span>财产损失</div>
+      <div class="task-info-row"><span class="task-label">复勘员</span>王五</div>
+      <div class="task-info-row"><span class="task-label">完成时间</span>2026-04-10 14:00</div>
+    </a>
+
+    <div style="height:16px"></div>
+  </div>
+</div>
+<div class="toast"></div>
+<script src="../../common/script.js"></script>
+</body>
+</html>

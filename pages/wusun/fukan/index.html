@@ -3,10 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>物鉴理赔</title>
-<link rel="stylesheet" href="../common/style.css">
+<title>复勘任务</title>
+<link rel="stylesheet" href="../../common/style.css">
 <style>
-/* ==================== 最近任务模块容器 ==================== */
+/* ==================== 统计栏紫色主题 ==================== */
+.stat-bar {
+  display: flex;
+  padding: 14px 12px 12px;
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+  gap: 1px;
+}
+.stat-item {
+  flex: 1;
+  text-align: center;
+  background: rgba(255,255,255,0.15);
+  padding: 10px 4px;
+  border-radius: 8px;
+}
+.stat-num {
+  font-size: 22px;
+  font-weight: 800;
+  color: white;
+}
+.stat-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.8);
+  margin-top: 2px;
+}
+
+/* ==================== 功能入口 ==================== */
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 0 0 4px;
+}
+.module-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 4px;
+  text-decoration: none;
+  color: var(--text);
+}
+.module-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.module-icon-wrap.purple { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+.module-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ==================== 最近任务模块 ==================== */
 .task-section {
   background: #fff;
   border-radius: var(--radius);
@@ -33,7 +90,7 @@
   content: '';
   width: 3px;
   height: 16px;
-  background: linear-gradient(180deg, var(--orange), #f0a020);
+  background: linear-gradient(180deg, var(--purple), #a78bfa);
   border-radius: 2px;
 }
 .task-section-more {
@@ -63,23 +120,15 @@
   cursor: pointer;
   transition: all 0.2s;
 }
-.filter-tab:active {
-  transform: scale(0.96);
-}
 .filter-tab.active {
-  background: var(--orange);
-  color: #fff;
-  border-color: var(--orange);
-  font-weight: 600;
-  box-shadow: 0 2px 6px rgba(240,160,32,0.3);
-}
-.filter-tab[data-filter="fukan"].active {
   background: var(--purple);
+  color: #fff;
   border-color: var(--purple);
+  font-weight: 600;
   box-shadow: 0 2px 6px rgba(139,92,246,0.3);
 }
 
-/* ==================== 任务卡片美化 ==================== */
+/* ==================== 任务卡片 ==================== */
 .task-card {
   display: block;
   padding: 14px;
@@ -90,17 +139,7 @@
   position: relative;
   transition: all 0.15s;
 }
-/* 左侧彩色边框区分类型 */
-.task-card[data-type="wusun"]::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: linear-gradient(180deg, var(--orange), #f0a020);
-}
-.task-card[data-type="fukan"]::before {
+.task-card::before {
   content: '';
   position: absolute;
   left: 0;
@@ -109,12 +148,8 @@
   width: 3px;
   background: linear-gradient(180deg, var(--purple), #a78bfa);
 }
-.task-card:last-child {
-  border-bottom: none;
-}
-.task-card:active {
-  background: #fafafa;
-}
+.task-card:last-child { border-bottom: none; }
+.task-card:active { background: #fafafa; }
 .task-card-header {
   display: flex;
   align-items: center;
@@ -129,20 +164,18 @@
   font-family: monospace;
   letter-spacing: 0.5px;
 }
-.task-card .tag {
+.tag {
   font-size: 10px;
   padding: 2px 8px;
   border-radius: 10px;
   font-weight: 500;
 }
-.tag-orange {
-  background: #fff3e0;
-  color: var(--orange);
-}
-.tag-purple {
-  background: #f5f3ff;
-  color: var(--purple);
-}
+.tag-purple { background: #f5f3ff; color: var(--purple); }
+.tag-orange { background: #fff3e0; color: var(--orange); }
+.tag-blue { background: #eff6ff; color: #3b82f6; }
+.tag-green { background: #f0fdf4; color: var(--green); }
+.tag-red { background: #fef2f2; color: var(--red); }
+
 .task-info-list {
   display: flex;
   flex-wrap: wrap;
@@ -154,17 +187,10 @@
   display: flex;
   align-items: center;
 }
-.task-info-item .label {
-  color: var(--text3);
-}
-.task-info-item .value {
-  color: var(--text);
-}
-.task-info-item .amount {
-  color: var(--orange);
-  font-weight: 600;
-  font-size: 13px;
-}
+.task-info-item .label { color: var(--text3); }
+.task-info-item .value { color: var(--text); }
+.task-info-item .amount { color: var(--orange); font-weight: 600; font-size: 13px; }
+
 .task-card-footer {
   display: flex;
   align-items: center;
@@ -173,111 +199,91 @@
   padding-top: 10px;
   border-top: 1px dashed #f0f0f0;
 }
-.task-meta {
-  font-size: 11px;
-  color: var(--text3);
-}
+.task-meta { font-size: 11px; color: var(--text3); }
 .task-action {
   font-size: 12px;
-  color: var(--orange);
+  color: var(--purple);
   font-weight: 500;
 }
 
-/* 状态颜色 */
-.status-wait { background: #fff; }
-.status-doing { background: #fff; }
+/* 状态样式 */
 .status-done { background: #fafafa; }
 .status-done .task-id { color: var(--text3); }
 .status-done .task-info-item .value { color: var(--text3); }
+.status-done .task-action { color: var(--text3); }
 </style>
 </head>
 <body>
 <div class="phone-container">
-  <div class="status-bar orange"><span>9:41</span><span>📶 5G 🔋</span></div>
-  <div class="header orange">
+  <div class="status-bar purple"><span>9:41</span><span>📶 5G 🔋</span></div>
+  <div class="header purple">
     <a class="header-back" href="../home/index.html">‹</a>
-    <span class="header-title">物鉴理赔</span>
+    <span class="header-title">复勘任务</span>
     <a class="header-action" href="create.html">＋</a>
   </div>
 
-  <div class="stat-bar" style="background:var(--orange-light)">
+  <!-- 统计栏 -->
+  <div class="stat-bar">
     <div class="stat-item">
-      <div class="stat-num" style="color:var(--red)">3</div>
-      <div class="stat-label">待处理</div>
+      <div class="stat-num">2</div>
+      <div class="stat-label">待复勘</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num" style="color:var(--orange)">5</div>
+      <div class="stat-num">3</div>
       <div class="stat-label">进行中</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num" style="color:var(--green)">18</div>
+      <div class="stat-num">15</div>
       <div class="stat-label">已完成</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num" style="color:var(--blue)">26</div>
+      <div class="stat-num">20</div>
       <div class="stat-label">总计</div>
     </div>
   </div>
 
   <div class="scroll-area">
-    <div class="card">
-      <div class="card-title"><span class="card-title-dot orange"></span>物鉴理赔</div>
+    <!-- 功能入口 -->
+    <div class="card" style="margin:12px 12px 0">
+      <div class="card-title"><span class="card-title-dot purple"></span>复勘管理</div>
       <div class="module-grid">
         <a class="module-item" href="create.html">
-          <div class="module-icon-wrap orange">➕</div>
-          <span class="module-label">物鉴发布</span>
-        </a>
-        <a class="module-item" href="tasks.html">
-          <div class="module-icon-wrap orange">📋</div>
-          <span class="module-label">物鉴任务</span>
+          <div class="module-icon-wrap purple">➕</div>
+          <span class="module-label">发起复勘</span>
         </a>
         <a class="module-item" href="approval.html">
-          <div class="module-icon-wrap orange">✅</div>
-          <span class="module-label">物鉴审批</span>
-        </a>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:0">
-      <div class="card-title"><span class="card-title-dot purple"></span>复勘任务</div>
-      <div class="module-grid">
-        <a class="module-item" href="fukan/create.html">
-          <div class="module-icon-wrap purple">➕</div>
-          <span class="module-label">复勘发布</span>
-        </a>
-        <a class="module-item" href="fukan/tasks.html">
           <div class="module-icon-wrap purple">📋</div>
-          <span class="module-label">复勘任务</span>
+          <span class="module-label">审批</span>
         </a>
-        <a class="module-item" href="fukan/approval.html">
+        <a class="module-item" href="records.html">
           <div class="module-icon-wrap purple">📄</div>
-          <span class="module-label">复勘审批</span>
+          <span class="module-label">全部记录</span>
         </a>
-        <div class="module-item" style="visibility:hidden"></div>
       </div>
     </div>
 
     <!-- 最近任务模块 -->
     <div class="task-section">
       <div class="task-section-header">
-        <div class="task-section-title">物鉴理赔</div>
-        <a class="task-section-more" href="tasks.html">查看全部 ›</a>
+        <div class="task-section-title">复勘任务</div>
+        <a class="task-section-more" href="records.html">全部记录 ›</a>
       </div>
 
-      <!-- 任务筛选标签 -->
+      <!-- 筛选标签 -->
       <div class="filter-tabs">
         <div class="filter-tab active" data-filter="all" onclick="filterTasks('all', this)">全部</div>
-        <div class="filter-tab" data-filter="wusun" onclick="filterTasks('wusun', this)">物鉴任务</div>
-        <div class="filter-tab" data-filter="fukan" onclick="filterTasks('fukan', this)">复勘任务</div>
+        <div class="filter-tab" data-filter="pending" onclick="filterTasks('pending', this)">待复勘</div>
+        <div class="filter-tab" data-filter="doing" onclick="filterTasks('doing', this)">进行中</div>
+        <div class="filter-tab" data-filter="done" onclick="filterTasks('done', this)">已完成</div>
       </div>
 
       <div id="task-list">
-        <!-- 物鉴任务1 - 待分配 -->
-        <a class="task-card status-wait" href="detail.html" data-type="wusun">
+        <!-- 复勘任务1 - 待复勘 -->
+        <a class="task-card" href="detail.html" data-status="pending">
           <div class="task-card-header">
-            <div class="task-id">WS2026041201</div>
-            <span class="tag tag-orange">物鉴</span>
-            <span class="tag tag-red">待分配</span>
+            <div class="task-id">FK2026041201</div>
+            <span class="tag tag-purple">复勘</span>
+            <span class="tag tag-red">待复勘</span>
           </div>
           <div class="task-info-list">
             <div class="task-info-item"><span class="label">当事人：</span><span class="value">王建国</span></div>
@@ -286,67 +292,66 @@
           </div>
           <div class="task-card-footer">
             <span class="task-meta">📅 2026-04-12 09:15</span>
-            <span class="task-action">查看详情 ›</span>
+            <span class="task-action">开始复勘 ›</span>
           </div>
         </a>
 
-        <!-- 物鉴任务2 - 进行中 -->
-        <a class="task-card status-doing" href="detail.html" data-type="wusun">
+        <!-- 复勘任务2 - 进行中 -->
+        <a class="task-card" href="detail.html" data-status="doing">
           <div class="task-card-header">
-            <div class="task-id">WS2026041202</div>
-            <span class="tag tag-orange">物鉴</span>
-            <span class="tag tag-blue">进行中</span>
-          </div>
-          <div class="task-info-list">
-            <div class="task-info-item"><span class="label">当事人：</span><span class="value">李秀梅</span></div>
-            <div class="task-info-item"><span class="label">物损类型：</span><span class="value">设备损坏</span></div>
-            <div class="task-info-item"><span class="label">预估金额：</span><span class="amount">¥8,300</span></div>
-            <div class="task-info-item"><span class="label">勘察员：</span><span class="value">张三</span></div>
-          </div>
-          <div class="task-card-footer">
-            <span class="task-meta">🔄 进行中 · 2026-04-12 10:22</span>
-            <span class="task-action">继续填写 ›</span>
-          </div>
-        </a>
-
-        <!-- 复勘任务1 - 进行中 -->
-        <a class="task-card status-doing" href="fukan/tasks.html" data-type="fukan">
-          <div class="task-card-header">
-            <div class="task-id">FK2026041201</div>
+            <div class="task-id">FK2026041202</div>
             <span class="tag tag-purple">复勘</span>
             <span class="tag tag-blue">进行中</span>
           </div>
           <div class="task-info-list">
-            <div class="task-info-item"><span class="label">当事人：</span><span class="value">赵四海</span></div>
-            <div class="task-info-item"><span class="label">复勘类型：</span><span class="value">二次复勘</span></div>
-            <div class="task-info-item"><span class="label">勘察员：</span><span class="value">李四</span></div>
+            <div class="task-info-item"><span class="label">当事人：</span><span class="value">李秀梅</span></div>
+            <div class="task-info-item"><span class="label">复勘员：</span><span class="value">张三</span></div>
+            <div class="task-info-item"><span class="label">物损类型：</span><span class="value">设备损坏</span></div>
           </div>
           <div class="task-card-footer">
-            <span class="task-meta">🔄 进行中 · 2026-04-12 14:30</span>
-            <span class="task-action" style="color:var(--purple)">继续填写 ›</span>
+            <span class="task-meta">🔄 进行中 · 2026-04-12 10:30</span>
+            <span class="task-action">继续填写 ›</span>
           </div>
         </a>
 
-        <!-- 物鉴任务3 - 已完成 -->
-        <a class="task-card status-done" href="detail.html" data-type="wusun">
+        <!-- 复勘任务3 - 进行中 -->
+        <a class="task-card" href="detail.html" data-status="doing">
           <div class="task-card-header">
-            <div class="task-id">WS2026041103</div>
-            <span class="tag tag-orange">物鉴</span>
+            <div class="task-id">FK2026041105</div>
+            <span class="tag tag-purple">复勘</span>
+            <span class="tag tag-blue">进行中</span>
+          </div>
+          <div class="task-info-list">
+            <div class="task-info-item"><span class="label">当事人：</span><span class="value">赵大力</span></div>
+            <div class="task-info-item"><span class="label">复勘员：</span><span class="value">李四</span></div>
+            <div class="task-info-item"><span class="label">物损类型：</span><span class="value">建筑损坏</span></div>
+          </div>
+          <div class="task-card-footer">
+            <span class="task-meta">🔄 进行中 · 2026-04-11 14:20</span>
+            <span class="task-action">继续填写 ›</span>
+          </div>
+        </a>
+
+        <!-- 复勘任务4 - 已完成 -->
+        <a class="task-card status-done" href="detail.html" data-status="done">
+          <div class="task-card-header">
+            <div class="task-id">FK2026041103</div>
+            <span class="tag tag-purple">复勘</span>
             <span class="tag tag-green">已完成</span>
           </div>
           <div class="task-info-list">
-            <div class="task-info-item"><span class="label">当事人：</span><span class="value">孙磊</span></div>
-            <div class="task-info-item"><span class="label">物损类型：</span><span class="value">车辆损失</span></div>
-            <div class="task-info-item"><span class="label">定损金额：</span><span class="amount">¥15,200</span></div>
+            <div class="task-info-item"><span class="label">当事人：</span><span class="value">孙晓华</span></div>
+            <div class="task-info-item"><span class="label">复勘员：</span><span class="value">王五</span></div>
+            <div class="task-info-item"><span class="label">定损金额：</span><span class="amount">¥8,800</span></div>
           </div>
           <div class="task-card-footer">
             <span class="task-meta">✅ 已完成 · 2026-04-11 16:45</span>
-            <span class="task-action" style="color:var(--text3)">查看报告 ›</span>
+            <span class="task-action">查看报告 ›</span>
           </div>
         </a>
 
-        <!-- 复勘任务2 - 已完成 -->
-        <a class="task-card status-done" href="fukan/tasks.html" data-type="fukan">
+        <!-- 复勘任务5 - 已完成 -->
+        <a class="task-card status-done" href="detail.html" data-status="done">
           <div class="task-card-header">
             <div class="task-id">FK2026041102</div>
             <span class="tag tag-purple">复勘</span>
@@ -354,12 +359,12 @@
           </div>
           <div class="task-info-list">
             <div class="task-info-item"><span class="label">当事人：</span><span class="value">周华</span></div>
-            <div class="task-info-item"><span class="label">复勘类型：</span><span class="value">首次复勘</span></div>
-            <div class="task-info-item"><span class="label">勘察员：</span><span class="value">王五</span></div>
+            <div class="task-info-item"><span class="label">复勘员：</span><span class="value">赵六</span></div>
+            <div class="task-info-item"><span class="label">定损金额：</span><span class="amount">¥15,200</span></div>
           </div>
           <div class="task-card-footer">
             <span class="task-meta">✅ 已完成 · 2026-04-11 11:20</span>
-            <span class="task-action" style="color:var(--text3)">查看报告 ›</span>
+            <span class="task-action">查看报告 ›</span>
           </div>
         </a>
       </div>
@@ -375,9 +380,9 @@
   </div>
 </div>
 <div class="toast"></div>
-<script src="../common/script.js"></script>
+<script src="../../common/script.js"></script>
 <script>
-function filterTasks(type, el) {
+function filterTasks(status, el) {
   // 更新标签选中态
   document.querySelectorAll('.filter-tab').forEach(function(tab) {
     tab.classList.remove('active');
@@ -387,7 +392,7 @@ function filterTasks(type, el) {
   // 筛选任务卡片
   var cards = document.querySelectorAll('#task-list .task-card');
   cards.forEach(function(card) {
-    if (type === 'all' || card.dataset.type === type) {
+    if (status === 'all' || card.dataset.status === status) {
       card.style.display = 'block';
     } else {
       card.style.display = 'none';

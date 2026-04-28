@@ -3,18 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>监拆审批</title>
-<link rel="stylesheet" href="../common/style.css">
+<title>复勘审批</title>
+<link rel="stylesheet" href="../../common/style.css">
 </head>
 <body>
 <div class="phone-container">
-  <div class="status-bar"><span>9:41</span><span>📶 5G 🔋</span></div>
-  <div class="header">
-    <a class="header-back" href="index.html">‹</a>
-    <span class="header-title">监拆审批</span>
-    <span style="width:32px"></span>
+  <div class="status-bar purple"><span>9:41</span><span style="display:flex;align-items:center;gap:4px"><svg width="15" height="11" viewBox="0 0 15 11" fill="none"><rect x="0" y="4" width="3" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="4" y="2.5" width="3" height="8.5" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="8" y="1" width="3" height="10" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="12" y="0" width="3" height="11" rx="1" fill="rgba(255,255,255,0.95)"/></svg><span style="font-size:11px;letter-spacing:0.5px">5G</span><svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="19" height="10" rx="2" stroke="rgba(255,255,255,0.6)" stroke-width="1"/><rect x="2" y="2" width="14" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><path d="M21 3.5v4a2 2 0 0 0 0-4z" fill="rgba(255,255,255,0.6)"/></svg></span></div>
+  <div class="header purple">
+    <a class="header-back" href="../index.html">‹</a>
+    <span class="header-title" style="color:white">复勘审批</span>
+    <span style="width:28px"></span>
   </div>
 
+  <!-- Tab 切换 -->
   <div class="tab-bar">
     <a class="tab-item active" href="approval.html">全部</a>
     <a class="tab-item" href="approval.html?s=wait">待审批</a>
@@ -46,57 +47,67 @@
     <!-- 待审批 -->
     <a class="task-card status-pending" href="detail.html">
       <div class="task-card-header">
-        <div class="task-id">JD2026033101</div>
+        <div class="task-id">FK2026041201</div>
         <span class="tag tag-orange">待审批</span>
       </div>
       <div class="task-info-row"><span class="task-label">车牌号：</span>鲁A·12345</div>
       <div class="task-info-row"><span class="task-label">修理厂：</span>莱芜顺达汽修</div>
-      <div class="task-info-row"><span class="task-label">监拆员：</span>张三</div>
-      <div class="task-info-row"><span class="task-label">提交时间：</span>2026-04-12 14:30</div>
+      <div class="task-info-row"><span class="task-label">监拆单号：</span>JD2026041201</div>
+      <div class="task-info-row"><span class="task-label">复勘类型：</span>过程复勘</div>
+      <div class="task-info-row"><span class="task-label">维修项目：</span>发动机拆解、变速箱检修</div>
+      <div class="task-info-row"><span class="task-label">申请人：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">提交时间：</span>2026-04-12 16:30</div>
       <div class="task-actions">
         <button class="btn btn-gray" onclick="event.preventDefault();location.href='detail.html'">查看</button>
         <button class="btn btn-red" onclick="event.preventDefault();showToast('已驳回')">驳回</button>
-        <button class="btn btn-primary" onclick="event.preventDefault();showToast('审批通过！')">通过</button>
+        <button class="btn btn-primary purple" onclick="event.preventDefault();showToast('审批通过！')">通过</button>
       </div>
     </a>
 
     <a class="task-card status-pending" href="detail.html">
       <div class="task-card-header">
-        <div class="task-id">JD2026033102</div>
+        <div class="task-id">FK2026041202</div>
         <span class="tag tag-orange">待审批</span>
       </div>
       <div class="task-info-row"><span class="task-label">车牌号：</span>鲁B·67890</div>
       <div class="task-info-row"><span class="task-label">修理厂：</span>莱芜宏达汽修</div>
-      <div class="task-info-row"><span class="task-label">监拆员：</span>张三</div>
-      <div class="task-info-row"><span class="task-label">提交时间：</span>2026-04-12 10:15</div>
+      <div class="task-info-row"><span class="task-label">监拆单号：</span>JD2026041101</div>
+      <div class="task-info-row"><span class="task-label">复勘类型：</span>竣工复勘</div>
+      <div class="task-info-row"><span class="task-label">维修项目：</span>前保险杠更换、大灯维修</div>
+      <div class="task-info-row"><span class="task-label">申请人：</span>李四</div>
+      <div class="task-info-row"><span class="task-label">提交时间：</span>2026-04-12 15:00</div>
       <div class="task-actions">
         <button class="btn btn-gray" onclick="event.preventDefault();location.href='detail.html'">查看</button>
         <button class="btn btn-red" onclick="event.preventDefault();showToast('已驳回')">驳回</button>
-        <button class="btn btn-primary" onclick="event.preventDefault();showToast('审批通过！')">通过</button>
+        <button class="btn btn-primary purple" onclick="event.preventDefault();showToast('审批通过！')">通过</button>
       </div>
     </a>
 
     <!-- 已通过 -->
     <a class="task-card status-done" href="detail.html">
       <div class="task-card-header">
-        <div class="task-id">JD2026033103</div>
+        <div class="task-id">FK2026041101</div>
         <span class="tag tag-green">已通过</span>
       </div>
       <div class="task-info-row"><span class="task-label">车牌号：</span>鲁C·11111</div>
       <div class="task-info-row"><span class="task-label">修理厂：</span>莱芜鑫源汽修</div>
-      <div class="task-info-row"><span class="task-label">监拆员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">监拆单号：</span>JD2026041101</div>
+      <div class="task-info-row"><span class="task-label">复勘类型：</span>过程复勘</div>
+      <div class="task-info-row"><span class="task-label">申请人：</span>王五</div>
       <div class="task-info-row"><span class="task-label">审批时间：</span>2026-04-11 16:20</div>
     </a>
 
     <!-- 已驳回 -->
     <a class="task-card status-reject" href="detail.html">
       <div class="task-card-header">
-        <div class="task-id">JD2026033104</div>
+        <div class="task-id">FK2026041102</div>
         <span class="tag tag-red">已驳回</span>
       </div>
       <div class="task-info-row"><span class="task-label">车牌号：</span>鲁D·22222</div>
       <div class="task-info-row"><span class="task-label">修理厂：</span>莱芜永兴汽修</div>
-      <div class="task-info-row"><span class="task-label">监拆员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">监拆单号：</span>JD2026041001</div>
+      <div class="task-info-row"><span class="task-label">复勘类型：</span>竣工复勘</div>
+      <div class="task-info-row"><span class="task-label">申请人：</span>赵六</div>
       <div class="task-info-row" style="color:var(--red)"><span class="task-label">驳回原因：</span>照片不清晰，需补充</div>
     </a>
 
@@ -104,6 +115,6 @@
   </div>
 </div>
 <div class="toast"></div>
-<script src="../common/script.js"></script>
+<script src="../../common/script.js"></script>
 </body>
 </html>

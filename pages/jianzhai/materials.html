@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>案件素材</title>
+<link rel="stylesheet" href="../common/style.css">
+<style>
+/* ==================== Tab栏 ==================== */
+.tab-bar {
+  background: var(--blue);
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-item {
+  flex: 1;
+  min-width: 80px;
+  text-align: center;
+  padding: 12px 8px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+.tab-item.active {
+  color: white;
+  font-weight: 600;
+}
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 3px;
+  background: white;
+  border-radius: 2px 2px 0 0;
+}
+
+/* ==================== 提示条 ==================== */
+.tip-bar {
+  background: linear-gradient(135deg, #c75c5c, #a84a4a);
+  color: white;
+  text-align: center;
+  padding: 12px 16px;
+  font-size: 14px;
+  margin: 12px;
+  border-radius: 8px;
+}
+
+/* ==================== 内容区域 ==================== */
+.content-area {
+  padding: 0 12px 20px;
+  min-height: 300px;
+}
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+}
+
+/* ==================== 空状态 ==================== */
+.empty-state {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--text3);
+}
+.empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+.empty-text {
+  font-size: 16px;
+  color: var(--text2);
+}
+
+/* ==================== 照片网格 ==================== */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 12px 0;
+}
+.photo-thumb {
+  background: #f3f4f6;
+  border-radius: 8px;
+  aspect-ratio: 1;
+  overflow: hidden;
+  position: relative;
+}
+.photo-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.photo-add {
+  border: 2px dashed var(--blue);
+  border-radius: 8px;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: var(--blue);
+  cursor: pointer;
+  background: var(--blue-light);
+  transition: all 0.2s;
+}
+.photo-add:active {
+  background: #d0e2fd;
+}
+.photo-add span:last-child {
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* ==================== 视频列表 ==================== */
+.video-list {
+  padding: 12px 0;
+}
+.video-item {
+  background: white;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.video-thumb {
+  width: 80px;
+  height: 60px;
+  background: linear-gradient(135deg, #e8f0fe, #d0e2fd);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.video-info {
+  flex: 1;
+}
+.video-name {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.video-meta {
+  font-size: 12px;
+  color: var(--text3);
+}
+.video-action {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--blue-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blue);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* ==================== 监拆视频特殊样式 ==================== */
+.record-4g-list {
+  padding: 12px 0;
+}
+.record-4g-item {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 10px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.record-4g-icon {
+  font-size: 36px;
+  margin-bottom: 8px;
+}
+.record-4g-title {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.record-4g-status {
+  font-size: 12px;
+  color: var(--green);
+}
+.record-4g-status.pending {
+  color: var(--text3);
+}
+</style>
+</head>
+<body>
+<div class="phone-container">
+  <div class="status-bar"><span>9:41</span><span>📶 5G 🔋</span></div>
+  <div class="header">
+    <a class="header-back" href="tasks.html">‹</a>
+    <span class="header-title">案件素材</span>
+    <span class="header-action-text"></span>
+  </div>
+
+  <!-- Tab栏 -->
+  <div class="tab-bar">
+    <div class="tab-item active" onclick="switchTab(0)">拆前照</div>
+    <div class="tab-item" onclick="switchTab(1)">拆前视频</div>
+    <div class="tab-item" onclick="switchTab(2)">监拆视频</div>
+    <div class="tab-item" onclick="switchTab(3)">拆后照</div>
+    <div class="tab-item" onclick="switchTab(4)">拆后视频</div>
+  </div>
+
+  <!-- 提示条 -->
+  <div class="tip-bar">长按图片进行选择保存</div>
+
+  <!-- 内容区域 -->
+  <div class="content-area">
+    
+    <!-- 拆前照 -->
+    <div class="tab-content active" id="tab0">
+      <div class="empty-state">
+        <div class="empty-icon">📷</div>
+        <div class="empty-text">暂无数据</div>
+      </div>
+    </div>
+
+    <!-- 拆前视频 -->
+    <div class="tab-content" id="tab1">
+      <div class="empty-state">
+        <div class="empty-icon">🎥</div>
+        <div class="empty-text">暂无数据</div>
+      </div>
+    </div>
+
+    <!-- 监拆视频 -->
+    <div class="tab-content" id="tab2">
+      <div class="record-4g-list">
+        <div class="record-4g-item">
+          <div class="record-4g-icon">📹</div>
+          <div class="record-4g-title">固定4G记录仪</div>
+          <div class="record-4g-status pending">未录制</div>
+        </div>
+        <div class="record-4g-item">
+          <div class="record-4g-icon">📱</div>
+          <div class="record-4g-title">移动4G记录仪</div>
+          <div class="record-4g-status pending">未录制</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 拆后照 -->
+    <div class="tab-content" id="tab3">
+      <div class="empty-state">
+        <div class="empty-icon">📷</div>
+        <div class="empty-text">暂无数据</div>
+      </div>
+    </div>
+
+    <!-- 拆后视频 -->
+    <div class="tab-content" id="tab4">
+      <div class="empty-state">
+        <div class="empty-icon">🎥</div>
+        <div class="empty-text">暂无数据</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast"></div>
+<script src="../common/script.js"></script>
+<script>
+function switchTab(index) {
+  // 更新Tab样式
+  document.querySelectorAll('.tab-item').forEach(function(item, i) {
+    item.classList.toggle('active', i === index);
+  });
+  
+  // 切换内容
+  document.querySelectorAll('.tab-content').forEach(function(content, i) {
+    content.classList.toggle('active', i === index);
+  });
+}
+</script>
+</body>
+</html>

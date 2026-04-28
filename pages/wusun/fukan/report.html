@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>复勘详情</title>
+<link rel="stylesheet" href="../../common/style.css">
+<style>
+/* ==================== 固定头部区域 ==================== */
+.fixed-header { flex-shrink: 0; }
+
+/* ==================== 顶部标签切换（步骤条风格） ==================== */
+.tab-switch {
+  display: flex;
+  background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 100%);
+  padding: 12px 16px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 4px;
+}
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.tab-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--gray2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--text3);
+  transition: all 0.25s;
+}
+.tab-item.active .tab-dot {
+  background: var(--purple);
+  color: white;
+  box-shadow: 0 0 0 4px rgba(139,92,246,0.15);
+}
+.tab-item.done .tab-dot {
+  background: var(--purple);
+  color: white;
+}
+.tab-text {
+  font-size: 11px;
+  color: var(--text3);
+  transition: all 0.25s;
+}
+.tab-item.active .tab-text { color: var(--purple); font-weight: 600; }
+.tab-item.done .tab-text { color: var(--purple); font-weight: 500; }
+
+/* 连接线 */
+.tab-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 13px;
+  left: calc(50% + 18px);
+  width: calc(100% - 36px);
+  height: 2px;
+  background: var(--gray2);
+}
+.tab-item.done:not(:last-child)::after { background: var(--purple); }
+.tab-item { position: relative; }
+
+/* ==================== 可滚动内容区 ==================== */
+.content-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 12px;
+}
+.content-scroll::-webkit-scrollbar { display: none; }
+
+/* ==================== 内容区 ==================== */
+.step-section { display: none; padding-top: 12px; padding-bottom: 16px; }
+.step-section.active { display: block; }
+
+/* ==================== 卡片（统一风格） ==================== */
+.card { margin-bottom: 10px; }
+.step-section > .card:last-child { margin-bottom: 0; }
+
+.card-title {
+  display: flex;
+  align-items: center;
+  padding: 14px 14px 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  background: #fff;
+  border-bottom: 1px solid var(--gray);
+}
+.card-title:first-child { border-radius: 8px 8px 0 0; }
+.card-title-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+.card-title-dot.purple { background: var(--purple); }
+.card-title-dot.orange { background: var(--orange); }
+.card-title-dot.green { background: var(--green); }
+
+/* ==================== 详情只读样式 ==================== */
+.detail-label {
+  color: var(--text3);
+  font-size: 14px;
+  flex-shrink: 0;
+  min-width: 85px;
+}
+.detail-value {
+  font-size: 14px;
+  color: var(--text);
+  flex: 1;
+  text-align: right;
+}
+.detail-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--gray);
+  gap: 10px;
+  background: #fff;
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-row:first-child { border-radius: 0 0 0 0; }
+.detail-row:last-child { border-radius: 0 0 8px 8px; }
+.detail-row:only-child { border-radius: 0 0 8px 8px; border-bottom: none; }
+
+/* 多行文本 */
+.detail-row.multi { align-items: flex-start; padding-top: 12px; padding-bottom: 12px; }
+.detail-row.multi .detail-label { padding-top: 2px; }
+.detail-row.multi .detail-value { text-align: left; line-height: 1.6; }
+
+/* 第一个 card 的 title 没有圆角 */
+.card:first-child .card-title { border-radius: 8px 8px 0 0; }
+
+/* ==================== 关联标签 ==================== */
+.related-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  background: var(--orange-light);
+  border-radius: 12px;
+  font-size: 11px;
+  color: var(--orange);
+  margin-left: auto;
+  font-weight: 500;
+}
+.related-tag svg { width: 11px; height: 11px; }
+
+/* ==================== 复勘项折叠卡片 ==================== */
+.fukan-item {
+  border-bottom: 1px solid var(--gray);
+}
+.fukan-item:last-child { border-bottom: none; }
+.fukan-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  cursor: pointer;
+  background: #fff;
+  transition: background 0.2s;
+}
+.fukan-header:active { background: var(--purple-light); }
+.fukan-name { font-size: 14px; font-weight: 600; color: var(--text); }
+.fukan-meta { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.fukan-content { display: none; padding: 0 14px 14px; background: #fff; }
+.fukan-item.open .fukan-content { display: block; }
+
+/* ==================== 照片网格（只读） ==================== */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.photo-thumb {
+  background: var(--gray);
+  border-radius: 8px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--text3);
+}
+
+/* ==================== 标签样式 ==================== */
+.tag-green { background: var(--green-light); color: var(--green); padding: 3px 8px; border-radius: 10px; font-size: 12px; }
+.tag-purple { background: var(--purple-light); color: var(--purple); padding: 3px 8px; border-radius: 10px; font-size: 12px; }
+
+/* ==================== 录像区域（只读） ==================== */
+.record-block.purple {
+  background: var(--purple-light);
+  border: 1px solid #ddd6fe;
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  margin: 12px 14px;
+}
+.record-icon { font-size: 36px; margin-bottom: 8px; }
+.record-title.purple { font-size: 15px; font-weight: 700; color: var(--purple); margin-bottom: 4px; }
+.record-sub { font-size: 13px; color: var(--text3); }
+
+/* ==================== 签字区域（只读） ==================== */
+.sign-section { padding: 14px; }
+.sign-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--gray);
+}
+.sign-row:first-child { border-top: none; }
+.sign-label { font-size: 14px; color: var(--text); min-width: 85px; flex-shrink: 0; }
+.sign-area {
+  flex: 1;
+  height: 44px;
+  border: 1px dashed var(--gray3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text3);
+  font-size: 14px;
+  background: #fafafa;
+}
+.sign-area.done {
+  border-style: solid;
+  border-color: var(--green);
+  background: var(--green-light);
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* ==================== 告知事项 ==================== */
+.notice-section { padding: 14px; }
+.notice-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 14px;
+  color: var(--text2);
+}
+.notice-item .check-icon { color: var(--green); font-size: 16px; }
+
+/* ==================== 审批按钮区域（固定底部） ==================== */
+.approval-wrap {
+  flex-shrink: 0;
+  padding: 12px 16px 20px;
+  background: var(--bg);
+}
+.approval-actions {
+  display: flex;
+  gap: 12px;
+}
+.approval-btn {
+  flex: 1;
+  height: 44px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 22px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-reject {
+  background: var(--gray);
+  color: var(--text2);
+}
+.btn-reject:active { background: var(--gray2); }
+.btn-approve {
+  background: linear-gradient(135deg, var(--green), var(--green-dark));
+  color: white;
+  box-shadow: 0 4px 12px rgba(24,160,88,0.3);
+}
+.btn-approve:active { opacity: 0.9; transform: scale(0.98); }
+
+/* ==================== 任务状态卡 ==================== */
+.status-card {
+  background: linear-gradient(135deg, var(--purple), #6d28d9);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-md);
+}
+.status-card .task-id { font-size: 16px; font-weight: 700; color: white; margin-bottom: 4px; }
+.status-card .task-time { font-size: 12px; color: rgba(255,255,255,0.8); }
+.status-card .status-badge {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  font-size: 13px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+</style>
+</head>
+<body>
+<div class="phone-container">
+  <!-- 固定头部 -->
+  <div class="fixed-header">
+    <div class="status-bar purple"><span>9:41</span><span>📶 5G 🔋</span></div>
+    <div class="header purple">
+      <a class="header-back" href="approval.html">‹</a>
+      <span class="header-title">复勘详情</span>
+      <span style="width:32px"></span>
+    </div>
+
+    <!-- 任务状态卡 -->
+    <div class="status-card">
+      <div>
+        <div class="task-id">FK2026041201</div>
+        <div class="task-time">提交：2026-04-12 10:00</div>
+      </div>
+      <div class="status-badge">待审批</div>
+    </div>
+
+    <!-- 顶部标签切换（步骤条风格） -->
+    <div class="tab-switch" id="tabSwitch">
+      <div class="tab-item active" data-step="1">
+        <div class="tab-dot">1</div>
+        <div class="tab-text">案件信息</div>
+      </div>
+      <div class="tab-item" data-step="2">
+        <div class="tab-dot">2</div>
+        <div class="tab-text">复勘拍照</div>
+      </div>
+      <div class="tab-item" data-step="3">
+        <div class="tab-dot">3</div>
+        <div class="tab-text">现场视频</div>
+      </div>
+      <div class="tab-item" data-step="4">
+        <div class="tab-dot">4</div>
+        <div class="tab-text">签字确认</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 可滚动内容区 -->
+  <div class="content-scroll">
+    <!-- 第一步：案件信息 -->
+    <div class="step-section active" id="step1">
+      <!-- 关联物鉴 -->
+      <div class="card">
+        <div class="card-title">
+          <span class="card-title-dot orange"></span>
+          关联物鉴任务
+          <span class="related-tag">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            已关联
+          </span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">物鉴单号</span>
+          <span class="detail-value" style="font-family:monospace;color:var(--orange);font-weight:600">WS2026041201</span>
+        </div>
+      </div>
+
+      <!-- 报案信息 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot purple"></span>报案信息</div>
+        <div class="detail-row"><span class="detail-label">报案号</span><span class="detail-value">P2026041201567</span></div>
+        <div class="detail-row"><span class="detail-label">保险公司</span><span class="detail-value">太平洋财险</span></div>
+        <div class="detail-row"><span class="detail-label">出险时间</span><span class="detail-value">2026-04-10 14:23</span></div>
+        <div class="detail-row"><span class="detail-label">出险地点</span><span class="detail-value">北京市朝阳区建国路88号</span></div>
+        <div class="detail-row"><span class="detail-label">定损员</span><span class="detail-value">李经理</span></div>
+      </div>
+
+      <!-- 当事人信息 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot purple"></span>当事人信息</div>
+        <div class="detail-row"><span class="detail-label">当事人姓名</span><span class="detail-value">王建国</span></div>
+        <div class="detail-row"><span class="detail-label">联系电话</span><span class="detail-value">138****5678</span></div>
+        <div class="detail-row"><span class="detail-label">身份证号</span><span class="detail-value">110101***********234</span></div>
+      </div>
+
+      <!-- 物损信息 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot purple"></span>物损信息</div>
+        <div class="detail-row"><span class="detail-label">物损类型</span><span class="detail-value">财产损失</span></div>
+        <div class="detail-row multi"><span class="detail-label">物损描述</span><span class="detail-value">铝合金门窗、室内地板、家用电器等财产损失</span></div>
+        <div class="detail-row"><span class="detail-label">预估金额</span><span class="detail-value" style="color:var(--orange);font-weight:700">¥12,500</span></div>
+      </div>
+
+      <!-- 复勘信息 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot purple"></span>复勘信息</div>
+        <div class="detail-row"><span class="detail-label">复勘类型</span><span class="detail-value">过程复勘</span></div>
+        <div class="detail-row multi"><span class="detail-label">复勘说明</span><span class="detail-value">车辆维修后需进行二次损伤核实</span></div>
+        <div class="detail-row"><span class="detail-label">申请人</span><span class="detail-value">张三</span></div>
+        <div class="detail-row"><span class="detail-label">申请时间</span><span class="detail-value">2026-04-12 10:00</span></div>
+      </div>
+    </div>
+
+    <!-- 第二步：复勘拍照 -->
+    <div class="step-section" id="step2">
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot purple"></span>复勘拍照（逐项留证）</div>
+
+        <div class="fukan-item">
+          <div class="fukan-header" onclick="toggleFukan(this)">
+            <div>
+              <div class="fukan-name">1. 铝合金门窗</div>
+              <div class="fukan-meta">物鉴估损：¥4,200 · 已维修</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="tag-green">已拍 3张</span>
+              <span style="color:var(--text3)">›</span>
+            </div>
+          </div>
+          <div class="fukan-content">
+            <div class="photo-grid">
+              <div class="photo-thumb">📷</div>
+              <div class="photo-thumb">📷</div>
+              <div class="photo-thumb">📷</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fukan-item">
+          <div class="fukan-header" onclick="toggleFukan(this)">
+            <div>
+              <div class="fukan-name">2. 室内地板</div>
+              <div class="fukan-meta">物鉴估损：¥3,800 · 已维修</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="tag-green">已拍 2张</span>
+              <span style="color:var(--text3)">›</span>
+            </div>
+          </div>
+          <div class="fukan-content">
+            <div class="photo-grid">
+              <div class="photo-thumb">📷</div>
+              <div class="photo-thumb">📷</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fukan-item">
+          <div class="fukan-header" onclick="toggleFukan(this)">
+            <div>
+              <div class="fukan-name">3. 家用电器</div>
+              <div class="fukan-meta">物鉴估损：¥4,500 · 已维修</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="tag-green">已拍 4张</span>
+              <span style="color:var(--text3)">›</span>
+            </div>
+          </div>
+          <div class="fukan-content">
+            <div class="photo-grid">
+              <div class="photo-thumb">📷</div>
+              <div class="photo-thumb">📷</div>
+              <div class="photo-thumb">📷</div>
+              <div class="photo-thumb">📷</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot purple"></span>现场核实信息</div>
+        <div class="detail-row">
+          <span class="detail-label">实际损失金额</span>
+          <span class="detail-value" style="color:var(--orange);font-weight:700">¥15,800</span>
+        </div>
+        <div class="detail-row"><span class="detail-label">损失认定结论</span><span class="detail-value">损失属实，建议全额赔付</span></div>
+        <div class="detail-row multi" style="border-bottom:none"><span class="detail-label">核实说明</span><span class="detail-value">经现场核实，上述三项均已按维修标准完成修复，实际损失金额比预估增加26%。</span></div>
+      </div>
+    </div>
+
+    <!-- 第三步：现场视频 -->
+    <div class="step-section" id="step3">
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot purple"></span>现场视频录制</div>
+        <div class="record-block purple">
+          <div class="record-icon">✓</div>
+          <div class="record-title purple">视频已录制</div>
+          <div class="record-sub">时长：2分35秒 · 已上传</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第四步：签字确认 -->
+    <div class="step-section" id="step4">
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot purple"></span>告知事项确认</div>
+        <div class="notice-section">
+          <div class="notice-item"><span class="check-icon">✓</span> 已告知复勘标准及流程</div>
+          <div class="notice-item"><span class="check-icon">✓</span> 已告知理赔联系方式</div>
+          <div class="notice-item"><span class="check-icon">✓</span> 确认复勘结果真实性</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot purple"></span>签字确认</div>
+        <div class="sign-section">
+          <div class="sign-row">
+            <span class="sign-label">当事人签字</span>
+            <div class="sign-area done">王建国</div>
+          </div>
+          <div class="sign-row">
+            <span class="sign-label">签字时间</span>
+            <div class="sign-area done" style="justify-content:flex-start;padding-left:12px">2026-04-12 10:30</div>
+          </div>
+          <div class="sign-row" style="border-bottom:none">
+            <span class="sign-label">复勘员签字</span>
+            <div class="sign-area done">张三</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 定损结果 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot orange"></span>定损结果</div>
+        <div class="detail-row">
+          <span class="detail-label">定损金额</span>
+          <span class="detail-value" style="color:var(--orange);font-weight:700;font-size:16px">¥15,800</span>
+        </div>
+        <div class="detail-row multi" style="border-bottom:none">
+          <span class="detail-label">定损说明</span>
+          <span class="detail-value">经复核，实际损失比预估增加26%，建议按实际定损金额赔付。</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 固定底部审批按钮 -->
+  <div class="approval-wrap">
+    <div class="approval-actions">
+      <button class="approval-btn btn-reject" onclick="showToast('已拒绝')">拒绝</button>
+      <button class="approval-btn btn-approve" onclick="showToast('已通过')">通过审批</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast"></div>
+<script src="../../common/script.js"></script>
+<script>
+function toggleFukan(el) {
+  el.closest('.fukan-item').classList.toggle('open');
+}
+
+document.querySelectorAll('.tab-item').forEach(tab => {
+  tab.addEventListener('click', function() {
+    // 更新步骤状态
+    document.querySelectorAll('.tab-item').forEach((t, i) => {
+      const step = parseInt(this.dataset.step);
+      t.classList.remove('active', 'done');
+      const dot = t.querySelector('.tab-dot');
+      const stepNum = i + 1;
+      if (stepNum < step) {
+        t.classList.add('done');
+        dot.textContent = '✓';
+      } else if (stepNum === step) {
+        t.classList.add('active');
+        dot.textContent = stepNum;
+      } else {
+        dot.textContent = stepNum;
+      }
+    });
+    
+    // 切换内容
+    const step = this.dataset.step;
+    document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
+    document.getElementById('step' + step).classList.add('active');
+    document.querySelector('.content-scroll').scrollTop = 0;
+  });
+});
+</script>
+</body>
+</html>

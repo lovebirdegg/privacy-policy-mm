@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>物鉴任务</title>
+<title>人伤审批</title>
 <link rel="stylesheet" href="../common/style.css">
 <style>
 /* ==================== 筛选区域容器 ==================== */
@@ -42,7 +42,6 @@
 .status-tabs {
   display: flex;
   gap: 8px;
-  margin-bottom: 10px;
 }
 .status-tab {
   height: 32px;
@@ -58,7 +57,7 @@
   position: relative;
 }
 .status-tab.active {
-  background: var(--orange);
+  background: var(--green);
   color: white;
   font-weight: 600;
 }
@@ -70,7 +69,7 @@
   transform: translateX(-50%);
   width: 20px;
   height: 3px;
-  background: var(--orange);
+  background: var(--green);
   border-radius: 2px;
 }
 
@@ -95,7 +94,7 @@
   top: 0;
   bottom: 0;
   width: 4px;
-  background: linear-gradient(180deg, var(--orange), #f0a020);
+  background: linear-gradient(180deg, var(--green), #34d399);
 }
 .task-card:active {
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -121,9 +120,9 @@
   border-radius: 10px;
   font-weight: 500;
 }
-.tag-orange { background: #fff3e0; color: var(--orange); }
-.tag-blue { background: #eff6ff; color: #3b82f6; }
 .tag-green { background: #f0fdf4; color: var(--green); }
+.tag-blue { background: #eff6ff; color: #3b82f6; }
+.tag-orange { background: #fff3e0; color: var(--orange); }
 .tag-red { background: #fef2f2; color: var(--red); }
 
 .task-info-list {
@@ -150,7 +149,7 @@
 .task-meta { font-size: 11px; color: var(--text3); }
 .task-action {
   font-size: 12px;
-  color: var(--orange);
+  color: var(--green);
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -161,6 +160,34 @@
 .task-card.done { background: #fafafa; }
 .task-card.done .task-id { color: var(--text3); }
 .task-card.done .task-info-item .value { color: var(--text3); }
+
+/* 操作按钮 */
+.action-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed #f0f0f0;
+}
+.action-btn {
+  flex: 1;
+  height: 32px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.action-btn:active { transform: scale(0.97); }
+.btn-reject {
+  background: #f5f5f5;
+  color: var(--text2);
+}
+.btn-approve {
+  background: var(--green);
+  color: white;
+}
 
 /* 空状态 */
 .empty-state {
@@ -179,125 +206,131 @@
 </head>
 <body>
 <div class="phone-container">
-  <div class="status-bar orange"><span>9:41</span><span>📶 5G 🔋</span></div>
-  <div class="header orange">
+  <div class="status-bar green"><span>9:41</span><span>📶 5G 🔋</span></div>
+  <div class="header green">
     <a class="header-back" href="index.html">‹</a>
-    <span class="header-title">物鉴任务</span>
-    <a class="header-action" href="create.html">＋</a>
+    <span class="header-title">探视审批</span>
+    <span style="width:28px"></span>
   </div>
 
   <!-- 筛选区域 -->
   <div class="filter-container">
     <div class="search-input-wrap">
       <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.4"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-      <input type="text" id="searchInput" placeholder="搜索当事人、单号..." oninput="filterTasks()">
+      <input type="text" id="searchInput" placeholder="搜索伤者、单号..." oninput="filterTasks()">
     </div>
     <div class="status-tabs">
-      <button class="status-tab active" data-status="all" onclick="switchTab('all', this)">全部</button>
-      <button class="status-tab" data-status="wait" onclick="switchTab('wait', this)">待接单</button>
-      <button class="status-tab" data-status="doing" onclick="switchTab('doing', this)">进行中</button>
-      <button class="status-tab" data-status="done" onclick="switchTab('done', this)">已完成</button>
+      <button class="status-tab active" data-status="pending" onclick="switchTab('pending', this)">待审批</button>
+      <button class="status-tab" data-status="done" onclick="switchTab('done', this)">已审批</button>
     </div>
   </div>
 
   <div class="scroll-area" style="padding-top:8px">
     <div id="task-list">
 
-      <!-- 物鉴任务1 - 待接单 -->
-      <a class="task-card" href="detail.html" data-status="wait">
+      <!-- 待审批1 -->
+      <div class="task-card" data-status="pending">
         <div class="task-card-header">
-          <div class="task-id">WS2026041201</div>
-          <span class="tag tag-orange">物鉴</span>
-          <span class="tag tag-red">待接单</span>
+          <div class="task-id">TS2026033102</div>
+          <span class="tag tag-green">探视</span>
+          <span class="tag tag-orange">待审批</span>
         </div>
         <div class="task-info-list">
-          <div class="task-info-item"><span class="label">当事人：</span><span class="value">王建国</span></div>
-          <div class="task-info-item"><span class="label">物损类型：</span><span class="value">财产损失</span></div>
-          <div class="task-info-item"><span class="label">预估金额：</span><span class="amount">¥12,500</span></div>
+          <div class="task-info-item"><span class="label">伤者：</span><span class="value">刘洋</span></div>
+          <div class="task-info-item"><span class="label">就诊医院：</span><span class="value">济南市第三人民医院</span></div>
+          <div class="task-info-item"><span class="label">探视员：</span><span class="value">张三</span></div>
         </div>
         <div class="task-card-footer">
-          <span class="task-meta">📅 2026-04-12 09:15</span>
-          <span class="task-action">立即接单 ›</span>
+          <span class="task-meta">📅 2026-03-31 10:15</span>
+          <a href="tanshi_detail.html" class="task-action">查看详情 ›</a>
         </div>
-      </a>
+        <div class="action-btns">
+          <button class="action-btn btn-reject" onclick="showToast('已拒绝')">拒绝</button>
+          <button class="action-btn btn-approve" onclick="showToast('已通过')">通过</button>
+        </div>
+      </div>
 
-      <!-- 物鉴任务2 - 进行中 -->
-      <a class="task-card" href="detail.html" data-status="doing">
+      <!-- 待审批2 -->
+      <div class="task-card" data-status="pending">
         <div class="task-card-header">
-          <div class="task-id">WS2026041202</div>
-          <span class="tag tag-orange">物鉴</span>
-          <span class="tag tag-blue">进行中</span>
+          <div class="task-id">TS2026033001</div>
+          <span class="tag tag-green">探视</span>
+          <span class="tag tag-orange">待审批</span>
         </div>
         <div class="task-info-list">
-          <div class="task-info-item"><span class="label">当事人：</span><span class="value">李秀梅</span></div>
-          <div class="task-info-item"><span class="label">物损类型：</span><span class="value">设备损坏</span></div>
-          <div class="task-info-item"><span class="label">预估金额：</span><span class="amount">¥8,300</span></div>
+          <div class="task-info-item"><span class="label">伤者：</span><span class="value">王芳</span></div>
+          <div class="task-info-item"><span class="label">就诊医院：</span><span class="value">泰安市中心医院</span></div>
+          <div class="task-info-item"><span class="label">探视员：</span><span class="value">李四</span></div>
         </div>
         <div class="task-card-footer">
-          <span class="task-meta">🔄 进行中 · 2026-04-12 10:22</span>
-          <span class="task-action">继续填写 ›</span>
+          <span class="task-meta">📅 2026-03-30 14:30</span>
+          <a href="tanshi_detail.html" class="task-action">查看详情 ›</a>
         </div>
-      </a>
+        <div class="action-btns">
+          <button class="action-btn btn-reject" onclick="showToast('已拒绝')">拒绝</button>
+          <button class="action-btn btn-approve" onclick="showToast('已通过')">通过</button>
+        </div>
+      </div>
 
-      <!-- 物鉴任务3 - 进行中 -->
-      <a class="task-card" href="detail.html" data-status="doing">
+      <!-- 已审批1 - 通过 -->
+      <div class="task-card done" data-status="done">
         <div class="task-card-header">
-          <div class="task-id">WS2026041105</div>
-          <span class="tag tag-orange">物鉴</span>
-          <span class="tag tag-blue">进行中</span>
+          <div class="task-id">TS2026032901</div>
+          <span class="tag tag-green">探视</span>
+          <span class="tag tag-green">已通过</span>
         </div>
         <div class="task-info-list">
-          <div class="task-info-item"><span class="label">当事人：</span><span class="value">赵大力</span></div>
-          <div class="task-info-item"><span class="label">物损类型：</span><span class="value">建筑损坏</span></div>
-          <div class="task-info-item"><span class="label">预估金额：</span><span class="amount">¥18,600</span></div>
+          <div class="task-info-item"><span class="label">伤者：</span><span class="value">陈建国</span></div>
+          <div class="task-info-item"><span class="label">就诊医院：</span><span class="value">山东省立医院</span></div>
+          <div class="task-info-item"><span class="label">探视员：</span><span class="value">李四</span></div>
         </div>
         <div class="task-card-footer">
-          <span class="task-meta">🔄 进行中 · 2026-04-11 14:20</span>
-          <span class="task-action">继续填写 ›</span>
+          <span class="task-meta">✅ 已通过 · 2026-03-29 16:45</span>
+          <a href="tanshi_detail.html" class="task-action" style="color:var(--text3)">查看详情 ›</a>
         </div>
-      </a>
+      </div>
 
-      <!-- 物鉴任务4 - 已完成 -->
-      <a class="task-card done" href="records.html" data-status="done">
+      <!-- 已审批2 - 拒绝 -->
+      <div class="task-card done" data-status="done">
         <div class="task-card-header">
-          <div class="task-id">WS2026041001</div>
-          <span class="tag tag-orange">物鉴</span>
-          <span class="tag tag-green">已完成</span>
+          <div class="task-id">TS2026032801</div>
+          <span class="tag tag-green">探视</span>
+          <span class="tag tag-red">已拒绝</span>
         </div>
         <div class="task-info-list">
-          <div class="task-info-item"><span class="label">当事人：</span><span class="value">孙磊</span></div>
-          <div class="task-info-item"><span class="label">物损类型：</span><span class="value">车辆损失</span></div>
-          <div class="task-info-item"><span class="label">定损金额：</span><span class="amount">¥15,200</span></div>
+          <div class="task-info-item"><span class="label">伤者：</span><span class="value">赵丽</span></div>
+          <div class="task-info-item"><span class="label">就诊医院：</span><span class="value">莱芜市人民医院</span></div>
+          <div class="task-info-item"><span class="label">探视员：</span><span class="value">张三</span></div>
         </div>
         <div class="task-card-footer">
-          <span class="task-meta">✅ 已完成 · 2026-04-10 16:00</span>
-          <span class="task-action" style="color:var(--text3)">查看报告 ›</span>
+          <span class="task-meta">❌ 已拒绝 · 2026-03-28 11:20</span>
+          <a href="tanshi_detail.html" class="task-action" style="color:var(--text3)">查看详情 ›</a>
         </div>
-      </a>
+      </div>
 
-      <!-- 物鉴任务5 - 已完成 -->
-      <a class="task-card done" href="records.html" data-status="done">
+      <!-- 已审批3 - 通过 -->
+      <div class="task-card done" data-status="done">
         <div class="task-card-header">
-          <div class="task-id">WS2026040901</div>
-          <span class="tag tag-orange">物鉴</span>
-          <span class="tag tag-green">已完成</span>
+          <div class="task-id">TS2026032701</div>
+          <span class="tag tag-green">探视</span>
+          <span class="tag tag-green">已通过</span>
         </div>
         <div class="task-info-list">
-          <div class="task-info-item"><span class="label">当事人：</span><span class="value">周华</span></div>
-          <div class="task-info-item"><span class="label">物损类型：</span><span class="value">财产损失</span></div>
-          <div class="task-info-item"><span class="label">定损金额：</span><span class="amount">¥22,800</span></div>
+          <div class="task-info-item"><span class="label">伤者：</span><span class="value">孙磊</span></div>
+          <div class="task-info-item"><span class="label">就诊医院：</span><span class="value">山东省中医院</span></div>
+          <div class="task-info-item"><span class="label">探视员：</span><span class="value">李四</span></div>
         </div>
         <div class="task-card-footer">
-          <span class="task-meta">✅ 已完成 · 2026-04-09 11:30</span>
-          <span class="task-action" style="color:var(--text3)">查看报告 ›</span>
+          <span class="task-meta">✅ 已通过 · 2026-03-27 15:30</span>
+          <a href="tanshi_detail.html" class="task-action" style="color:var(--text3)">查看详情 ›</a>
         </div>
-      </a>
+      </div>
 
     </div>
 
     <div id="emptyState" class="empty-state" style="display:none">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-      <p>暂无符合条件的任务</p>
+      <p>暂无符合条件的审批</p>
     </div>
 
     <div style="height:20px"></div>
@@ -307,7 +340,7 @@
 <div class="toast"></div>
 <script src="../common/script.js"></script>
 <script>
-var currentStatus = 'all';
+var currentStatus = 'pending';
 
 function switchTab(status, el) {
   currentStatus = status;

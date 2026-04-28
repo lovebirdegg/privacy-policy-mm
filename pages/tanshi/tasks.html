@@ -3,30 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>探视任务中心</title>
+<title>人伤任务</title>
 <link rel="stylesheet" href="../common/style.css">
 </head>
 <body>
 <div class="phone-container">
-  <div class="status-bar green">
-    <span>9:41</span>
-    <span>📶 5G 🔋</span>
-  </div>
+  <div class="status-bar green"><span>9:41</span><span>📶 5G 🔋</span></div>
   <div class="header green">
     <a class="header-back" href="index.html">‹</a>
-    <span class="header-title">探视任务中心</span>
+    <span class="header-title">人伤任务</span>
     <a class="header-action" href="create.html">＋</a>
   </div>
 
   <div class="tab-bar">
     <a class="tab-item active-green" href="tasks.html" style="color:var(--green);border-bottom-color:var(--green)">全部</a>
-    <a class="tab-item" href="tasks.html?status=pending">待接单</a>
-    <a class="tab-item" href="tasks.html?status=doing">进行中</a>
-    <a class="tab-item" href="tasks.html?status=done">已完成</a>
+    <a class="tab-item" href="tasks.html?s=wait">待接单</a>
+    <a class="tab-item" href="tasks.html?s=doing">进行中</a>
+    <a class="tab-item" href="tasks.html?s=done">已完成</a>
   </div>
 
-  <div class="scroll-area" style="padding:12px 14px">
-    <a class="task-card" href="detail.html?id=1">
+  <div class="search-bar">
+    <div class="search-input-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" placeholder="搜索伤者姓名、医院...">
+    </div>
+  </div>
+
+  <div class="scroll-area" style="padding:10px 12px">
+    <a class="task-card status-doing" href="detail.html">
       <div class="task-card-header">
         <div class="task-id">TS2026033101</div>
         <span class="tag tag-blue">进行中</span>
@@ -37,7 +41,7 @@
       <div class="task-info-row"><span class="task-label">接单时间：</span>2026-03-31 09:30</div>
     </a>
 
-    <a class="task-card" href="detail.html?id=2">
+    <a class="task-card status-pending" href="detail.html">
       <div class="task-card-header">
         <div class="task-id">TS2026033102</div>
         <span class="tag tag-orange">待审批</span>
@@ -48,7 +52,7 @@
       <div class="task-info-row"><span class="task-label">提交时间：</span>2026-03-31 14:20</div>
     </a>
 
-    <a class="task-card" href="detail.html?id=3">
+    <a class="task-card status-wait" href="detail.html">
       <div class="task-card-header">
         <div class="task-id">TS2026033103</div>
         <span class="tag tag-red">待分配</span>
@@ -56,12 +60,12 @@
       <div class="task-info-row"><span class="task-label">伤者：</span>王芳</div>
       <div class="task-info-row"><span class="task-label">医院：</span>泰安市中心医院</div>
       <div class="task-info-row"><span class="task-label">发布时间：</span>2026-03-31 11:00</div>
-      <div style="display:flex;justify-content:flex-end;margin-top:8px">
-        <button class="btn btn-green btn-sm" onclick="event.preventDefault();showToast('已接单！')">接单</button>
+      <div class="task-actions">
+        <button class="btn btn-green" onclick="event.preventDefault();showToast('接单成功！')">接单</button>
       </div>
     </a>
 
-    <a class="task-card" href="detail.html?id=4">
+    <a class="task-card status-done" href="detail.html">
       <div class="task-card-header">
         <div class="task-id">TS2026033004</div>
         <span class="tag tag-green">已完成</span>
@@ -71,8 +75,11 @@
       <div class="task-info-row"><span class="task-label">探视员：</span>张三</div>
       <div class="task-info-row"><span class="task-label">完成时间：</span>2026-03-30 16:45</div>
     </a>
+
+    <div style="height:20px"></div>
   </div>
 </div>
+<div class="toast"></div>
 <script src="../common/script.js"></script>
 </body>
 </html>

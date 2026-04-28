@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>复勘任务详情</title>
+<link rel="stylesheet" href="../../common/style.css">
+<style>
+/* ==================== 步骤条紫色主题 ==================== */
+.steps.purple-theme {
+  background: linear-gradient(180deg, #f3e8ff 0%, #ffffff 100%);
+  padding: 12px 16px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+.steps.purple-theme .step-dot.done,
+.steps.purple-theme .step-dot.active { background: var(--purple); }
+.steps.purple-theme .step-dot.active { box-shadow: 0 0 0 4px rgba(139,92,246,0.15); }
+.steps.purple-theme .step-item.done:not(:last-child)::after { background: var(--purple); }
+.steps.purple-theme .step-text.done,
+.steps.purple-theme .step-text.active { color: var(--purple); font-weight: 600; }
+.steps.purple-theme .step-dot {
+  width: 26px;
+  height: 26px;
+  font-size: 12px;
+}
+.steps.purple-theme .step-text {
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+/* ==================== 分步内容区 ==================== */
+.step-section { display: none; }
+.step-section.active { display: block; }
+
+/* ==================== 卡片统一间距 ==================== */
+.card { margin: 0 0 8px; }
+.step-section > .card:first-child { margin-top: 12px; }
+.step-section > .card:last-child { margin-bottom: 12px; }
+
+/* ==================== 详情只读样式 ==================== */
+.detail-label {
+  color: var(--text2);
+  font-size: 14px;
+  flex-shrink: 0;
+  min-width: 85px;
+}
+.detail-value {
+  font-size: 14px;
+  color: var(--text);
+  flex: 1;
+  text-align: right;
+}
+.detail-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--gray);
+  gap: 10px;
+  background: #fff;
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-row:first-child { border-radius: 8px 8px 0 0; }
+.detail-row:last-child { border-radius: 0 0 8px 8px; }
+.detail-row:only-child { border-radius: 8px; border-bottom: none; }
+
+/* ==================== 车牌大标题 ==================== */
+.car-title {
+  padding: 14px 14px 8px;
+  background: #fff;
+}
+.car-plate {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.car-case {
+  font-size: 12px;
+  color: var(--text2);
+}
+
+/* ==================== 表单输入样式 ==================== */
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--gray);
+  gap: 10px;
+  background: #fff;
+}
+.form-item:last-child { border-bottom: none; }
+.form-item:first-child { border-radius: 8px 8px 0 0; }
+.form-item:last-child { border-radius: 0 0 8px 8px; }
+.form-item:only-child { border-radius: 8px; border-bottom: none; }
+.form-label {
+  font-size: 14px;
+  color: var(--text);
+  min-width: 85px;
+  flex-shrink: 0;
+}
+.form-input {
+  flex: 1;
+  height: 36px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: var(--text);
+  background: transparent;
+  text-align: right;
+}
+.form-input::placeholder { color: var(--text3); text-align: right; }
+.form-textarea {
+  flex: 1;
+  min-height: 72px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: var(--text);
+  background: transparent;
+  resize: none;
+  line-height: 1.5;
+  text-align: left;
+}
+.form-textarea::placeholder { color: var(--text3); }
+.form-select {
+  flex: 1;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 14px;
+  color: var(--text3);
+  cursor: pointer;
+}
+.form-select .arr { margin-left: 4px; color: var(--text3); }
+
+/* ==================== 照片网格 ==================== */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.photo-thumb {
+  background: #f3f4f6;
+  border-radius: 8px;
+  aspect-ratio: 1;
+}
+.photo-add {
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #9ca3af;
+  cursor: pointer;
+  background: #fafafa;
+  transition: all 0.2s;
+}
+.photo-add:active {
+  background: var(--purple-light);
+  border-color: var(--purple);
+  color: var(--purple);
+}
+
+/* ==================== 录像区域 ==================== */
+.record-block {
+  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+  border: 1px solid #c4b5fd;
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.record-block:active {
+  transform: scale(0.98);
+  background: linear-gradient(135deg, #e9d5ff 0%, #c4b5fd 100%);
+}
+.record-icon { font-size: 36px; margin-bottom: 8px; }
+.record-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--purple);
+  margin-bottom: 4px;
+}
+.record-sub { font-size: 13px; color: var(--text3); }
+
+/* ==================== 复勘项目项 ==================== */
+.parts-item {
+  border-bottom: 1px solid var(--gray);
+}
+.parts-item:last-child { border-bottom: none; }
+.parts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  cursor: pointer;
+  background: #fff;
+}
+.parts-header:active { background: #fafafa; }
+.parts-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.parts-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--purple);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.parts-arrow { color: var(--text3); font-size: 14px; transition: transform 0.2s; }
+.parts-item.open .parts-arrow { transform: rotate(90deg); }
+.parts-content {
+  display: none;
+  padding: 0 14px 12px;
+  background: #fafafa;
+}
+.parts-item.open .parts-content { display: block; }
+.parts-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.parts-tag {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+.parts-tag.damage { background: var(--purple-light); color: var(--purple); }
+.parts-tag.abnormal { background: var(--orange-light); color: var(--orange-dark); }
+.parts-tag.link { background: var(--green-light); color: var(--green); cursor: pointer; }
+.parts-tag.delete { background: var(--red-light); color: var(--red); cursor: pointer; }
+.parts-desc { font-size: 11px; color: var(--red); }
+
+/* ==================== 底部选项 ==================== */
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 14px;
+  border-top: 1px solid var(--gray);
+  background: #fff;
+}
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text);
+}
+.option-toggle {
+  display: flex;
+  background: var(--gray);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.option-toggle span {
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.option-toggle span.off { color: var(--text3); }
+.option-toggle span.on { background: var(--purple); color: white; }
+
+/* ==================== 评价标签 ==================== */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 14px;
+}
+.tag-item {
+  background: var(--gray);
+  color: var(--text2);
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.tag-item:active {
+  background: var(--purple-light);
+  color: var(--purple);
+}
+
+/* ==================== 步骤内操作按钮 ==================== */
+.step-actions {
+  display: flex;
+  gap: 12px;
+  padding: 16px 14px;
+  margin-top: 8px;
+}
+.step-actions .btn {
+  flex: 1;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 24px;
+}
+
+/* ==================== 添加按钮 ==================== */
+.add-btn {
+  width: 100%;
+  background: var(--purple-light);
+  color: var(--purple);
+  border: 1.5px dashed var(--purple);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.add-btn:active {
+  background: #e9d5ff;
+}
+.add-btn.green {
+  background: var(--green-light);
+  color: var(--green);
+  border-color: var(--green);
+}
+.add-btn.green:active {
+  background: #a7f3d0;
+}
+</style>
+</head>
+<body>
+<div class="phone-container">
+  <div class="status-bar purple"><span>9:41</span><span style="display:flex;align-items:center;gap:4px"><svg width="15" height="11" viewBox="0 0 15 11" fill="none"><rect x="0" y="4" width="3" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="4" y="2.5" width="3" height="8.5" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="8" y="1" width="3" height="10" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="12" y="0" width="3" height="11" rx="1" fill="rgba(255,255,255,0.95)"/></svg><span style="font-size:11px;letter-spacing:0.5px">5G</span><svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="19" height="10" rx="2" stroke="rgba(255,255,255,0.6)" stroke-width="1"/><rect x="2" y="2" width="14" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><path d="M21 3.5v4a2 2 0 0 0 0-4z" fill="rgba(255,255,255,0.6)"/></svg></span></div>
+  <div class="header purple">
+    <a class="header-back" href="tasks.html">‹</a>
+    <span class="header-title" style="color:white">复勘任务详情</span>
+    <span style="width:28px"></span>
+  </div>
+
+  <!-- 任务状态卡 -->
+  <div style="background:linear-gradient(135deg,#7c3aed,#6d28d9);border-radius:var(--radius);padding:14px 16px;margin:10px 12px;display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <div style="font-size:16px;font-weight:700;color:white;margin-bottom:4px">C371200VEH26001636</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.8)">发布时间：2026-04-17 12:37</div>
+    </div>
+    <span style="background:rgba(255,255,255,0.2);color:white;font-size:13px;padding:5px 12px;border-radius:20px">进行中</span>
+  </div>
+
+  <!-- 步骤条 -->
+  <div class="steps purple-theme" id="stepBar">
+    <div class="step-item active">
+      <div class="step-dot active">1</div>
+      <div class="step-text active">任务信息</div>
+    </div>
+    <div class="step-item">
+      <div class="step-dot">2</div>
+      <div class="step-text">素材收集</div>
+    </div>
+    <div class="step-item">
+      <div class="step-dot">3</div>
+      <div class="step-text">复勘视频</div>
+    </div>
+  </div>
+
+  <div class="scroll-area" style="padding:0 12px 20px">
+
+    <!-- 第一步：任务信息 -->
+    <div class="step-section active" id="step1">
+      <!-- 任务信息卡片 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot" style="background:var(--purple)"></span>任务信息</div>
+        <div class="car-title">
+          <div class="car-plate">鲁AF17290</div>
+          <div class="car-case">案件号：C371200VEH26001636</div>
+        </div>
+        <div class="detail-row"><span class="detail-label">报案时间</span><span class="detail-value">2026-04-17 12:37:29</span></div>
+        <div class="detail-row"><span class="detail-label">定损员</span><a href="tel:15006800706" class="detail-value" style="color:var(--purple)">张斌 15006800706</a></div>
+        <div class="detail-row"><span class="detail-label">接待员</span><a href="tel:13356227590" class="detail-value" style="color:var(--purple)">王 13356227590</a></div>
+        <div class="detail-row"><span class="detail-label">车型名称</span><span class="detail-value">奇瑞</span></div>
+        <div class="detail-row"><span class="detail-label">保险公司</span><span class="detail-value">太平洋保险</span></div>
+        <div class="detail-row"><span class="detail-label">预约时间</span><span class="detail-value">2026-04-17 13:37:00</span></div>
+      </div>
+
+      <!-- 修理厂卡片 -->
+      <div class="card">
+        <div class="card-title">
+          <span class="card-title-dot" style="background:var(--purple)"></span>修理厂
+          <a href="tel:0531-76011888" style="margin-left:auto;font-size:12px;color:var(--purple);text-decoration:none;display:flex;align-items:center;gap:3px;padding:3px 8px;border:1px solid var(--purple);border-radius:12px">
+            📍 导航
+          </a>
+        </div>
+        <div style="padding:12px 14px">
+          <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px">奇瑞济南盛乾体验中心</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:12px">山东省济南市莱芜区 龙潭东大街79号</div>
+          <div class="photo-add" onclick="showToast('拍照')" style="aspect-ratio:2/1;height:auto;padding:20px">
+            <span style="font-size:24px">+</span>
+            <span style="font-size:12px">添加门头照</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 复勘资料卡片 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot" style="background:var(--purple)"></span>复勘资料</div>
+        <div style="padding:12px 14px">
+          <!-- 定损单 -->
+          <div style="margin-bottom:14px">
+            <div style="font-size:13px;color:var(--text2);margin-bottom:8px">定损单</div>
+            <div style="display:flex;gap:6px">
+              <div style="position:relative;width:64px;height:64px;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:#f5f5f5;display:flex;align-items:center;justify-content:center">
+                <span style="font-size:10px;color:#999">1张</span>
+                <span style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,0.5);color:white;font-size:8px;padding:1px 3px;border-radius:2px">1</span>
+              </div>
+            </div>
+          </div>
+          <!-- 整车照片 -->
+          <div style="margin-bottom:14px">
+            <div style="font-size:13px;color:var(--text2);margin-bottom:8px">整车照片</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <div style="position:relative;width:64px;height:64px;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:#f5f5f5;display:flex;align-items:center;justify-content:center">
+                <span style="font-size:10px;color:#999">查看</span>
+                <span style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,0.5);color:white;font-size:8px;padding:1px 3px;border-radius:2px">4</span>
+              </div>
+            </div>
+          </div>
+          <!-- 受损部位照片 -->
+          <div>
+            <div style="font-size:13px;color:var(--text2);margin-bottom:8px">受损部位照片</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <div style="position:relative;width:64px;height:64px;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:#f5f5f5;display:flex;align-items:center;justify-content:center">
+                <span style="font-size:10px;color:#999">部位1</span>
+                <span style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,0.5);color:white;font-size:8px;padding:1px 3px;border-radius:2px">1</span>
+              </div>
+              <div style="position:relative;width:64px;height:64px;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:#f5f5f5;display:flex;align-items:center;justify-content:center">
+                <span style="font-size:10px;color:#999">部位2</span>
+                <span style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,0.5);color:white;font-size:8px;padding:1px 3px;border-radius:2px">2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button class="btn btn-gray" style="display:none">上一步</button>
+        <button class="btn btn-primary purple" onclick="nextStep()">下一步</button>
+      </div>
+    </div>
+
+    <!-- 第二步：素材收集 -->
+    <div class="step-section" id="step2">
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot" style="background:var(--purple)"></span>素材收集</div>
+        
+        <!-- 1. 复勘前照片-人车合影、车架号、铭牌 -->
+        <div style="padding:12px 14px;border-bottom:1px solid var(--gray)">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+            <span style="font-size:14px;color:var(--text)">复勘前照片</span>
+            <span style="font-size:10px;color:var(--text3)">人车合影、车架号、铭牌</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+            <span style="font-size:10px;color:var(--text3)">长按图片进行排序或删除</span>
+          </div>
+          <div class="photo-grid">
+            <div class="photo-add" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+        
+        <!-- 2. 复勘全车外观视频 -->
+        <div style="padding:12px 14px;border-bottom:1px solid var(--gray)">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+            <span style="font-size:14px;color:var(--text)">复勘全车外观视频</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+            <span style="font-size:10px;color:var(--text3)">长按按钮可以录制视频</span>
+          </div>
+          <div class="record-block" onclick="showToast('开始录制')">
+            <div class="record-icon">🎥</div>
+            <div class="record-title">点击开始录制</div>
+            <div class="record-sub">录制复勘全车外观视频</div>
+          </div>
+        </div>
+        
+        <!-- 3. 新旧件对比照片 -->
+        <div style="padding:12px 14px;border-bottom:1px solid var(--gray)">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+            <span style="font-size:14px;color:var(--text)">新旧件对比照片</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+            <span style="font-size:10px;color:var(--text3)">长按图片进行排序或删除</span>
+          </div>
+          <div class="photo-grid">
+            <div class="photo-add" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+        
+        <!-- 4. 新件外包装验件照片 -->
+        <div style="padding:12px 14px;border-bottom:1px solid var(--gray)">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+            <span style="font-size:14px;color:var(--text)">新件外包装验件照片</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+            <span style="font-size:10px;color:var(--text3)">长按图片进行排序或删除</span>
+          </div>
+          <div class="photo-grid">
+            <div class="photo-add" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+        
+        <!-- 5. 新件实物验件照片 -->
+        <div style="padding:12px 14px;border-bottom:1px solid var(--gray)">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+            <span style="font-size:14px;color:var(--text)">新件实物验件照片</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+            <span style="font-size:10px;color:var(--text3)">长按图片进行排序或删除</span>
+          </div>
+          <div class="photo-grid">
+            <div class="photo-add" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+        
+        <!-- 6. 配件拆装视频 -->
+        <div style="padding:12px 14px;border-bottom:1px solid var(--gray)">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+            <span style="font-size:14px;color:var(--text)">配件拆装视频</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+            <span style="font-size:10px;color:var(--text3)">长按按钮可以录制视频</span>
+          </div>
+          <div class="record-block" onclick="showToast('开始录制')">
+            <div class="record-icon">📹</div>
+            <div class="record-title">点击开始录制</div>
+            <div class="record-sub">录制配件拆装视频</div>
+          </div>
+        </div>
+        
+        <!-- 7. 配件装车视频 -->
+        <div style="padding:12px 14px">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+            <span style="font-size:14px;color:var(--text)">配件装车视频</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+            <span style="font-size:10px;color:var(--text3)">长按按钮可以录制视频</span>
+          </div>
+          <div class="record-block" onclick="showToast('开始录制')">
+            <div class="record-icon">📹</div>
+            <div class="record-title">点击开始录制</div>
+            <div class="record-sub">录制配件装车视频</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button class="btn btn-gray" onclick="prevStep()">上一步</button>
+        <button class="btn btn-primary purple" onclick="nextStep()">下一步</button>
+      </div>
+    </div>
+
+    <!-- 第三步：复勘视频 -->
+    <div class="step-section" id="step3">
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot" style="background:var(--purple)"></span>复勘视频</div>
+        
+        <div style="padding:20px 14px;display:flex;flex-direction:column;align-items:center;gap:12px">
+          <!-- 4G记录仪视频录制 -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer" onclick="showToast('开启4G记录仪')">
+            <div style="width:100px;height:80px;border:2px dashed var(--gray2);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:#fafafa">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+              </svg>
+              <span style="font-size:12px;color:var(--text2)">4G记录仪</span>
+            </div>
+            <span style="font-size:14px;color:var(--purple);font-weight:500">开启</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button class="btn btn-gray" onclick="prevStep()">上一步</button>
+        <button class="btn btn-primary purple" onclick="completeTask()">完成复勘</button>
+      </div>
+    </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast"></div>
+<script src="../../common/script.js"></script>
+<script>
+var currentStep = 1;
+var totalSteps = 4;
+
+function updateStepBar() {
+  var items = document.querySelectorAll('.step-item');
+  var dots = document.querySelectorAll('.step-dot');
+  var texts = document.querySelectorAll('.step-text');
+  
+  items.forEach(function(item, index) {
+    var stepNum = index + 1;
+    item.classList.remove('active', 'done');
+    dots[index].classList.remove('active', 'done');
+    texts[index].classList.remove('active', 'done');
+    
+    if (stepNum < currentStep) {
+      item.classList.add('done');
+      dots[index].classList.add('done');
+      dots[index].textContent = '✓';
+      texts[index].classList.add('done');
+    } else if (stepNum === currentStep) {
+      item.classList.add('active');
+      dots[index].classList.add('active');
+      dots[index].textContent = stepNum;
+      texts[index].classList.add('active');
+    } else {
+      dots[index].textContent = stepNum;
+    }
+  });
+}
+
+function showStep(step) {
+  document.querySelectorAll('.step-section').forEach(function(section) {
+    section.classList.remove('active');
+  });
+  document.getElementById('step' + step).classList.add('active');
+  
+  updateStepBar();
+  window.scrollTo(0, 0);
+}
+
+function nextStep() {
+  if (currentStep < totalSteps) {
+    currentStep++;
+    showStep(currentStep);
+  }
+}
+
+function prevStep() {
+  if (currentStep > 1) {
+    currentStep--;
+    showStep(currentStep);
+  }
+}
+
+function completeTask() {
+  showToast('复勘任务已完成！');
+  setTimeout(function() { location.href = 'tasks.html'; }, 1000);
+}
+
+// 复勘部位折叠
+function togglePartsItem(header) {
+  var item = header.closest('.parts-item');
+  item.classList.toggle('open');
+}
+
+// 初始化
+showStep(1);
+</script>
+</body>
+</html>

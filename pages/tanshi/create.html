@@ -3,35 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>发布探视订单</title>
+<title>人伤发布</title>
 <link rel="stylesheet" href="../common/style.css">
 </head>
 <body>
 <div class="phone-container">
-  <div class="status-bar green">
-    <span>9:41</span>
-    <span>📶 5G 🔋</span>
-  </div>
+  <div class="status-bar green"><span>9:41</span><span>📶 5G 🔋</span></div>
   <div class="header green">
     <a class="header-back" href="index.html">‹</a>
-    <span class="header-title">发布探视订单</span>
-    <span class="header-action"></span>
+    <span class="header-title">人伤发布</span>
+    <span style="width:32px"></span>
   </div>
 
-  <div class="scroll-area" style="padding:12px 14px">
-    <!-- 案件基本信息 -->
-    <div class="card" style="margin:0 0 12px 0">
-      <div class="card-title">案件基本信息</div>
+  <div class="scroll-area" style="padding:10px 12px">
+    <div class="card" style="margin:0 0 10px">
+      <div class="card-title"><span class="card-title-dot green"></span>案件基本信息</div>
       <div class="form-item">
-        <label class="form-label">报案号</label>
+        <label class="form-label form-label-req">报案号</label>
         <input class="form-input" type="text" placeholder="请输入报案号">
       </div>
       <div class="form-item">
-        <label class="form-label">保险公司</label>
+        <label class="form-label form-label-req">保险公司</label>
         <div class="form-select" onclick="showToast('选择保险公司')">请选择 <span class="arr">›</span></div>
       </div>
       <div class="form-item">
-        <label class="form-label">事故日期</label>
+        <label class="form-label form-label-req">事故日期</label>
         <input class="form-input" type="date">
       </div>
       <div class="form-item">
@@ -40,15 +36,14 @@
       </div>
     </div>
 
-    <!-- 伤者信息 -->
-    <div class="card" style="margin:0 0 12px 0">
-      <div class="card-title">伤者信息</div>
+    <div class="card" style="margin:0 0 10px">
+      <div class="card-title"><span class="card-title-dot green"></span>伤者信息</div>
       <div class="form-item">
-        <label class="form-label">伤者姓名</label>
+        <label class="form-label form-label-req">伤者姓名</label>
         <input class="form-input" type="text" placeholder="请输入伤者姓名">
       </div>
       <div class="form-item">
-        <label class="form-label">联系电话</label>
+        <label class="form-label form-label-req">联系电话</label>
         <input class="form-input" type="tel" placeholder="请输入手机号">
       </div>
       <div class="form-item">
@@ -57,62 +52,39 @@
       </div>
     </div>
 
-    <!-- 就诊信息 -->
-    <div class="card" style="margin:0 0 12px 0">
-      <div class="card-title">就诊信息</div>
+    <div class="card" style="margin:0 0 10px">
+      <div class="card-title"><span class="card-title-dot green"></span>就诊信息</div>
       <div class="form-item">
-        <label class="form-label">就诊医院</label>
+        <label class="form-label form-label-req">就诊医院</label>
         <div class="form-select" onclick="showToast('选择医院')">请选择 <span class="arr">›</span></div>
       </div>
       <div class="form-item">
-        <label class="form-label">科室/病区</label>
+        <label class="form-label">科室 / 病区</label>
         <input class="form-input" type="text" placeholder="如：骨科三病区">
       </div>
       <div class="form-item">
         <label class="form-label">床位号</label>
         <input class="form-input" type="text" placeholder="请输入床位号">
       </div>
-      <div class="form-item">
+      <div class="form-item" style="align-items:flex-start;border-bottom:none">
         <label class="form-label">诊断结果</label>
         <textarea class="form-textarea" placeholder="请输入诊断结果"></textarea>
       </div>
     </div>
 
-    <!-- 费用情况 -->
-    <div class="card" style="margin:0 0 12px 0">
-      <div class="card-title">费用情况</div>
-      <div class="form-item">
-        <label class="form-label">预估医疗费</label>
-        <input class="form-input" type="number" placeholder="请输入预估金额">
-      </div>
-      <div class="form-item">
-        <label class="form-label">已住院天数</label>
-        <input class="form-input" type="number" placeholder="请输入天数">
-      </div>
-    </div>
-
-    <!-- 事故经过 -->
-    <div class="card" style="margin:0 0 12px 0">
-      <div class="card-title">事故经过</div>
-      <div class="form-item">
-        <textarea class="form-textarea" placeholder="请简要描述事故经过"></textarea>
-      </div>
-    </div>
-
-    <!-- 审批人 -->
-    <div class="card" style="margin:0 0 80px 0">
-      <div class="card-title">审批信息</div>
-      <div class="form-item">
-        <label class="form-label">审批人</label>
-        <div class="form-select" onclick="showToast('选择审批人')">请选择 <span class="arr">›</span></div>
+    <div class="card" style="margin:0 0 80px">
+      <div class="card-title"><span class="card-title-dot green"></span>事故经过</div>
+      <div class="form-item" style="border-bottom:none">
+        <textarea class="form-textarea" placeholder="请简要描述事故经过（选填）"></textarea>
       </div>
     </div>
   </div>
 
   <div class="bottom-action">
-    <button class="btn btn-full btn-green" onclick="showToast('探视订单已发布！');location.href='index.html'">发布探视订单</button>
+    <button class="btn btn-full btn-green" onclick="showToast('探视订单已发布！');setTimeout(()=>location.href='index.html',1000)">发布探视订单</button>
   </div>
 </div>
+<div class="toast"></div>
 <script src="../common/script.js"></script>
 </body>
 </html>

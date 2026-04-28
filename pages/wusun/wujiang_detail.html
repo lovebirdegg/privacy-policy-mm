@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>物鉴详情</title>
+<link rel="stylesheet" href="../common/style.css">
+<style>
+/* ==================== 固定头部区域 ==================== */
+.fixed-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+}
+
+/* ==================== 任务状态卡 ==================== */
+.task-status-card {
+  background: linear-gradient(135deg, #f0a020, #d97706);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.task-status-card .task-id {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 4px;
+}
+.task-status-card .task-time {
+  font-size: 12px;
+  color: rgba(255,255,255,0.8);
+}
+.task-status-card .task-status {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  font-size: 13px;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+/* ==================== 标签切换 ==================== */
+.tab-switch {
+  display: flex;
+  gap: 6px;
+  padding: 0 12px 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tab-switch::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text2);
+  background: #f5f5f5;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--orange), #f0a020);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(240,160,32,0.3);
+}
+
+/* ==================== 内容区 ==================== */
+.content-scroll {
+  padding: 0 12px;
+}
+
+/* ==================== 卡片 ==================== */
+.card {
+  background: #fff;
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  border-bottom: 1px solid #f0f0f0;
+}
+.card-title-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.card-title-dot.orange { background: var(--orange); }
+.card-title-dot.green { background: var(--green); }
+.card-title-dot.purple { background: var(--purple); }
+.card-title-dot.blue { background: #3b82f6; }
+
+/* ==================== 详情行 ==================== */
+.detail-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--gray);
+  gap: 10px;
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-label {
+  font-size: 13px;
+  color: var(--text3);
+  min-width: 85px;
+  flex-shrink: 0;
+}
+.detail-value {
+  flex: 1;
+  text-align: right;
+  font-size: 13px;
+  color: var(--text);
+}
+.detail-value.amount {
+  color: var(--orange);
+  font-weight: 700;
+}
+.detail-row.multi { align-items: flex-start; }
+.detail-row.multi .detail-label { padding-top: 2px; }
+.detail-row.multi .detail-value { text-align: left; line-height: 1.5; }
+
+/* ==================== 标签 ==================== */
+.tag {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+.tag-orange { background: #fff3e0; color: var(--orange); }
+.tag-green { background: #f0fdf4; color: var(--green); }
+.tag-blue { background: #eff6ff; color: #3b82f6; }
+.tag-red { background: #fef2f2; color: var(--red); }
+
+/* ==================== 物损项折叠 ==================== */
+.wusun-item {
+  border-bottom: 1px solid var(--gray);
+}
+.wusun-item:last-child { border-bottom: none; }
+.wusun-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  cursor: pointer;
+  background: #fff;
+}
+.wusun-header:active { background: #fafafa; }
+.wusun-name { font-size: 14px; font-weight: 600; color: var(--text); }
+.wusun-meta { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.wusun-content {
+  display: none;
+  padding: 0 14px 14px;
+  background: #fafafa;
+}
+.wusun-item.open .wusun-content { display: block; }
+.wusun-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px dashed #e5e7eb;
+  margin-top: 10px;
+}
+.wusun-total-label { font-size: 13px; color: var(--text2); }
+.wusun-total-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--orange);
+}
+
+/* ==================== 照片网格 ==================== */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 8px;
+}
+.photo-thumb {
+  background: #f3f4f6;
+  border-radius: 6px;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+/* ==================== 签字区 ==================== */
+.sign-section { padding: 12px 14px; }
+.sign-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--gray);
+}
+.sign-row:last-child { border-bottom: none; }
+.sign-label { font-size: 13px; color: var(--text); min-width: 80px; flex-shrink: 0; }
+.sign-area {
+  flex: 1;
+  height: 44px;
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text3);
+  font-size: 13px;
+  background: #fafafa;
+}
+.sign-area.done {
+  border-color: var(--green);
+  border-style: solid;
+  background: #f0fdf4;
+  color: var(--green);
+}
+
+/* ==================== 录像区 ==================== */
+.record-block {
+  margin: 14px;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  border: 1px solid #fed7aa;
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+}
+.record-icon { font-size: 36px; margin-bottom: 8px; }
+.record-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--orange);
+  margin-bottom: 4px;
+}
+.record-sub { font-size: 12px; color: var(--text3); }
+.record-info {
+  margin-top: 12px;
+  padding: 10px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--text2);
+}
+
+/* ==================== 审批操作区 ==================== */
+.approval-actions {
+  display: flex;
+  gap: 10px;
+  padding: 16px;
+}
+.approval-btn {
+  flex: 1;
+  height: 44px;
+  border-radius: 22px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.approval-btn:active { transform: scale(0.98); }
+.btn-reject {
+  background: #f5f5f5;
+  color: var(--text2);
+}
+.btn-approve {
+  background: linear-gradient(135deg, var(--green), #059669);
+  color: white;
+  box-shadow: 0 2px 8px rgba(16,185,129,0.3);
+}
+
+/* ==================== 审批按钮区域（固定底部） ==================== */
+.approval-wrap {
+  flex-shrink: 0;
+  padding: 12px 16px 20px;
+  background: var(--bg);
+}
+.approval-actions {
+  display: flex;
+  gap: 12px;
+}
+.approval-btn {
+  flex: 1;
+  height: 44px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 22px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.approval-btn:active { transform: scale(0.98); }
+.btn-reject {
+  background: #f5f5f5;
+  color: var(--text2);
+}
+.btn-approve {
+  background: linear-gradient(135deg, var(--green), #059669);
+  color: white;
+  box-shadow: 0 2px 8px rgba(16,185,129,0.3);
+}
+</style>
+</head>
+<body>
+<div class="phone-container">
+  <div class="status-bar orange"><span>9:41</span><span>📶 5G 🔋</span></div>
+  <div class="header orange">
+    <a class="header-back" href="approval.html">‹</a>
+    <span class="header-title">物鉴详情</span>
+    <span style="width:28px"></span>
+  </div>
+
+  <div class="fixed-header">
+    <div class="task-status-card">
+      <div>
+        <div class="task-id">WS2026041201</div>
+        <div class="task-time">📅 2026-04-12 10:00</div>
+      </div>
+      <span class="task-status">待审批</span>
+    </div>
+
+    <div class="tab-switch">
+      <button class="tab-btn active" data-tab="info" onclick="switchTab('info', this)">案件信息</button>
+      <button class="tab-btn" data-tab="photo" onclick="switchTab('photo', this)">物鉴拍照</button>
+      <button class="tab-btn" data-tab="video" onclick="switchTab('video', this)">现场视频</button>
+      <button class="tab-btn" data-tab="sign" onclick="switchTab('sign', this)">签字确认</button>
+    </div>
+  </div>
+
+  <div class="scroll-area">
+    <div class="content-scroll">
+
+      <!-- 案件信息 -->
+      <div class="tab-content active" id="tab-info">
+        <div class="card">
+          <div class="card-title"><span class="card-title-dot orange"></span>报案信息</div>
+          <div class="detail-row"><span class="detail-label">报案号</span><span class="detail-value">P2026041201</span></div>
+          <div class="detail-row"><span class="detail-label">保险公司</span><span class="detail-value">太平洋财险</span></div>
+          <div class="detail-row"><span class="detail-label">出险时间</span><span class="detail-value">2026-04-12 09:30</span></div>
+          <div class="detail-row"><span class="detail-label">出险地点</span><span class="detail-value">济南市历下区XX路</span></div>
+          <div class="detail-row"><span class="detail-label">定损员</span><span class="detail-value">李经理</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="card-title-dot blue"></span>当事人信息</div>
+          <div class="detail-row"><span class="detail-label">当事人姓名</span><span class="detail-value">王建国</span></div>
+          <div class="detail-row"><span class="detail-label">联系电话</span><span class="detail-value">138****5678</span></div>
+          <div class="detail-row"><span class="detail-label">身份证号</span><span class="detail-value">370102***********23</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="card-title-dot orange"></span>物损信息</div>
+          <div class="detail-row"><span class="detail-label">物损类型</span><span class="detail-value">财产损失</span></div>
+          <div class="detail-row multi"><span class="detail-label">物损描述</span><span class="detail-value">铝合金门窗、室内地板、家用电器等财产损失</span></div>
+          <div class="detail-row"><span class="detail-label">预估金额</span><span class="detail-value amount">¥12,500</span></div>
+          <div class="detail-row"><span class="detail-label">定损金额</span><span class="detail-value amount">¥11,800</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="card-title-dot purple"></span>勘察信息</div>
+          <div class="detail-row"><span class="detail-label">勘察员</span><span class="detail-value">张明</span></div>
+          <div class="detail-row"><span class="detail-label">勘察时间</span><span class="detail-value">2026-04-12 10:30</span></div>
+          <div class="detail-row"><span class="detail-label">损失认定</span><span class="detail-value"><span class="tag tag-green">无异议</span></span></div>
+        </div>
+      </div>
+
+      <!-- 物鉴拍照 -->
+      <div class="tab-content" id="tab-photo" style="display:none">
+        <div class="card">
+          <div class="card-title"><span class="card-title-dot orange"></span>物鉴拍照（逐项留证）</div>
+
+          <div class="wusun-item open">
+            <div class="wusun-header" onclick="toggleItem(this)">
+              <div>
+                <div class="wusun-name">1. 铝合金门窗</div>
+                <div class="wusun-meta">定损：¥4,200 · 全损 · 已拍 3张</div>
+              </div>
+              <span style="color:var(--text3)">›</span>
+            </div>
+            <div class="wusun-content">
+              <div class="photo-grid">
+                <div class="photo-thumb" style="background:linear-gradient(135deg,#e5e7eb,#d1d5db)"></div>
+                <div class="photo-thumb" style="background:linear-gradient(135deg,#d1d5db,#e5e7eb)"></div>
+                <div class="photo-thumb" style="background:linear-gradient(135deg,#e5e7eb,#d1d5db)"></div>
+              </div>
+              <div class="wusun-total">
+                <span class="wusun-total-label">小计</span>
+                <span class="wusun-total-value">¥4,200</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="wusun-item">
+            <div class="wusun-header" onclick="toggleItem(this)">
+              <div>
+                <div class="wusun-name">2. 室内地板</div>
+                <div class="wusun-meta">定损：¥3,800 · 部分损坏 · 已拍 2张</div>
+              </div>
+              <span style="color:var(--text3)">›</span>
+            </div>
+            <div class="wusun-content">
+              <div class="photo-grid">
+                <div class="photo-thumb" style="background:linear-gradient(135deg,#f3f4f6,#e5e7eb)"></div>
+                <div class="photo-thumb" style="background:linear-gradient(135deg,#e5e7eb,#f3f4f6)"></div>
+              </div>
+              <div class="wusun-total">
+                <span class="wusun-total-label">小计</span>
+                <span class="wusun-total-value">¥3,800</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="wusun-item">
+            <div class="wusun-header" onclick="toggleItem(this)">
+              <div>
+                <div class="wusun-name">3. 家用电器</div>
+                <div class="wusun-meta">定损：¥3,800 · 全损 · 已拍 4张</div>
+              </div>
+              <span style="color:var(--text3)">›</span>
+            </div>
+            <div class="wusun-content">
+              <div class="photo-grid">
+                <div class="photo-thumb" style="background:linear-gradient(135deg,#d1d5db,#e5e7eb)"></div>
+                <div class="photo-thumb" style="background:linear-gradient(135deg,#e5e7eb,#d1d5db)"></div>
+                <div class="photo-thumb" style="background:linear-gradient(135deg,#d1d5db,#f3f4f6)"></div>
+                <div class="photo-thumb" style="background:linear-gradient(135deg,#f3f4f6,#d1d5db)"></div>
+              </div>
+              <div class="wusun-total">
+                <span class="wusun-total-label">小计</span>
+                <span class="wusun-total-value">¥3,800</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:12px 14px">
+            <div class="wusun-total" style="border:none;margin:0;padding:0">
+              <span style="font-size:14px;font-weight:600;color:var(--text)">定损总额</span>
+              <span style="font-size:18px;font-weight:700;color:var(--orange)">¥11,800</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 现场视频 -->
+      <div class="tab-content" id="tab-video" style="display:none">
+        <div class="card">
+          <div class="card-title"><span class="card-title-dot green"></span>现场视频</div>
+          <div class="record-block">
+            <div class="record-icon">🎥</div>
+            <div class="record-title">现场视频已录制</div>
+            <div class="record-sub">通过记录仪录制，时长 2分30秒</div>
+            <div class="record-info">
+              📅 录制时间：2026-04-12 10:45<br>
+              📍 录制地点：济南市历下区XX路
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 签字确认 -->
+      <div class="tab-content" id="tab-sign" style="display:none">
+        <div class="card">
+          <div class="card-title"><span class="card-title-dot blue"></span>告知事项确认</div>
+          <div style="padding:10px 14px">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f0f0f0">
+              <span style="color:var(--green);font-size:16px">✓</span>
+              <span style="font-size:13px;color:var(--text2)">已告知物损定损标准</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f0f0f0">
+              <span style="color:var(--green);font-size:16px">✓</span>
+              <span style="font-size:13px;color:var(--text2)">已告知复勘申请流程</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 0">
+              <span style="color:var(--green);font-size:16px">✓</span>
+              <span style="font-size:13px;color:var(--text2)">已告知理赔联系方式</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="card-title-dot purple"></span>签字确认</div>
+          <div class="sign-section">
+            <div class="sign-row">
+              <span class="sign-label">当事人签字</span>
+              <div class="sign-area done">✓ 已签字</div>
+            </div>
+            <div class="sign-row">
+              <span class="sign-label">签字时间</span>
+              <span class="detail-value">2026-04-12 11:00</span>
+            </div>
+            <div class="sign-row" style="border-bottom:none">
+              <span class="sign-label">勘察员签字</span>
+              <div class="sign-area done">✓ 已签字</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 固定底部审批按钮 -->
+    <div class="approval-wrap">
+      <div class="approval-actions">
+        <button class="approval-btn btn-reject" onclick="reject()">拒绝</button>
+        <button class="approval-btn btn-approve" onclick="approve()">通过</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast"></div>
+<script src="../common/script.js"></script>
+<script>
+function switchTab(tabName, btn) {
+  document.querySelectorAll('.tab-btn').forEach(function(b) {
+    b.classList.remove('active');
+  });
+  btn.classList.add('active');
+
+  document.querySelectorAll('.tab-content').forEach(function(content) {
+    content.style.display = 'none';
+  });
+  document.getElementById('tab-' + tabName).style.display = 'block';
+
+  window.scrollTo(0, 0);
+}
+
+function toggleItem(header) {
+  header.closest('.wusun-item').classList.toggle('open');
+}
+
+function approve() {
+  showToast('已通过审批');
+}
+
+function reject() {
+  showToast('已拒绝');
+}
+</script>
+</body>
+</html>

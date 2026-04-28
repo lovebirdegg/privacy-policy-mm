@@ -5,119 +5,899 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>监拆任务详情</title>
 <link rel="stylesheet" href="../common/style.css">
+<style>
+/* ==================== 步骤条蓝色主题 ==================== */
+.steps.blue-theme {
+  background: linear-gradient(180deg, #e8f0fe 0%, #ffffff 100%);
+  padding: 12px 16px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+.steps.blue-theme .step-dot.done,
+.steps.blue-theme .step-dot.active { background: var(--blue); }
+.steps.blue-theme .step-dot.active { box-shadow: 0 0 0 4px rgba(46,108,246,0.15); }
+.steps.blue-theme .step-item.done:not(:last-child)::after { background: var(--blue); }
+.steps.blue-theme .step-text.done,
+.steps.blue-theme .step-text.active { color: var(--blue); font-weight: 600; }
+.steps.blue-theme .step-dot {
+  width: 26px;
+  height: 26px;
+  font-size: 12px;
+}
+.steps.blue-theme .step-text {
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+/* ==================== 分步内容区 ==================== */
+.step-section { display: none; }
+.step-section.active { display: block; }
+
+/* ==================== 卡片统一间距 ==================== */
+.card { margin: 0 0 8px; }
+.step-section > .card:first-child { margin-top: 12px; }
+.step-section > .card:last-child { margin-bottom: 12px; }
+
+/* ==================== 详情只读样式 ==================== */
+.detail-label {
+  color: var(--text2);
+  font-size: 14px;
+  flex-shrink: 0;
+  min-width: 85px;
+}
+.detail-value {
+  font-size: 14px;
+  color: var(--text);
+  flex: 1;
+  text-align: right;
+}
+.detail-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--gray);
+  gap: 10px;
+  background: #fff;
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-row:first-child { border-radius: 8px 8px 0 0; }
+.detail-row:last-child { border-radius: 0 0 8px 8px; }
+.detail-row:only-child { border-radius: 8px; border-bottom: none; }
+
+/* ==================== 车牌大标题 ==================== */
+.car-title {
+  padding: 14px 14px 8px;
+  background: #fff;
+}
+.car-plate {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.car-case {
+  font-size: 12px;
+  color: var(--text2);
+}
+
+/* ==================== 表单输入样式 ==================== */
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--gray);
+  gap: 10px;
+  background: #fff;
+}
+.form-item:last-child { border-bottom: none; }
+.form-item:first-child { border-radius: 8px 8px 0 0; }
+.form-item:last-child { border-radius: 0 0 8px 8px; }
+.form-item:only-child { border-radius: 8px; border-bottom: none; }
+.form-label {
+  font-size: 14px;
+  color: var(--text);
+  min-width: 85px;
+  flex-shrink: 0;
+}
+.form-input {
+  flex: 1;
+  height: 36px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: var(--text);
+  background: transparent;
+  text-align: right;
+}
+.form-input::placeholder { color: var(--text3); text-align: right; }
+.form-textarea {
+  flex: 1;
+  min-height: 72px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: var(--text);
+  background: transparent;
+  resize: none;
+  line-height: 1.5;
+  text-align: left;
+}
+.form-textarea::placeholder { color: var(--text3); }
+.form-select {
+  flex: 1;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 14px;
+  color: var(--text3);
+  cursor: pointer;
+}
+.form-select .arr { margin-left: 4px; color: var(--text3); }
+
+/* ==================== 照片网格 ==================== */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.photo-thumb {
+  background: #f3f4f6;
+  border-radius: 8px;
+  aspect-ratio: 1;
+}
+.photo-add {
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #9ca3af;
+  cursor: pointer;
+  background: #fafafa;
+  transition: all 0.2s;
+}
+.photo-add:active {
+  background: var(--blue-light);
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+/* ==================== 录像区域 ==================== */
+.record-block {
+  background: linear-gradient(135deg, #e8f0fe 0%, #d0e2fd 100%);
+  border: 1px solid #93c5fd;
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.record-block:active {
+  transform: scale(0.98);
+  background: linear-gradient(135deg, #d0e2fd 0%, #93c5fd 100%);
+}
+.record-icon { font-size: 36px; margin-bottom: 8px; }
+.record-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--blue);
+  margin-bottom: 4px;
+}
+.record-sub { font-size: 13px; color: var(--text3); }
+
+/* ==================== 监拆视频按钮 ==================== */
+.record-4g {
+  display: flex;
+  gap: 10px;
+}
+.record-4g-item {
+  flex: 1;
+  background: linear-gradient(135deg, #4d85ff, #1a56db);
+  border-radius: 10px;
+  padding: 16px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.record-4g-item.green {
+  background: linear-gradient(135deg, #34c77b, #059669);
+}
+.record-4g-item:active {
+  transform: scale(0.98);
+}
+.record-4g-icon { font-size: 28px; margin-bottom: 6px; }
+.record-4g-title {
+  font-size: 13px;
+  color: white;
+  font-weight: 600;
+}
+.record-4g-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+  margin-top: 2px;
+}
+
+/* ==================== 拆解部位项 ==================== */
+.parts-item {
+  border-bottom: 1px solid var(--gray);
+}
+.parts-item:last-child { border-bottom: none; }
+.parts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  cursor: pointer;
+  background: #fff;
+}
+.parts-header:active { background: #fafafa; }
+.parts-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.parts-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.parts-arrow { color: var(--text3); font-size: 14px; transition: transform 0.2s; }
+.parts-item.open .parts-arrow { transform: rotate(90deg); }
+.parts-content {
+  display: none;
+  padding: 0 14px 12px;
+  background: #fafafa;
+}
+.parts-item.open .parts-content { display: block; }
+.parts-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.parts-tag {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+.parts-tag.damage { background: var(--blue-light); color: var(--blue); }
+.parts-tag.abnormal { background: var(--orange-light); color: var(--orange-dark); }
+.parts-tag.link { background: var(--green-light); color: var(--green); cursor: pointer; }
+.parts-tag.delete { background: var(--red-light); color: var(--red); cursor: pointer; }
+.parts-desc { font-size: 11px; color: var(--red); }
+
+/* ==================== 底部选项 ==================== */
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 14px;
+  border-top: 1px solid var(--gray);
+  background: #fff;
+}
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text);
+}
+.option-toggle {
+  display: flex;
+  background: var(--gray);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.option-toggle span {
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.option-toggle span.off { color: var(--text3); }
+.option-toggle span.on { background: var(--blue); color: white; }
+
+/* ==================== 评价标签 ==================== */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 14px;
+}
+.tag-item {
+  background: var(--gray);
+  color: var(--text2);
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.tag-item:active {
+  background: var(--blue-light);
+  color: var(--blue);
+}
+
+/* ==================== 步骤内操作按钮 ==================== */
+.step-actions {
+  display: flex;
+  gap: 12px;
+  padding: 16px 14px;
+  margin-top: 8px;
+}
+.step-actions .btn {
+  flex: 1;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 24px;
+}
+
+/* ==================== 添加按钮 ==================== */
+.add-btn {
+  width: 100%;
+  background: var(--blue-light);
+  color: var(--blue);
+  border: 1.5px dashed var(--blue);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.add-btn:active {
+  background: #d0e2fd;
+}
+.add-btn.green {
+  background: var(--green-light);
+  color: var(--green);
+  border-color: var(--green);
+}
+.add-btn.green:active {
+  background: #a7f3d0;
+}
+</style>
 </head>
 <body>
 <div class="phone-container">
-  <div class="status-bar">
-    <span>9:41</span>
-    <span>📶 5G 🔋</span>
-  </div>
+  <div class="status-bar"><span>9:41</span><span>📶 5G 🔋</span></div>
   <div class="header">
     <a class="header-back" href="tasks.html">‹</a>
     <span class="header-title">监拆任务详情</span>
-    <a class="header-action" style="font-size:14px" href="media.html">媒体</a>
+    <a class="header-action-text" href="materials.html" style="padding:8px 12px;display:block;">案件素材</a>
   </div>
 
-  <div class="scroll-area" style="padding:12px 14px">
-    <!-- 案件信息 -->
-    <div class="card" style="margin:0 0 12px 0">
-      <div class="card-title">案件信息</div>
-      <div class="detail-row"><span class="detail-label">任务编号</span><span>JD2026033101</span></div>
-      <div class="detail-row"><span class="detail-label">报案号</span><span>P2026033154319</span></div>
-      <div class="detail-row"><span class="detail-label">车牌号</span><span>鲁S·12345</span></div>
-      <div class="detail-row"><span class="detail-label">车辆品牌</span><span>丰田 RAV4</span></div>
-      <div class="detail-row"><span class="detail-label">修理厂</span><span>莱芜鑫鑫修理厂</span></div>
-      <div class="detail-row"><span class="detail-label">定损员</span><span>李四</span></div>
-      <div class="detail-row"><span class="detail-label">监拆员</span><span>张三</span></div>
-      <div class="detail-row"><span class="detail-label">任务状态</span><span style="color:#18a058;font-weight:600">进行中</span></div>
+  <!-- 任务状态卡 -->
+  <div style="background:linear-gradient(135deg,#2e6cf6,#1a56db);border-radius:var(--radius);padding:14px 16px;margin:10px 12px;display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <div style="font-size:16px;font-weight:700;color:white;margin-bottom:4px">JD2026033101</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.8)">发布：2026-03-31 09:30</div>
     </div>
+    <span style="background:rgba(255,255,255,0.2);color:white;font-size:13px;padding:5px 12px;border-radius:20px">进行中</span>
+  </div>
 
-    <!-- 拆解部位记录 -->
-    <div class="card" style="margin:0 0 12px 0">
-      <div class="card-title">拆解部位记录</div>
-      
-      <div class="photo-collect-item">
-        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
-          <div class="photo-collect-title">
-            <span class="photo-collect-num">1</span>
-            <span>车辆外观（四面）</span>
-          </div>
-          <span class="photo-collect-status done">已拍 4/4</span>
-        </div>
-        <div class="photo-collect-body">
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <div style="width:72px;height:72px;background:#ddd;border-radius:8px;cursor:pointer" onclick="showToast('查看照片')"></div>
-            <div style="width:72px;height:72px;background:#ccc;border-radius:8px;cursor:pointer" onclick="showToast('查看照片')"></div>
-            <div style="width:72px;height:72px;background:#e0e0e0;border-radius:8px;cursor:pointer" onclick="showToast('查看照片')"></div>
-            <div style="width:72px;height:72px;background:#d5d5d5;border-radius:8px;cursor:pointer" onclick="showToast('查看照片')"></div>
-            <div style="width:72px;height:72px;border:1.5px dashed var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--blue)" onclick="showToast('拍照')">＋</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="photo-collect-item">
-        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
-          <div class="photo-collect-title">
-            <span class="photo-collect-num">2</span>
-            <span>车架号/VIN码</span>
-          </div>
-          <span class="photo-collect-status pending">未拍</span>
-        </div>
-        <div class="photo-collect-body" style="display:none">
-          <div style="display:flex;gap:8px">
-            <div style="width:72px;height:72px;border:1.5px dashed var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--blue)" onclick="showToast('拍照')">＋</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="photo-collect-item">
-        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
-          <div class="photo-collect-title">
-            <span class="photo-collect-num">3</span>
-            <span>损伤部位特写</span>
-          </div>
-          <span class="photo-collect-status pending">未拍</span>
-        </div>
-        <div class="photo-collect-body" style="display:none">
-          <div style="display:flex;gap:8px">
-            <div style="width:72px;height:72px;border:1.5px dashed var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--blue)" onclick="showToast('拍照')">＋</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="photo-collect-item">
-        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
-          <div class="photo-collect-title">
-            <span class="photo-collect-num">4</span>
-            <span>拆解过程（关键节点）</span>
-          </div>
-          <span class="photo-collect-status pending">未拍</span>
-        </div>
-        <div class="photo-collect-body" style="display:none">
-          <div style="display:flex;gap:8px">
-            <div style="width:72px;height:72px;border:1.5px dashed var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--blue)" onclick="showToast('拍照')">＋</div>
-          </div>
-        </div>
-      </div>
+  <!-- 步骤条 -->
+  <div class="steps blue-theme" id="stepBar">
+    <div class="step-item active">
+      <div class="step-dot active">1</div>
+      <div class="step-text active">任务信息</div>
     </div>
-
-    <!-- 现场录像 -->
-    <div class="card" style="margin:0 0 80px 0">
-      <div class="card-title">现场录像</div>
-      <div style="padding:12px 14px">
-        <div style="background:var(--blue-light);border:1.5px dashed var(--blue);border-radius:8px;padding:16px;text-align:center;cursor:pointer" onclick="showToast('启动记录仪')">
-          <div style="font-size:32px;margin-bottom:6px">🎥</div>
-          <div style="font-size:13px;color:var(--blue);font-weight:600">点击开始录制</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:4px">全程记录监拆过程</div>
-        </div>
-      </div>
+    <div class="step-item">
+      <div class="step-dot">2</div>
+      <div class="step-text">素材收集</div>
+    </div>
+    <div class="step-item">
+      <div class="step-dot">3</div>
+      <div class="step-text">拆解部位</div>
+    </div>
+    <div class="step-item">
+      <div class="step-dot">4</div>
+      <div class="step-text">其他说明</div>
     </div>
   </div>
 
-  <div class="bottom-action">
-    <button class="btn btn-full btn-primary" onclick="showToast('监拆任务已完成！');location.href='index.html'">完成监拆</button>
+  <div class="scroll-area" style="padding:0 12px 20px">
+
+    <!-- 第一步：任务信息 -->
+    <div class="step-section active" id="step1">
+      <!-- 任务信息卡片 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span>任务信息</div>
+        <div class="car-title">
+          <div class="car-plate">鲁AA34222</div>
+          <div class="car-case">案件号：C371200VEH26001765</div>
+        </div>
+        <div class="detail-row"><span class="detail-label">报案时间</span><span class="detail-value">2026-04-23 08:29:50</span></div>
+        <div class="detail-row"><span class="detail-label">定损员</span><a href="tel:15906341611" class="detail-value" style="color:var(--blue)">吴艳明 15906341611</a></div>
+        <div class="detail-row"><span class="detail-label">接待员</span><a href="tel:15006819563" class="detail-value" style="color:var(--blue)">朱 15006819563</a></div>
+        <div class="detail-row"><span class="detail-label">车型名称</span><span class="detail-value">长安</span></div>
+        <div class="detail-row"><span class="detail-label">保险公司</span><span class="detail-value">太平洋保险</span></div>
+        <div class="detail-row"><span class="detail-label">预约时间</span><span class="detail-value">2026-04-23 09:29:00</span></div>
+      </div>
+
+      <!-- 修理厂卡片 -->
+      <div class="card">
+        <div class="card-title">
+          <span class="card-title-dot"></span>修理厂
+          <a href="tel:0531-76011888" style="margin-left:auto;font-size:12px;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:3px;padding:3px 8px;border:1px solid var(--blue);border-radius:12px">
+            📍 导航
+          </a>
+        </div>
+        <div style="padding:12px 14px">
+          <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px">长安汽车济南盛和店</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:12px">山东省济南市莱芜区 长勺北路995号（豪德城对过）</div>
+          <div class="photo-add" onclick="showToast('拍照')" style="aspect-ratio:2/1;height:auto;padding:20px">
+            <span style="font-size:24px">+</span>
+            <span style="font-size:12px">添加门头照</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button class="btn btn-gray" style="display:none">上一步</button>
+        <button class="btn btn-primary" onclick="nextStep()">下一步</button>
+      </div>
+    </div>
+
+    <!-- 第二步：素材收集 -->
+    <div class="step-section" id="step2">
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span>素材收集</div>
+        
+        <!-- 车架号 -->
+        <div class="form-item">
+          <label class="form-label">车架号 <span style="color:var(--red)">*</span></label>
+          <input class="form-input" type="text" placeholder="请输入车架号">
+        </div>
+        
+        <!-- 拆解前照片 -->
+        <div style="padding:12px 14px;border-bottom:1px solid var(--gray)">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+            <span style="font-size:14px;color:var(--text)">拆解前照片</span>
+            <span style="font-size:10px;color:var(--text3)">长按图片进行排序或删除</span>
+          </div>
+          <div class="photo-grid">
+            <div class="photo-add" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+        
+        <!-- 拆解前视频 -->
+        <div style="padding:12px 14px;border-bottom:1px solid var(--gray)">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+            <span style="font-size:14px;color:var(--text)">拆解前视频</span>
+            <span style="font-size:10px;color:var(--text3)">长按按钮可以录制视频</span>
+          </div>
+          <div class="record-block" onclick="showToast('开始录制')">
+            <div class="record-icon">🎥</div>
+            <div class="record-title">点击开始录制</div>
+            <div class="record-sub">录制拆解前视频</div>
+          </div>
+        </div>
+        
+        <!-- 监拆视频 -->
+        <div style="padding:12px 14px;border-bottom:1px solid var(--gray)">
+          <div style="font-size:14px;color:var(--text);margin-bottom:10px">监拆视频</div>
+          <div class="record-4g">
+            <div class="record-4g-item" onclick="showToast('固定4G记录仪')">
+              <div class="record-4g-icon">📹</div>
+              <div class="record-4g-title">固定4G记录仪</div>
+              <div class="record-4g-sub">开始录制</div>
+            </div>
+            <div class="record-4g-item green" onclick="showToast('移动4G记录仪')">
+              <div class="record-4g-icon">📱</div>
+              <div class="record-4g-title">移动4G记录仪</div>
+              <div class="record-4g-sub">开始录制</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 拆解后照片 -->
+        <div style="padding:12px 14px;border-bottom:1px solid var(--gray)">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+            <span style="font-size:14px;color:var(--text)">拆解后照片</span>
+            <span style="font-size:10px;color:var(--text3)">长按图片进行排序或删除</span>
+          </div>
+          <div class="photo-grid">
+            <div class="photo-add" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+        
+        <!-- 拆解后视频 -->
+        <div style="padding:12px 14px;border-bottom:1px solid var(--gray)">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+            <span style="font-size:14px;color:var(--text)">拆解后视频</span>
+            <span style="font-size:10px;color:var(--text3)">长按按钮可以录制视频</span>
+          </div>
+          <div class="record-block" onclick="showToast('开始录制')">
+            <div class="record-icon">🎥</div>
+            <div class="record-title">点击开始录制</div>
+            <div class="record-sub">录制拆解后视频</div>
+          </div>
+        </div>
+        
+        <!-- 对件照片 -->
+        <div style="padding:12px 14px">
+          <div style="font-size:14px;color:var(--text);margin-bottom:10px">对件照片</div>
+          <div class="photo-grid">
+            <div class="photo-add" onclick="showToast('拍照')">＋</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button class="btn btn-gray" onclick="prevStep()">上一步</button>
+        <button class="btn btn-primary" onclick="nextStep()">下一步</button>
+      </div>
+    </div>
+
+    <!-- 第三步：拆解部位 -->
+    <div class="step-section" id="step3">
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span>拆解部位</div>
+        
+        <!-- 部位列表 -->
+        <div class="parts-item open">
+          <div class="parts-header" onclick="togglePartsItem(this)">
+            <div class="parts-title">
+              <span class="parts-num">1</span>
+              <span>机盖</span>
+            </div>
+            <span class="parts-arrow">›</span>
+          </div>
+          <div class="parts-content">
+            <div class="parts-tags">
+              <span class="parts-tag damage">受损情况：碰撞</span>
+              <span class="parts-tag abnormal">异常类型：外观</span>
+              <span class="parts-tag link" onclick="showToast('关联配件')">关联</span>
+              <span class="parts-tag delete" onclick="showToast('删除')">删除</span>
+            </div>
+            <div class="parts-desc">受损描述：右侧划伤；右下断裂；</div>
+          </div>
+        </div>
+
+        <div class="parts-item">
+          <div class="parts-header" onclick="togglePartsItem(this)">
+            <div class="parts-title">
+              <span class="parts-num">2</span>
+              <span>前杠</span>
+            </div>
+            <span class="parts-arrow">›</span>
+          </div>
+          <div class="parts-content">
+            <div class="parts-tags">
+              <span class="parts-tag link" onclick="showToast('关联配件')">关联</span>
+              <span class="parts-tag delete" onclick="showToast('删除')">删除</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="parts-item">
+          <div class="parts-header" onclick="togglePartsItem(this)">
+            <div class="parts-title">
+              <span class="parts-num">3</span>
+              <span>前挡风玻璃</span>
+            </div>
+            <span class="parts-arrow">›</span>
+          </div>
+          <div class="parts-content">
+            <div class="parts-tags">
+              <span class="parts-tag link" onclick="showToast('关联配件')">关联</span>
+              <span class="parts-tag delete" onclick="showToast('删除')">删除</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="parts-item">
+          <div class="parts-header" onclick="togglePartsItem(this)">
+            <div class="parts-title">
+              <span class="parts-num">4</span>
+              <span>左前大灯</span>
+            </div>
+            <span class="parts-arrow">›</span>
+          </div>
+          <div class="parts-content">
+            <div class="parts-tags">
+              <span class="parts-tag link" onclick="showToast('关联配件')">关联</span>
+              <span class="parts-tag delete" onclick="showToast('删除')">删除</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="parts-item">
+          <div class="parts-header" onclick="togglePartsItem(this)">
+            <div class="parts-title">
+              <span class="parts-num">5</span>
+              <span>左前叶子板</span>
+            </div>
+            <span class="parts-arrow">›</span>
+          </div>
+          <div class="parts-content">
+            <div class="parts-tags">
+              <span class="parts-tag link" onclick="showToast('关联配件')">关联</span>
+              <span class="parts-tag delete" onclick="showToast('删除')">删除</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="parts-item">
+          <div class="parts-header" onclick="togglePartsItem(this)">
+            <div class="parts-title">
+              <span class="parts-num">6</span>
+              <span>左后叶子板</span>
+            </div>
+            <span class="parts-arrow">›</span>
+          </div>
+          <div class="parts-content">
+            <div class="parts-tags">
+              <span class="parts-tag link" onclick="showToast('关联配件')">关联</span>
+              <span class="parts-tag delete" onclick="showToast('删除')">删除</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="parts-item">
+          <div class="parts-header" onclick="togglePartsItem(this)">
+            <div class="parts-title">
+              <span class="parts-num">7</span>
+              <span>左后视镜</span>
+            </div>
+            <span class="parts-arrow">›</span>
+          </div>
+          <div class="parts-content">
+            <div class="parts-tags">
+              <span class="parts-tag link" onclick="showToast('关联配件')">关联</span>
+              <span class="parts-tag delete" onclick="showToast('删除')">删除</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="parts-item">
+          <div class="parts-header" onclick="togglePartsItem(this)">
+            <div class="parts-title">
+              <span class="parts-num">8</span>
+              <span>左前门</span>
+            </div>
+            <span class="parts-arrow">›</span>
+          </div>
+          <div class="parts-content">
+            <div class="parts-tags">
+              <span class="parts-tag link" onclick="showToast('关联配件')">关联</span>
+              <span class="parts-tag delete" onclick="showToast('删除')">删除</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="parts-item">
+          <div class="parts-header" onclick="togglePartsItem(this)">
+            <div class="parts-title">
+              <span class="parts-num">9</span>
+              <span>左后门</span>
+            </div>
+            <span class="parts-arrow">›</span>
+          </div>
+          <div class="parts-content">
+            <div class="parts-tags">
+              <span class="parts-tag link" onclick="showToast('关联配件')">关联</span>
+              <span class="parts-tag delete" onclick="showToast('删除')">删除</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="parts-item">
+          <div class="parts-header" onclick="togglePartsItem(this)">
+            <div class="parts-title">
+              <span class="parts-num">10</span>
+              <span>后杠</span>
+            </div>
+            <span class="parts-arrow">›</span>
+          </div>
+          <div class="parts-content">
+            <div class="parts-tags">
+              <span class="parts-tag link" onclick="showToast('关联配件')">关联</span>
+              <span class="parts-tag delete" onclick="showToast('删除')">删除</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="parts-item">
+          <div class="parts-header" onclick="togglePartsItem(this)">
+            <div class="parts-title">
+              <span class="parts-num">11</span>
+              <span>行李箱盖</span>
+            </div>
+            <span class="parts-arrow">›</span>
+          </div>
+          <div class="parts-content">
+            <div class="parts-tags">
+              <span class="parts-tag link" onclick="showToast('关联配件')">关联</span>
+              <span class="parts-tag delete" onclick="showToast('删除')">删除</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="parts-item">
+          <div class="parts-header" onclick="togglePartsItem(this)">
+            <div class="parts-title">
+              <span class="parts-num">12</span>
+              <span>后挡风玻璃</span>
+            </div>
+            <span class="parts-arrow">›</span>
+          </div>
+          <div class="parts-content">
+            <div class="parts-tags">
+              <span class="parts-tag link" onclick="showToast('关联配件')">关联</span>
+              <span class="parts-tag delete" onclick="showToast('删除')">删除</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="parts-item">
+          <div class="parts-header" onclick="togglePartsItem(this)">
+            <div class="parts-title">
+              <span class="parts-num">13</span>
+              <span>后尾灯</span>
+            </div>
+            <span class="parts-arrow">›</span>
+          </div>
+          <div class="parts-content">
+            <div class="parts-tags">
+              <span class="parts-tag link" onclick="showToast('关联配件')">关联</span>
+              <span class="parts-tag delete" onclick="showToast('删除')">删除</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 底部操作按钮 -->
+        <div style="padding:12px 14px;display:flex;gap:10px;border-top:1px solid var(--gray)">
+          <button class="add-btn" onclick="showToast('新增配件')">+ 新增配件</button>
+          <button class="add-btn green" onclick="showToast('复制配件')">复制配件</button>
+        </div>
+
+        <!-- 底部选项 -->
+        <div style="padding:12px 14px;display:flex;gap:16px;border-top:1px solid var(--gray);flex-wrap:wrap">
+          <div class="option-item">
+            <span>是否贴易碎贴</span>
+            <div class="option-toggle">
+              <span class="on">是</span>
+              <span class="off">否</span>
+            </div>
+          </div>
+          <div class="option-item">
+            <span>车辆是否有拆痕</span>
+            <div class="option-toggle">
+              <span class="off">是</span>
+              <span class="on">否</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button class="btn btn-gray" onclick="prevStep()">上一步</button>
+        <button class="btn btn-primary" onclick="nextStep()">下一步</button>
+      </div>
+    </div>
+
+    <!-- 第四步：其他说明 -->
+    <div class="step-section" id="step4">
+      <!-- 特殊情况说明 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span>特殊情况说明</div>
+        <div style="padding:12px 14px">
+          <textarea class="form-textarea" placeholder="仅用于填写特殊情况" style="width:100%;min-height:80px;background:#fafafa;border:1px solid var(--gray2);border-radius:8px;padding:10px"></textarea>
+        </div>
+      </div>
+
+      <!-- 修理点评价 -->
+      <div class="card">
+        <div class="card-title">
+          <span class="card-title-dot"></span>修理点评价
+          <span style="margin-left:6px;font-size:12px;color:var(--blue);font-weight:600">(100.00)</span>
+        </div>
+        <div class="tag-list">
+          <span class="tag-item">接待员配合度差</span>
+          <span class="tag-item">拆车师傅配合度差</span>
+          <span class="tag-item">易损贴有损坏</span>
+          <span class="tag-item">有扩损动作</span>
+          <span class="tag-item">配件放置不妥当</span>
+          <span class="tag-item">有暴力拆解</span>
+          <span class="tag-item">未按车辆出厂标准作业</span>
+          <span class="tag-item">维修设备不专业</span>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button class="btn btn-gray" onclick="prevStep()">上一步</button>
+        <button class="btn btn-primary" onclick="completeTask()">完成监拆</button>
+      </div>
+    </div>
+
   </div>
 </div>
+
+<div class="toast"></div>
 <script src="../common/script.js"></script>
+<script>
+var currentStep = 1;
+var totalSteps = 4;
+
+function updateStepBar() {
+  var items = document.querySelectorAll('.step-item');
+  var dots = document.querySelectorAll('.step-dot');
+  var texts = document.querySelectorAll('.step-text');
+  
+  items.forEach(function(item, index) {
+    var stepNum = index + 1;
+    item.classList.remove('active', 'done');
+    dots[index].classList.remove('active', 'done');
+    texts[index].classList.remove('active', 'done');
+    
+    if (stepNum < currentStep) {
+      item.classList.add('done');
+      dots[index].classList.add('done');
+      dots[index].textContent = '✓';
+      texts[index].classList.add('done');
+    } else if (stepNum === currentStep) {
+      item.classList.add('active');
+      dots[index].classList.add('active');
+      dots[index].textContent = stepNum;
+      texts[index].classList.add('active');
+    } else {
+      dots[index].textContent = stepNum;
+    }
+  });
+}
+
+function showStep(step) {
+  document.querySelectorAll('.step-section').forEach(function(section) {
+    section.classList.remove('active');
+  });
+  document.getElementById('step' + step).classList.add('active');
+  
+  updateStepBar();
+  window.scrollTo(0, 0);
+}
+
+function nextStep() {
+  if (currentStep < totalSteps) {
+    currentStep++;
+    showStep(currentStep);
+  }
+}
+
+function prevStep() {
+  if (currentStep > 1) {
+    currentStep--;
+    showStep(currentStep);
+  }
+}
+
+function completeTask() {
+  showToast('监拆任务已完成！');
+  setTimeout(function() { location.href = 'index.html'; }, 1000);
+}
+
+// 拆解部位折叠
+function togglePartsItem(header) {
+  var item = header.closest('.parts-item');
+  item.classList.toggle('open');
+}
+
+// 初始化
+showStep(1);
+</script>
 </body>
 </html>

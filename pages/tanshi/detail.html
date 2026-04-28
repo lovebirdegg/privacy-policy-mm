@@ -5,202 +5,574 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>探视任务详情</title>
 <link rel="stylesheet" href="../common/style.css">
+<style>
+/* ==================== 步骤条优化 ==================== */
+.steps.green-theme {
+  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+  padding: 12px 16px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+.steps.green-theme .step-dot.done,
+.steps.green-theme .step-dot.active { background: var(--green); }
+.steps.green-theme .step-dot.active { box-shadow: 0 0 0 4px rgba(24,160,88,0.15); }
+.steps.green-theme .step-item.done:not(:last-child)::after { background: var(--green); }
+.steps.green-theme .step-text.done,
+.steps.green-theme .step-text.active { color: var(--green); font-weight: 600; }
+.steps.green-theme .step-dot {
+  width: 26px;
+  height: 26px;
+  font-size: 12px;
+}
+.steps.green-theme .step-text {
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+/* ==================== 分步内容区 ==================== */
+.step-section { display: none; }
+.step-section.active { display: block; }
+
+/* ==================== 卡片统一间距 ==================== */
+.card { margin: 0 0 8px; }
+.step-section > .card:first-child { margin-top: 12px; }
+.step-section > .card:last-child { margin-bottom: 12px; }
+
+/* ==================== 详情只读样式 ==================== */
+.detail-label {
+  color: var(--text3);
+  font-size: 14px;
+  flex-shrink: 0;
+  min-width: 85px;
+}
+.detail-value {
+  font-size: 14px;
+  color: var(--text);
+  flex: 1;
+  text-align: right;
+}
+.detail-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--gray);
+  gap: 10px;
+  background: #fff;
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-row:first-child { border-radius: 8px 8px 0 0; }
+.detail-row:last-child { border-radius: 0 0 8px 8px; }
+.detail-row:only-child { border-radius: 8px; border-bottom: none; }
+
+/* 多行文本在详情中 */
+.detail-row.multi {
+  align-items: flex-start;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.detail-row.multi .detail-label { padding-top: 2px; }
+.detail-row.multi .detail-value { text-align: left; line-height: 1.6; }
+
+/* ==================== 标签选择样式 ==================== */
+.tag-value {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1;
+  justify-content: flex-end;
+}
+.tag-item {
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 13px;
+  background: #f0fdf4;
+  color: var(--green);
+  border: 1px solid #bbf7d0;
+  transition: all 0.2s;
+}
+.tag-item.off {
+  background: #f9fafb;
+  color: var(--text3);
+  border-color: var(--gray);
+}
+.tag-item:active {
+  transform: scale(0.96);
+}
+
+/* ==================== 表单输入样式 ==================== */
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--gray);
+  gap: 10px;
+  background: #fff;
+}
+.form-item:last-child { border-bottom: none; }
+.form-item:first-child { border-radius: 8px 8px 0 0; }
+.form-item:last-child { border-radius: 0 0 8px 8px; }
+.form-item:only-child { border-radius: 8px; border-bottom: none; }
+.form-label {
+  font-size: 14px;
+  color: var(--text);
+  min-width: 85px;
+  flex-shrink: 0;
+}
+.form-input {
+  flex: 1;
+  height: 36px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: var(--text);
+  background: transparent;
+  text-align: right;
+}
+.form-input::placeholder { color: var(--text3); text-align: right; }
+.form-textarea {
+  flex: 1;
+  min-height: 72px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: var(--text);
+  background: transparent;
+  resize: none;
+  line-height: 1.5;
+  text-align: left;
+}
+.form-textarea::placeholder { color: var(--text3); }
+.form-select {
+  flex: 1;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 14px;
+  color: var(--text3);
+  cursor: pointer;
+}
+.form-select .arr { margin-left: 4px; color: var(--text3); }
+
+/* 表单多行 */
+.form-item.multi {
+  align-items: flex-start;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.form-item.multi .form-label { padding-top: 2px; }
+
+/* ==================== 照片网格 ==================== */
+.photo-free-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 14px;
+}
+.photo-thumb {
+  background: #f3f4f6;
+  border-radius: 8px;
+  aspect-ratio: 1;
+  position: relative;
+  overflow: hidden;
+}
+.photo-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  opacity: 0.5;
+}
+.photo-add {
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #fafafa;
+}
+.photo-add:active {
+  background: #f0fdf4;
+  border-color: var(--green);
+  color: var(--green);
+  transform: scale(0.96);
+}
+
+/* ==================== 录像区域 ==================== */
+.record-block.green {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.record-block.green:active {
+  transform: scale(0.98);
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+}
+.record-icon { font-size: 36px; margin-bottom: 8px; }
+.record-title.green {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--green);
+  margin-bottom: 4px;
+}
+.record-sub { font-size: 13px; color: var(--text3); }
+
+/* ==================== 签字区域 ==================== */
+.sign-section { padding: 14px; }
+.sign-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--gray);
+}
+.sign-row:first-child { border-top: none; }
+.sign-label { font-size: 14px; color: var(--text); min-width: 85px; flex-shrink: 0; }
+.sign-area {
+  flex: 1;
+  height: 44px;
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text3);
+  font-size: 14px;
+  cursor: pointer;
+  background: #fafafa;
+  transition: all 0.2s;
+}
+.sign-area:active {
+  border-color: var(--green);
+  background: #f0fdf4;
+  color: var(--green);
+}
+
+/* ==================== 告知确认 ==================== */
+.notice-section { padding: 14px; }
+.notice-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  font-size: 14px;
+  color: var(--text2);
+  cursor: pointer;
+  user-select: none;
+}
+.notice-check input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--green);
+}
+
+/* ==================== 步骤内操作按钮 ==================== */
+.step-actions {
+  display: flex;
+  gap: 12px;
+  padding: 16px 14px;
+  margin-top: 8px;
+}
+.step-actions .btn {
+  flex: 1;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 24px;
+}
+</style>
 </head>
 <body>
 <div class="phone-container">
-  <div class="status-bar green">
-    <span>9:41</span>
-    <span>📶 5G 🔋</span>
-  </div>
+  <div class="status-bar green"><span>9:41</span><span>5G  🔋</span></div>
   <div class="header green">
     <a class="header-back" href="tasks.html">‹</a>
     <span class="header-title">探视任务详情</span>
-    <a class="header-action" style="font-size:14px" href="media.html">媒体</a>
+    <a class="header-action-text" href="#">报告</a>
   </div>
 
-  <div class="scroll-area" style="padding:12px 14px">
-    <!-- 案件信息 -->
-    <div class="card" style="margin:0 0 12px 0">
-      <div class="card-title">案件信息</div>
-      <div class="detail-row"><span class="detail-label">任务编号</span><span>TS2026033101</span></div>
-      <div class="detail-row"><span class="detail-label">报案号</span><span>P2026033154322</span></div>
-      <div class="detail-row"><span class="detail-label">伤者姓名</span><span>张敏</div>
-      <div class="detail-row"><span class="detail-label">联系电话</span><span>138****5678</span></div>
-      <div class="detail-row"><span class="detail-label">就诊医院</span><span>莱芜区人民医院</span></div>
-      <div class="detail-row"><span class="detail-label">科室/病区</span><span>骨科三病区</span></div>
-      <div class="detail-row"><span class="detail-label">床位号</span><span>305-2</span></div>
-      <div class="detail-row"><span class="detail-label">诊断结果</span><span>左腿骨折</span></div>
-      <div class="detail-row"><span class="detail-label">探视员</span><span>张三</span></div>
+  <!-- 步骤条 -->
+  <div class="steps green-theme" id="stepBar">
+    <div class="step-item active">
+      <div class="step-dot active">1</div>
+      <div class="step-text active">案件信息</div>
     </div>
-
-    <!-- 必拍照片（8类） -->
-    <div class="card" style="margin:0 0 12px 0">
-      <div class="card-title">必拍照片（8类）</div>
-      
-      <div class="photo-collect-item">
-        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
-          <div class="photo-collect-title">
-            <span class="photo-collect-num green">1</span>
-            <span>医院外景</span>
-          </div>
-          <span class="photo-collect-status done">已拍 1/1</span>
-        </div>
-        <div class="photo-collect-body">
-          <div style="display:flex;gap:8px">
-            <div style="width:72px;height:72px;background:#ddd;border-radius:8px;cursor:pointer" onclick="showToast('查看照片')"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="photo-collect-item">
-        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
-          <div class="photo-collect-title">
-            <span class="photo-collect-num green">2</span>
-            <span>科室</span>
-          </div>
-          <span class="photo-collect-status done">已拍 1/1</span>
-        </div>
-        <div class="photo-collect-body">
-          <div style="display:flex;gap:8px">
-            <div style="width:72px;height:72px;background:#ccc;border-radius:8px;cursor:pointer" onclick="showToast('查看照片')"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="photo-collect-item">
-        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
-          <div class="photo-collect-title">
-            <span class="photo-collect-num green">3</span>
-            <span>病区</span>
-          </div>
-          <span class="photo-collect-status pending">未拍</span>
-        </div>
-        <div class="photo-collect-body" style="display:none">
-          <div style="display:flex;gap:8px">
-            <div style="width:72px;height:72px;border:1.5px dashed var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--green)" onclick="showToast('拍照')">＋</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="photo-collect-item">
-        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
-          <div class="photo-collect-title">
-            <span class="photo-collect-num green">4</span>
-            <span>床位号</span>
-          </div>
-          <span class="photo-collect-status pending">未拍</span>
-        </div>
-        <div class="photo-collect-body" style="display:none">
-          <div style="display:flex;gap:8px">
-            <div style="width:72px;height:72px;border:1.5px dashed var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--green)" onclick="showToast('拍照')">＋</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="photo-collect-item">
-        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
-          <div class="photo-collect-title">
-            <span class="photo-collect-num green">5</span>
-            <span>伤者整体</span>
-          </div>
-          <span class="photo-collect-status pending">未拍</span>
-        </div>
-        <div class="photo-collect-body" style="display:none">
-          <div style="display:flex;gap:8px">
-            <div style="width:72px;height:72px;border:1.5px dashed var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--green)" onclick="showToast('拍照')">＋</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="photo-collect-item">
-        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
-          <div class="photo-collect-title">
-            <span class="photo-collect-num green">6</span>
-            <span>受伤部位</span>
-          </div>
-          <span class="photo-collect-status pending">未拍</span>
-        </div>
-        <div class="photo-collect-body" style="display:none">
-          <div style="display:flex;gap:8px">
-            <div style="width:72px;height:72px;border:1.5px dashed var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--green)" onclick="showToast('拍照')">＋</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="photo-collect-item">
-        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
-          <div class="photo-collect-title">
-            <span class="photo-collect-num green">7</span>
-            <span>探视人员与伤者合影</span>
-          </div>
-          <span class="photo-collect-status pending">未拍</span>
-        </div>
-        <div class="photo-collect-body" style="display:none">
-          <div style="display:flex;gap:8px">
-            <div style="width:72px;height:72px;border:1.5px dashed var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--green)" onclick="showToast('拍照')">＋</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="photo-collect-item">
-        <div class="photo-collect-header" onclick="togglePhotoItem(this)">
-          <div class="photo-collect-title">
-            <span class="photo-collect-num green">8</span>
-            <span>理赔手册与伤者合影</span>
-          </div>
-          <span class="photo-collect-status pending">未拍</span>
-        </div>
-        <div class="photo-collect-body" style="display:none">
-          <div style="display:flex;gap:8px">
-            <div style="width:72px;height:72px;border:1.5px dashed var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--green)" onclick="showToast('拍照')">＋</div>
-          </div>
-        </div>
-      </div>
+    <div class="step-item">
+      <div class="step-dot">2</div>
+      <div class="step-text">探视信息</div>
     </div>
-
-    <!-- 全程录像 -->
-    <div class="card" style="margin:0 0 12px 0">
-      <div class="card-title">全程录像</div>
-      <div style="padding:12px 14px">
-        <div style="background:var(--green-light);border:1.5px dashed var(--green);border-radius:8px;padding:16px;text-align:center;cursor:pointer" onclick="showToast('启动记录仪')">
-          <div style="font-size:32px;margin-bottom:6px">🎥</div>
-          <div style="font-size:13px;color:var(--green);font-weight:600">点击开始录制</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:4px">从探视开始至结束全程录像</div>
-        </div>
-      </div>
+    <div class="step-item">
+      <div class="step-dot">3</div>
+      <div class="step-text">照片核实</div>
     </div>
-
-    <!-- 现场核实信息 -->
-    <div class="card" style="margin:0 0 12px 0">
-      <div class="card-title">现场核实信息</div>
-      <div style="padding:0 14px 12px">
-        <div class="form-item" style="padding-left:0;padding-right:0">
-          <label class="form-label">实际伤情</label>
-          <textarea class="form-textarea" placeholder="请描述实际核实到的伤情"></textarea>
-        </div>
-        <div class="form-item" style="padding-left:0;padding-right:0">
-          <label class="form-label">探视结论</label>
-          <div class="form-select" onclick="showToast('选择结论')">请选择 <span class="arr">›</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 告知事项 -->
-    <div class="card" style="margin:0 0 80px 0">
-      <div class="card-title">告知事项</div>
-      <div style="padding:12px 14px;font-size:13px;color:var(--text2);line-height:1.8">
-        <div style="margin-bottom:8px">✓ 已告知伤者理赔流程</div>
-        <div style="margin-bottom:8px">✓ 已告知伤者注意事项</div>
-        <div style="margin-bottom:8px">✓ 已提供理赔手册</div>
-        <div>✓ 已确认联系方式</div>
-      </div>
+    <div class="step-item">
+      <div class="step-dot">4</div>
+      <div class="step-text">签字确认</div>
     </div>
   </div>
 
-  <div class="bottom-action">
-    <button class="btn btn-full btn-green" onclick="showToast('探视任务已完成！');location.href='index.html'">完成探视</button>
+  <div class="scroll-area" style="padding:0 12px 100px">
+
+    <!-- 第一步：案件信息（只读展示） -->
+    <div class="step-section active" id="step1">
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>报案信息</div>
+        <div class="detail-row"><span class="detail-label">报案号</span><span class="detail-value">P2026033154322</span></div>
+        <div class="detail-row"><span class="detail-label">保险公司</span><span class="detail-value">太平洋财险</span></div>
+        <div class="detail-row"><span class="detail-label">出险时间</span><span class="detail-value">2026-03-30 14:23</span></div>
+        <div class="detail-row"><span class="detail-label">事故地点</span><span class="detail-value">济南市历下区XX路</span></div>
+        <div class="detail-row"><span class="detail-label">被保险人</span><span class="detail-value">李某某</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>车辆信息</div>
+        <div class="detail-row"><span class="detail-label">车牌号码</span><span class="detail-value">鲁A·12345</span></div>
+        <div class="detail-row"><span class="detail-label">车方联系人</span><span class="detail-value">王某某</span></div>
+        <div class="detail-row"><span class="detail-label">车方电话</span><span class="detail-value">138****5678</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>伤者基本信息</div>
+        <div class="detail-row"><span class="detail-label">伤者姓名</span><span class="detail-value">张敏</span></div>
+        <div class="detail-row"><span class="detail-label">联系电话</span><span class="detail-value">138****5678</span></div>
+        <div class="detail-row"><span class="detail-label">伤者身份</span><div class="tag-value"><span class="tag-item">三者车</span><span class="tag-item off">标的司机</span><span class="tag-item off">标的乘客</span><span class="tag-item off">行人</span></div></div>
+        <div class="detail-row"><span class="detail-label">伤者性别</span><div class="tag-value"><span class="tag-item">女</span><span class="tag-item off">男</span></div></div>
+        <div class="detail-row"><span class="detail-label">伤者年龄</span><span class="detail-value">42岁</span></div>
+        <div class="detail-row"><span class="detail-label">证件号码</span><span class="detail-value">370102***********23</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>就诊信息</div>
+        <div class="detail-row"><span class="detail-label">就诊医院</span><span class="detail-value">莱芜区人民医院</span></div>
+        <div class="detail-row"><span class="detail-label">病区/科室</span><span class="detail-value">骨科三病区 · 骨科</span></div>
+        <div class="detail-row"><span class="detail-label">床位号</span><span class="detail-value">305-2</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>事故经过</div>
+        <div class="detail-row"><span class="detail-label">时间地点</span><span class="detail-value">2026-03-30 · 济南市历下区</span></div>
+        <div class="detail-row multi"><span class="detail-label">事故描述</span><span class="detail-value">车辆行驶中与行人发生碰撞...</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>事故情况</div>
+        <div class="detail-row"><span class="detail-label">交通状态</span><div class="tag-value"><span class="tag-item">行人</span><span class="tag-item off">自行车</span><span class="tag-item off">电瓶车</span><span class="tag-item off">汽车</span><span class="tag-item off">摩托车</span><span class="tag-item off">静止</span><span class="tag-item off">其他</span></div></div>
+        <div class="detail-row"><span class="detail-label">酒驾/毒驾</span><div class="tag-value"><span class="tag-item">否</span><span class="tag-item off">是</span></div></div>
+        <div class="detail-row"><span class="detail-label">驶离现场</span><div class="tag-value"><span class="tag-item">否</span><span class="tag-item off">是</span></div></div>
+        <div class="detail-row"><span class="detail-label">是否顶包</span><div class="tag-value"><span class="tag-item">否</span><span class="tag-item off">是</span></div></div>
+      </div>
+      <div class="step-actions" id="actions1">
+        <button class="btn btn-gray" style="display:none" onclick="prevStep()">上一步</button>
+        <button class="btn btn-green" onclick="nextStep()">下一步</button>
+      </div>
+    </div>
+
+    <!-- 第二步：填写探视信息 -->
+    <div class="step-section" id="step2">
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>伤者详情</div>
+        <div class="form-item multi"><label class="form-label">伤情诊断</label><textarea class="form-textarea" placeholder="请描述实际核实到的伤情">左腿骨折</textarea></div>
+        <div class="form-item multi"><label class="form-label">基础疾病</label><textarea class="form-textarea" placeholder="请描述基础疾病情况">无</textarea></div>
+        <div class="form-item multi" style="border-bottom:none"><label class="form-label">治疗方案</label><textarea class="form-textarea" placeholder="请描述手术/治疗方案">待定</textarea></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>费用垫付情况</div>
+        <div class="form-item"><label class="form-label">已交金额</label><input class="form-input" type="text" value="¥15,000"></div>
+        <div class="form-item"><label class="form-label">已使用金额</label><input class="form-input" type="text" value="¥8,500"></div>
+        <div class="form-item" style="border-bottom:none"><label class="form-label">预计医疗费</label><input class="form-input" type="text" value="¥25,000"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>护理人员情况</div>
+        <div class="form-item"><label class="form-label">护理类型</label><div class="tag-value" onclick="toggleTag(this)"><span class="tag-item">家属</span><span class="tag-item off">护工</span></div></div>
+        <div class="form-item"><label class="form-label">护理人员</label><input class="form-input" type="text" value="张某某"></div>
+        <div class="form-item"><label class="form-label">与伤者关系</label><div class="form-select" onclick="showToast('选择关系')">配偶 <span class="arr">›</span></div></div>
+        <div class="form-item"><label class="form-label">月收入</label><input class="form-input" type="text" placeholder="请输入"></div>
+        <div class="form-item" style="border-bottom:none"><label class="form-label">工资形式</label><div class="form-select" onclick="showToast('选择形式')">请选择 <span class="arr">›</span></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>务工及收入情况</div>
+        <div class="form-item multi"><label class="form-label">事故前工作</label><textarea class="form-textarea" placeholder="请输入">个体经营</textarea></div>
+        <div class="form-item"><label class="form-label">单位名称</label><input class="form-input" type="text" placeholder="请输入"></div>
+        <div class="form-item"><label class="form-label">单位电话</label><input class="form-input" type="tel" placeholder="请输入"></div>
+        <div class="form-item multi"><label class="form-label">单位地址</label><textarea class="form-textarea" placeholder="请输入"></textarea></div>
+        <div class="form-item"><label class="form-label">岗位</label><input class="form-input" type="text" placeholder="请输入"></div>
+        <div class="form-item"><label class="form-label">务工年限</label><input class="form-input" type="number" placeholder="请输入"></div>
+        <div class="form-item"><label class="form-label">月收入</label><input class="form-input" type="number" placeholder="请输入"> <span style="color:var(--text3);font-size:14px">元</span></div>
+        <div class="form-item" style="border-bottom:none"><label class="form-label">工资形式</label><div class="form-select" onclick="showToast('选择形式')">请选择 <span class="arr">›</span></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>家庭情况</div>
+        <div class="form-item"><label class="form-label">父亲年龄</label><input class="form-input" type="number" value="68"> <span style="color:var(--text3);font-size:14px">岁</span></div>
+        <div class="form-item"><label class="form-label">母亲年龄</label><input class="form-input" type="number" value="65"> <span style="color:var(--text3);font-size:14px">岁</span></div>
+        <div class="form-item multi"><label class="form-label">父母收入</label><textarea class="form-textarea" placeholder="请输入">退休金</textarea></div>
+        <div class="form-item"><label class="form-label">父母子女数</label><input class="form-input" type="text" value="2人（含本人）"></div>
+        <div class="form-item"><label class="form-label">伤者子女数</label><input class="form-input" type="number" value="1"> <span style="color:var(--text3);font-size:14px">人</span></div>
+        <div class="form-item" style="border-bottom:none"><label class="form-label">子女年龄</label><input class="form-input" type="number" value="12"> <span style="color:var(--text3);font-size:14px">岁</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>户籍及地址</div>
+        <div class="form-item"><label class="form-label">户籍性质</label><div class="tag-value" onclick="toggleTag(this)"><span class="tag-item">农业户籍</span><span class="tag-item off">城镇户籍</span></div></div>
+        <div class="form-item multi" style="border-bottom:none"><label class="form-label">现居地址</label><textarea class="form-textarea" placeholder="请输入现居住地址"></textarea></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>其他补充</div>
+        <div class="form-item multi" style="border-bottom:none"><label class="form-label">补充说明</label><textarea class="form-textarea" placeholder="如有其他补充信息请在此说明"></textarea></div>
+      </div>
+      <div class="step-actions" id="actions2">
+        <button class="btn btn-gray" onclick="prevStep()">上一步</button>
+        <button class="btn btn-green" onclick="nextStep()">下一步</button>
+      </div>
+    </div>
+
+    <!-- 第三步：照片/核实 -->
+    <div class="step-section" id="step3">
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>证明照片</div>
+        <div class="photo-free-grid">
+          <div class="photo-thumb"></div>
+          <div class="photo-thumb"></div>
+          <div class="photo-add green" onclick="showToast('拍照')">＋</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>全程录像</div>
+        <div style="padding:14px">
+          <div class="record-block green" onclick="showToast('启动记录仪')">
+            <div class="record-icon">🎥</div>
+            <div class="record-title green">点击开始录制</div>
+            <div class="record-sub">从探视开始至结束全程录像</div>
+          </div>
+        </div>
+      </div>
+      <div class="step-actions" id="actions3">
+        <button class="btn btn-gray" onclick="prevStep()">上一步</button>
+        <button class="btn btn-green" onclick="nextStep()">下一步</button>
+      </div>
+    </div>
+
+    <!-- 第四步：签字确认 -->
+    <div class="step-section" id="step4">
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>告知事项确认</div>
+        <div class="notice-section">
+          <label class="notice-check"><input type="checkbox">提醒评残须通知保险公司</label>
+          <label class="notice-check"><input type="checkbox">提醒调解前须向我司咨询</label>
+          <label class="notice-check"><input type="checkbox">已告知理赔人员联系方式</label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot green"></span>签字确认</div>
+        <div class="sign-section">
+          <div class="sign-row"><span class="sign-label">伤者/家属签字</span><div class="sign-area">点击签字</div></div>
+          <div class="sign-row"><span class="sign-label">签字时间</span><input class="form-input" type="date" style="text-align:left"></div>
+          <div class="sign-row" style="border-bottom:none"><span class="sign-label">人伤专员签字</span><div class="sign-area">点击签字</div></div>
+        </div>
+      </div>
+
+      <!-- 操作按钮 -->
+      <div class="step-actions" id="actions4">
+        <button class="btn btn-gray" onclick="prevStep()">上一步</button>
+        <button class="btn btn-green" onclick="completeVisit()">完成探视</button>
+      </div>
+    </div>
+
   </div>
 </div>
+
+<div class="toast"></div>
 <script src="../common/script.js"></script>
+<script>
+var currentStep = 1;
+var totalSteps = 4;
+
+function updateStepBar() {
+  var items = document.querySelectorAll('.step-item');
+  var dots = document.querySelectorAll('.step-dot');
+  var texts = document.querySelectorAll('.step-text');
+  
+  items.forEach(function(item, index) {
+    var stepNum = index + 1;
+    item.classList.remove('active', 'done');
+    dots[index].classList.remove('active', 'done');
+    texts[index].classList.remove('active', 'done');
+    
+    if (stepNum < currentStep) {
+      item.classList.add('done');
+      dots[index].classList.add('done');
+      dots[index].textContent = '✓';
+      texts[index].classList.add('done');
+    } else if (stepNum === currentStep) {
+      item.classList.add('active');
+      dots[index].classList.add('active');
+      dots[index].textContent = stepNum;
+      texts[index].classList.add('active');
+    } else {
+      dots[index].textContent = stepNum;
+    }
+  });
+}
+
+function showStep(step) {
+  // 隐藏所有步骤内容
+  document.querySelectorAll('.step-section').forEach(function(section) {
+    section.classList.remove('active');
+  });
+  document.getElementById('step' + step).classList.add('active');
+  
+  // 隐藏所有步骤的按钮
+  document.querySelectorAll('.step-actions').forEach(function(actions) {
+    actions.style.display = 'none';
+  });
+  // 显示当前步骤的按钮
+  document.getElementById('actions' + step).style.display = 'flex';
+  
+  updateStepBar();
+  window.scrollTo(0, 0);
+}
+
+function completeVisit() {
+  showToast('探视任务已完成！');
+  setTimeout(function() { location.href = 'index.html'; }, 1000);
+}
+
+function nextStep() {
+  if (currentStep < totalSteps) {
+    currentStep++;
+    showStep(currentStep);
+  }
+}
+
+function prevStep() {
+  if (currentStep > 1) {
+    currentStep--;
+    showStep(currentStep);
+  }
+}
+
+function toggleTag(container) {
+  var items = container.querySelectorAll('.tag-item');
+  items.forEach(function(item) {
+    item.classList.toggle('off');
+  });
+}
+
+showStep(1);
+</script>
 </body>
 </html>

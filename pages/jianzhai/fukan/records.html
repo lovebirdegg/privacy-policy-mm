@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>复勘全部任务</title>
+<link rel="stylesheet" href="../../common/style.css">
+<style>
+  .btn-primary.purple { background: var(--purple); color: white; border: none; }
+  .btn-primary.purple:active { background: #6d28d9; }
+</style>
+</head>
+<body>
+<div class="phone-container">
+  <!-- 状态栏 -->
+  <div class="status-bar purple">
+    <span>9:41</span>
+    <span style="display:flex;align-items:center;gap:4px">
+      <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><rect x="0" y="4" width="3" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="4" y="2.5" width="3" height="8.5" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="8" y="1" width="3" height="10" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="12" y="0" width="3" height="11" rx="1" fill="rgba(255,255,255,0.95)"/></svg>
+      <span style="font-size:11px;letter-spacing:0.5px">5G</span>
+      <svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="19" height="10" rx="2" stroke="rgba(255,255,255,0.6)" stroke-width="1"/><rect x="2" y="2" width="14" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><path d="M21 3.5v4a2 2 0 0 0 0-4z" fill="rgba(255,255,255,0.6)"/></svg>
+    </span>
+  </div>
+
+  <!-- 顶部标题栏 -->
+  <div class="header" style="background:var(--purple)">
+    <a class="header-back" href="index.html">‹</a>
+    <span class="header-title" style="color:white">复勘全部任务</span>
+    <span style="width:28px"></span>
+  </div>
+
+  <!-- Tab 切换 -->
+  <div class="tab-bar">
+    <a class="tab-item active" href="records.html">全部</a>
+    <a class="tab-item" href="records.html?type=pending">待复勘</a>
+    <a class="tab-item" href="records.html?type=doing">复勘中</a>
+    <a class="tab-item" href="records.html?type=done">已完成</a>
+  </div>
+
+  <!-- 列表 -->
+  <div class="scroll-area" style="padding:12px 14px">
+
+    <!-- 待复勘 -->
+    <a class="task-card" style="border-left-color:var(--blue)" href="#">
+      <div class="task-card-header">
+        <div class="task-id">FK2026041201</div>
+        <span class="tag tag-blue">待复勘</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号</span>鲁A·12345</div>
+      <div class="task-info-row"><span class="task-label">修理厂</span>莱芜顺达汽修</div>
+      <div class="task-info-row"><span class="task-label">监拆完成</span>2026-04-12 15:00</div>
+      <div class="task-info-row"><span class="task-label">维修项目</span>发动机拆解、变速箱检修</div>
+      <div class="task-info-row"><span class="task-label">申请人</span>张三 · 2026-04-12 16:30</div>
+    </a>
+
+    <!-- 复勘中 -->
+    <a class="task-card" style="border-left-color:var(--orange)" href="#">
+      <div class="task-card-header">
+        <div class="task-id">FK2026041202</div>
+        <span class="tag tag-orange">复勘中</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号</span>鲁B·67890</div>
+      <div class="task-info-row"><span class="task-label">修理厂</span>莱芜宏达汽修</div>
+      <div class="task-info-row"><span class="task-label">复勘员</span>李四</div>
+      <div class="task-info-row"><span class="task-label">开始时间</span>2026-04-12 09:00</div>
+    </a>
+
+    <!-- 已完成 -->
+    <a class="task-card" style="border-left-color:var(--green)" href="#">
+      <div class="task-card-header">
+        <div class="task-id">FK2026041101</div>
+        <span class="tag tag-green">已完成</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号</span>鲁C·11111</div>
+      <div class="task-info-row"><span class="task-label">修理厂</span>莱芜鑫源汽修</div>
+      <div class="task-info-row"><span class="task-label">复勘员</span>王五</div>
+      <div class="task-info-row"><span class="task-label">完成时间</span>2026-04-11 16:20</div>
+    </a>
+
+    <!-- 已完成 -->
+    <a class="task-card" style="border-left-color:var(--green)" href="#">
+      <div class="task-card-header">
+        <div class="task-id">FK2026041001</div>
+        <span class="tag tag-green">已完成</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号</span>鲁D·55555</div>
+      <div class="task-info-row"><span class="task-label">修理厂</span>济南东岳汽修</div>
+      <div class="task-info-row"><span class="task-label">复勘员</span>张三</div>
+      <div class="task-info-row"><span class="task-label">完成时间</span>2026-04-10 14:00</div>
+    </a>
+
+    <!-- 已完成 -->
+    <a class="task-card" style="border-left-color:var(--green)" href="#">
+      <div class="task-card-header">
+        <div class="task-id">FK2026040901</div>
+        <span class="tag tag-green">已完成</span>
+      </div>
+      <div class="task-info-row"><span class="task-label">车牌号</span>鲁F·77777</div>
+      <div class="task-info-row"><span class="task-label">修理厂</span>莱芜诚信汽修</div>
+      <div class="task-info-row"><span class="task-label">复勘员</span>李四</div>
+      <div class="task-info-row"><span class="task-label">完成时间</span>2026-04-09 11:30</div>
+    </a>
+
+    <div style="height:16px"></div>
+  </div>
+</div>
+<div class="toast"></div>
+<script src="../../common/script.js"></script>
+</body>
+</html>

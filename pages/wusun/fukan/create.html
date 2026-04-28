@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>复勘发布</title>
+<link rel="stylesheet" href="../../common/style.css">
+<style>
+  .btn-primary.orange { background: var(--orange); color: white; border: none; }
+  .btn-primary.orange:active { background: #c24d00; }
+  .btn-link {
+    background: linear-gradient(135deg, var(--purple), #8b5cf6);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+    transition: all 0.2s;
+  }
+  .btn-link:active { transform: scale(0.96); }
+  .btn-link svg { width: 16px; height: 16px; }
+  
+  /* 模式切换 */
+  .mode-switch {
+    display: flex;
+    background: #f5f5f5;
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 14px;
+  }
+  .mode-btn {
+    flex: 1;
+    padding: 10px 8px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text3);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .mode-btn svg { width: 16px; height: 16px; }
+  .mode-btn.active {
+    background: white;
+    color: var(--text);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .mode-btn.active.link-mode { color: var(--purple); }
+  .mode-btn.active.edit-mode { color: var(--orange); }
+  
+  /* 关联区域 */
+  .link-info {
+    background: #f5f3ff;
+    border: 1px dashed var(--purple);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .link-info.has-data {
+    background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+    border: 1px solid var(--purple);
+    border-style: solid;
+  }
+  .link-info-tip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--purple);
+    font-size: 13px;
+  }
+  .link-info-tip svg { width: 18px; height: 18px; opacity: 0.7; }
+  .linked-task {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .linked-task-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--purple);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .linked-task-icon svg { width: 20px; height: 20px; color: white; }
+  .linked-task-info { flex: 1; }
+  .linked-task-id { font-size: 13px; font-weight: 700; color: var(--text); font-family: monospace; }
+  .linked-task-name { font-size: 14px; color: var(--text); margin-top: 3px; }
+  .linked-task-type { font-size: 11px; color: var(--purple); margin-top: 2px; }
+  .linked-task-change {
+    padding: 6px 10px;
+    background: white;
+    border: 1px solid var(--purple);
+    border-radius: 6px;
+    color: var(--purple);
+    font-size: 11px; font-weight: 500;
+    cursor: pointer;
+  }
+  .linked-task-change:active { background: var(--purple); color: white; }
+  
+  .readonly-input {
+    background: #f9f9f9;
+    color: var(--text);
+    cursor: not-allowed;
+  }
+  
+  /* 模态框 */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+  }
+  .modal-overlay.show { display: block; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .modal-content {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: white;
+    border-radius: 20px 20px 0 0;
+    max-height: 85vh;
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .modal-title { font-size: 16px; font-weight: 700; color: var(--text); }
+  .modal-close {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #f5f5f5;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: #666; font-size: 18px;
+  }
+  .modal-close:active { background: #e5e5e5; }
+  .modal-search { padding: 12px 14px; background: #fafafa; }
+  .modal-search input {
+    width: 100%; padding: 10px 14px;
+    border: 1px solid #e5e5e5; border-radius: 10px;
+    font-size: 14px; background: white;
+  }
+  .modal-search input:focus { outline: none; border-color: var(--purple); }
+  .modal-body { max-height: calc(85vh - 130px); overflow-y: auto; padding: 8px 0; }
+  .wusun-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #f5f5f5;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .wusun-item:active { background: #fafafa; }
+  .wusun-item-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: #fff3e0;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .wusun-item-icon svg { width: 20px; height: 20px; color: var(--orange); }
+  .wusun-item-info { flex: 1; min-width: 0; }
+  .wusun-item-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .wusun-item-id { font-size: 12px; font-weight: 600; color: var(--text); font-family: monospace; }
+  .wusun-item-tag { font-size: 10px; padding: 2px 6px; border-radius: 4px; background: #fff3e0; color: var(--orange); font-weight: 500; }
+  .wusun-item-name { font-size: 14px; color: var(--text); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wusun-item-meta { font-size: 11px; color: var(--text3); margin-top: 3px; }
+  .wusun-item-arrow { color: #ccc; font-size: 18px; }
+  .modal-empty { padding: 40px 20px; text-align: center; color: var(--text3); }
+  .modal-empty svg { width: 48px; height: 48px; color: #ddd; margin-bottom: 12px; }
+  
+  /* 编辑模式样式 */
+  .edit-mode-tip {
+    background: #fff3e0;
+    border: 1px dashed var(--orange);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--orange);
+    font-size: 12px;
+  }
+  .edit-mode-tip svg { width: 18px; height: 18px; flex-shrink: 0; }
+  
+  /* 隐藏/显示控制 */
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="phone-container">
+  <div class="status-bar orange">
+    <span>9:41</span>
+    <span style="display:flex;align-items:center;gap:4px">
+      <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><rect x="0" y="4" width="3" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="4" y="2.5" width="3" height="8.5" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="8" y="1" width="3" height="10" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="12" y="0" width="3" height="11" rx="1" fill="rgba(255,255,255,0.95)"/></svg>
+      <span style="font-size:11px;letter-spacing:0.5px">5G</span>
+      <svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="19" height="10" rx="2" stroke="rgba(255,255,255,0.6)" stroke-width="1"/><rect x="2" y="2" width="14" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><path d="M21 3.5v4a2 2 0 0 0 0-4z" fill="rgba(255,255,255,0.6)"/></svg>
+    </span>
+  </div>
+
+  <div class="header" style="background:var(--orange)">
+    <a class="header-back" href="../index.html">‹</a>
+    <span class="header-title" style="color:white">复勘发布</span>
+    <span style="width:28px"></span>
+  </div>
+
+  <div class="scroll-area" style="padding:14px">
+
+    <!-- 模式切换 -->
+    <div class="mode-switch">
+      <button class="mode-btn link-mode active" id="linkModeBtn" onclick="switchMode('link')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        关联物鉴
+      </button>
+      <button class="mode-btn edit-mode" id="editModeBtn" onclick="switchMode('edit')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        手动填写
+      </button>
+    </div>
+
+    <!-- 关联物鉴模式 -->
+    <div id="linkSection">
+      <div id="linkInfo" class="link-info">
+        <div class="link-info-tip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>
+          <span>关联物鉴理赔任务</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 手动填写提示 -->
+    <div id="editTip" class="edit-mode-tip hidden">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>手动填写模式，请完整填写以下信息</span>
+    </div>
+
+    <!-- 基本信息卡片 -->
+    <div class="card" style="margin:0 0 12px 0">
+      <div class="card-title"><span class="card-title-dot orange"></span>案件基本信息</div>
+      <div class="form-item">
+        <label class="form-label form-label-req">报案号</label>
+        <input id="reportNo" class="form-input" type="text" placeholder="请输入报案号">
+      </div>
+      <div class="form-item">
+        <label class="form-label form-label-req">保险公司</label>
+        <input id="company" class="form-input" type="text" placeholder="请输入保险公司">
+      </div>
+      <div class="form-item">
+        <label class="form-label form-label-req">出险日期</label>
+        <input id="accidentDate" class="form-input" type="date">
+      </div>
+      <div class="form-item">
+        <label class="form-label">出险地点</label>
+        <input id="accidentLocation" class="form-input" type="text" placeholder="请输入出险地点">
+      </div>
+      <div class="form-item">
+        <label class="form-label">定损员</label>
+        <input id="surveyor" class="form-input" type="text" placeholder="请输入定损员">
+      </div>
+    </div>
+
+    <!-- 当事人信息卡片 -->
+    <div class="card" style="margin:0 0 12px 0">
+      <div class="card-title"><span class="card-title-dot orange"></span>当事人信息</div>
+      <div class="form-item">
+        <label class="form-label form-label-req">当事人姓名</label>
+        <input id="partyName" class="form-input" type="text" placeholder="请输入当事人姓名">
+      </div>
+      <div class="form-item">
+        <label class="form-label form-label-req">联系电话</label>
+        <input id="partyPhone" class="form-input" type="tel" placeholder="请输入联系电话">
+      </div>
+      <div class="form-item">
+        <label class="form-label">身份证号</label>
+        <input id="partyIdCard" class="form-input" type="text" placeholder="请输入身份证号">
+      </div>
+    </div>
+
+    <!-- 物损信息卡片 -->
+    <div class="card" style="margin:0 0 12px 0">
+      <div class="card-title"><span class="card-title-dot orange"></span>物损信息</div>
+      <div class="form-item">
+        <label class="form-label form-label-req">物损类型</label>
+        <input id="damageType" class="form-input" type="text" placeholder="请输入物损类型">
+      </div>
+      <div class="form-item" style="align-items:flex-start">
+        <label class="form-label">物损描述</label>
+        <textarea id="damageDesc" class="form-textarea" rows="3" placeholder="请输入物损描述"></textarea>
+      </div>
+      <div class="form-item">
+        <label class="form-label">预估损失金额</label>
+        <input id="estimateAmount" class="form-input" type="number" placeholder="请输入预估金额（元）">
+      </div>
+    </div>
+
+    <!-- 复勘信息卡片 -->
+    <div class="card" style="margin:0 0 16px 0">
+      <div class="card-title"><span class="card-title-dot purple"></span>复勘信息</div>
+      <div class="form-item" style="align-items:flex-start">
+        <label class="form-label">复勘说明</label>
+        <textarea id="fukanDesc" class="form-textarea" rows="3" placeholder="请输入复勘说明..."></textarea>
+      </div>
+    </div>
+
+    <button class="btn btn-primary orange" style="width:100%;padding:13px;font-size:15px" onclick="submitFukan()">
+      发起复勘
+    </button>
+
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<!-- 选择物鉴任务模态框 -->
+<div id="wusunModal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="modal-title">选择物鉴任务</span>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    <div class="modal-search">
+      <input type="text" id="searchInput" placeholder="搜索当事人、单号..." oninput="filterWusun()">
+    </div>
+    <div class="modal-body" id="wusunList"></div>
+  </div>
+</div>
+
+<div class="toast"></div>
+<script src="../../common/script.js"></script>
+<script>
+// 物鉴任务数据
+const wusunTasks = [
+  { id: 'WS2026041201', name: '王建国', phone: '138****1234', type: '财产损失', amount: '¥12,500', reportNo: 'BA2026041200156', company: '平安保险', accidentDate: '2026-04-10', accidentLocation: '北京市朝阳区建国路88号', surveyor: '李明', idCard: '110101199001011234', damageDesc: '车辆追尾事故，导致前方车辆后保险杠及尾灯损坏' },
+  { id: 'WS2026041101', name: '李秀梅', phone: '139****5678', type: '设备损坏', amount: '¥28,000', reportNo: 'BA2026041100089', company: '人保财险', accidentDate: '2026-04-09', accidentLocation: '上海市浦东新区张江高科', surveyor: '张伟', idCard: '310101198505051234', damageDesc: '工厂设备意外故障，导致生产线停工' },
+  { id: 'WS2026041003', name: '赵大力', phone: '137****9012', type: '建筑损坏', amount: '¥45,000', reportNo: 'BA2026041000123', company: '太平洋保险', accidentDate: '2026-04-08', accidentLocation: '广州市天河区珠江新城', surveyor: '王芳', idCard: '440101199203031234', damageDesc: '施工导致相邻建筑墙面开裂' },
+  { id: 'WS2026040902', name: '孙晓华', phone: '136****3456', type: '财产损失', amount: '¥8,800', reportNo: 'BA2026040900067', company: '平安保险', accidentDate: '2026-04-07', accidentLocation: '深圳市南山区科技园', surveyor: '陈静', idCard: '440301198808081234', damageDesc: '仓库进水导致货物浸水损坏' }
+];
+
+let currentMode = 'link';
+let currentLinkedTask = null;
+
+function switchMode(mode) {
+  currentMode = mode;
+  const linkBtn = document.getElementById('linkModeBtn');
+  const editBtn = document.getElementById('editModeBtn');
+  const linkSection = document.getElementById('linkSection');
+  const editTip = document.getElementById('editTip');
+  
+  if (mode === 'link') {
+    linkBtn.classList.add('active');
+    editBtn.classList.remove('active');
+    linkSection.classList.remove('hidden');
+    editTip.classList.add('hidden');
+  } else {
+    linkBtn.classList.remove('active');
+    editBtn.classList.add('active');
+    linkSection.classList.add('hidden');
+    editTip.classList.remove('hidden');
+    currentLinkedTask = null;
+    // 清空表单
+    clearForm();
+  }
+}
+
+function clearForm() {
+  document.getElementById('reportNo').value = '';
+  document.getElementById('company').value = '';
+  document.getElementById('accidentDate').value = '';
+  document.getElementById('accidentLocation').value = '';
+  document.getElementById('surveyor').value = '';
+  document.getElementById('partyName').value = '';
+  document.getElementById('partyPhone').value = '';
+  document.getElementById('partyIdCard').value = '';
+  document.getElementById('damageType').value = '';
+  document.getElementById('damageDesc').value = '';
+  document.getElementById('estimateAmount').value = '';
+  document.getElementById('fukanDesc').value = '';
+  
+  // 恢复placeholder
+  const inputs = document.querySelectorAll('.card input, .card textarea');
+  inputs.forEach(input => {
+    input.classList.remove('readonly-input');
+  });
+}
+
+function openWusunModal() {
+  const modal = document.getElementById('wusunModal');
+  document.getElementById('searchInput').value = '';
+  renderWusunList(wusunTasks);
+  modal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  const modal = document.getElementById('wusunModal');
+  modal.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function renderWusunList(tasks) {
+  const list = document.getElementById('wusunList');
+  if (tasks.length === 0) {
+    list.innerHTML = `<div class="modal-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><div>未找到匹配的物鉴任务</div></div>`;
+    return;
+  }
+  list.innerHTML = tasks.map(task => `
+    <div class="wusun-item" onclick="selectWusun('${task.id}')">
+      <div class="wusun-item-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      </div>
+      <div class="wusun-item-info">
+        <div class="wusun-item-header">
+          <span class="wusun-item-id">${task.id}</span>
+          <span class="wusun-item-tag">${task.type}</span>
+        </div>
+        <div class="wusun-item-name">${task.name}</div>
+        <div class="wusun-item-meta">报案号: ${task.reportNo} · ${task.amount}</div>
+      </div>
+      <div class="wusun-item-arrow">›</div>
+    </div>
+  `).join('');
+}
+
+function filterWusun() {
+  const keyword = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = wusunTasks.filter(task => 
+    task.id.toLowerCase().includes(keyword) ||
+    task.name.toLowerCase().includes(keyword) ||
+    task.reportNo.toLowerCase().includes(keyword) ||
+    task.type.toLowerCase().includes(keyword)
+  );
+  renderWusunList(filtered);
+}
+
+function selectWusun(taskId) {
+  const task = wusunTasks.find(t => t.id === taskId);
+  if (!task) return;
+  
+  currentLinkedTask = task;
+  
+  // 填充数据
+  document.getElementById('reportNo').value = task.reportNo;
+  document.getElementById('company').value = task.company;
+  document.getElementById('accidentDate').value = task.accidentDate;
+  document.getElementById('accidentLocation').value = task.accidentLocation;
+  document.getElementById('surveyor').value = task.surveyor;
+  document.getElementById('partyName').value = task.name;
+  document.getElementById('partyPhone').value = task.phone;
+  document.getElementById('partyIdCard').value = task.idCard;
+  document.getElementById('damageType').value = task.type;
+  document.getElementById('damageDesc').value = task.damageDesc;
+  document.getElementById('estimateAmount').value = task.amount.replace('¥', '');
+  
+  // 设置readonly样式
+  const inputs = document.querySelectorAll('.card input, .card textarea');
+  inputs.forEach(input => {
+    if (input.id !== 'fukanDesc') {
+      input.classList.add('readonly-input');
+    }
+  });
+  
+  // 更新关联区域
+  const linkInfo = document.getElementById('linkInfo');
+  linkInfo.classList.add('has-data');
+  linkInfo.innerHTML = `
+    <div class="linked-task">
+      <div class="linked-task-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+      </div>
+      <div class="linked-task-info">
+        <div class="linked-task-id">${task.id}</div>
+        <div class="linked-task-name">${task.name}</div>
+        <div class="linked-task-type">${task.type} · ${task.amount}</div>
+      </div>
+      <button class="linked-task-change" onclick="openWusunModal()">重新选择</button>
+    </div>
+  `;
+  
+  closeModal();
+  showToast('已关联物鉴任务');
+}
+
+function submitFukan() {
+  // 验证必填项
+  const reportNo = document.getElementById('reportNo').value.trim();
+  const company = document.getElementById('company').value.trim();
+  const accidentDate = document.getElementById('accidentDate').value.trim();
+  const partyName = document.getElementById('partyName').value.trim();
+  const partyPhone = document.getElementById('partyPhone').value.trim();
+  const damageType = document.getElementById('damageType').value.trim();
+  
+  if (!reportNo) { showToast('请输入报案号'); return; }
+  if (!company) { showToast('请输入保险公司'); return; }
+  if (!accidentDate) { showToast('请输入出险日期'); return; }
+  if (!partyName) { showToast('请输入当事人姓名'); return; }
+  if (!partyPhone) { showToast('请输入联系电话'); return; }
+  if (!damageType) { showToast('请输入物损类型'); return; }
+  
+  showToast('复勘申请已提交');
+  setTimeout(() => location.href = '../index.html', 1000);
+}
+
+// 点击模态框外部关闭
+document.getElementById('wusunModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// 页面加载后显示关联按钮
+document.addEventListener('DOMContentLoaded', function() {
+  const linkInfo = document.getElementById('linkInfo');
+  linkInfo.innerHTML = `
+    <button class="btn-link" onclick="openWusunModal()" style="width:100%;padding:12px;justify-content:center">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      选择物鉴理赔任务
+    </button>
+  `;
+});
+</script>
+</body>
+</html>

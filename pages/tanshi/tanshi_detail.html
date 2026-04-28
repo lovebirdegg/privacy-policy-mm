@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>探视详情</title>
+<link rel="stylesheet" href="../common/style.css">
+<style>
+/* ==================== 固定头部区域 ==================== */
+.fixed-header { flex-shrink: 0; }
+
+/* ==================== 顶部标签切换（步骤条风格） ==================== */
+.tab-switch {
+  display: flex;
+  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+  padding: 12px 16px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 4px;
+}
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.tab-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--gray2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--text3);
+  transition: all 0.25s;
+}
+.tab-item.active .tab-dot {
+  background: var(--green);
+  color: white;
+  box-shadow: 0 0 0 4px rgba(24,160,88,0.15);
+}
+.tab-item.done .tab-dot {
+  background: var(--green);
+  color: white;
+}
+.tab-text {
+  font-size: 11px;
+  color: var(--text3);
+  transition: all 0.25s;
+}
+.tab-item.active .tab-text { color: var(--green); font-weight: 600; }
+.tab-item.done .tab-text { color: var(--green); font-weight: 500; }
+
+/* 连接线 */
+.tab-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 13px;
+  left: calc(50% + 18px);
+  width: calc(100% - 36px);
+  height: 2px;
+  background: var(--gray2);
+}
+.tab-item.done:not(:last-child)::after { background: var(--green); }
+.tab-item { position: relative; }
+
+/* ==================== 可滚动内容区 ==================== */
+.content-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 12px;
+}
+.content-scroll::-webkit-scrollbar { display: none; }
+
+/* ==================== 内容区 ==================== */
+.step-section { display: none; padding-top: 12px; padding-bottom: 16px; }
+.step-section.active { display: block; }
+
+/* ==================== 卡片（统一风格） ==================== */
+.card { margin-bottom: 10px; }
+.step-section > .card:last-child { margin-bottom: 0; }
+
+.card-title {
+  display: flex;
+  align-items: center;
+  padding: 14px 14px 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  background: #fff;
+  border-bottom: 1px solid var(--gray);
+}
+.card-title:first-child { border-radius: 8px 8px 0 0; }
+.card-title-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  margin-right: 8px;
+}
+.card-title-dot.orange { background: var(--orange); }
+.card-title-dot.blue { background: #3b82f6; }
+
+/* 详情行 */
+.detail-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--gray);
+  gap: 10px;
+  background: #fff;
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-row:first-child { border-radius: 0 0 0 0; }
+.detail-row:last-child { border-radius: 0 0 8px 8px; }
+.detail-row:only-child { border-radius: 0 0 8px 8px; border-bottom: none; }
+
+/* 多行文本 */
+.detail-row.multi { align-items: flex-start; padding-top: 12px; padding-bottom: 12px; }
+.detail-row.multi .detail-label { padding-top: 2px; }
+.detail-row.multi .detail-value { text-align: left; line-height: 1.6; }
+
+.detail-label {
+  color: var(--text3);
+  font-size: 14px;
+  flex-shrink: 0;
+  min-width: 85px;
+}
+.detail-value {
+  font-size: 14px;
+  color: var(--text);
+  flex: 1;
+  text-align: right;
+}
+
+/* 标签选择 */
+.tag-value {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  justify-content: flex-end;
+  gap: 4px;
+}
+.tag-item {
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  background: #f0fdf4;
+  color: var(--green);
+}
+.tag-item.off {
+  background: #f9fafb;
+  color: var(--text3);
+}
+
+/* 照片网格 */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 14px;
+}
+.photo-thumb {
+  background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+  border-radius: 8px;
+  aspect-ratio: 1;
+}
+
+/* 录像区域 */
+.record-block {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  margin: 12px 14px;
+}
+.record-icon { font-size: 36px; margin-bottom: 8px; }
+.record-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: 4px;
+}
+.record-sub { font-size: 13px; color: var(--text3); }
+.record-info {
+  margin-top: 12px;
+  padding: 10px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text2);
+  text-align: left;
+}
+
+/* 签字区域 */
+.sign-section { padding: 14px; }
+.sign-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--gray);
+}
+.sign-row:first-child { border-top: none; }
+.sign-label { font-size: 14px; color: var(--text); min-width: 85px; flex-shrink: 0; }
+.sign-area {
+  flex: 1;
+  height: 44px;
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text3);
+  font-size: 14px;
+  background: #fafafa;
+}
+.sign-area.done {
+  border-color: var(--green);
+  border-style: solid;
+  background: #f0fdf4;
+  color: var(--green);
+}
+
+/* 告知确认 */
+.notice-section { padding: 14px; }
+.notice-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  font-size: 14px;
+  color: var(--text2);
+}
+.notice-item .check-icon { color: var(--green); font-size: 16px; }
+
+/* ==================== 任务状态卡 ==================== */
+.status-card {
+  background: linear-gradient(135deg, #18a058, #059669);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-md);
+}
+.status-card .task-id { font-size: 16px; font-weight: 700; color: white; margin-bottom: 4px; }
+.status-card .task-time { font-size: 12px; color: rgba(255,255,255,0.8); }
+.status-card .status-badge {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  font-size: 13px;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+/* ==================== 审批按钮区域（固定底部） ==================== */
+.approval-wrap {
+  flex-shrink: 0;
+  padding: 12px 16px 20px;
+  background: var(--bg);
+}
+.approval-actions {
+  display: flex;
+  gap: 12px;
+}
+.approval-btn {
+  flex: 1;
+  height: 44px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 22px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.approval-btn:active { transform: scale(0.98); }
+.btn-reject {
+  background: #f5f5f5;
+  color: var(--text2);
+}
+.btn-approve {
+  background: linear-gradient(135deg, var(--green), #059669);
+  color: white;
+  box-shadow: 0 2px 8px rgba(16,185,129,0.3);
+}
+</style>
+</head>
+<body>
+<div class="phone-container">
+  <!-- 固定头部 -->
+  <div class="fixed-header">
+    <div class="status-bar green"><span>9:41</span><span>📶 5G 🔋</span></div>
+    <div class="header green">
+      <a class="header-back" href="approval.html">‹</a>
+      <span class="header-title">探视详情</span>
+      <span style="width:32px"></span>
+    </div>
+
+    <!-- 任务状态卡 -->
+    <div class="status-card">
+      <div>
+        <div class="task-id">TS2026033102</div>
+        <div class="task-time">提交：2026-03-31 10:15</div>
+      </div>
+      <div class="status-badge">待审批</div>
+    </div>
+
+    <!-- 顶部标签切换（步骤条风格） -->
+    <div class="tab-switch" id="tabSwitch">
+      <div class="tab-item active" data-step="1">
+        <div class="tab-dot">1</div>
+        <div class="tab-text">案件信息</div>
+      </div>
+      <div class="tab-item" data-step="2">
+        <div class="tab-dot">2</div>
+        <div class="tab-text">探视信息</div>
+      </div>
+      <div class="tab-item" data-step="3">
+        <div class="tab-dot">3</div>
+        <div class="tab-text">照片核实</div>
+      </div>
+      <div class="tab-item" data-step="4">
+        <div class="tab-dot">4</div>
+        <div class="tab-text">签字确认</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 可滚动内容区 -->
+  <div class="content-scroll">
+    <div id="step1" class="step-section active">
+      <!-- 报案信息 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span>报案信息</div>
+        <div class="detail-row"><span class="detail-label">报案号</span><span class="detail-value">P2026033154322</span></div>
+        <div class="detail-row"><span class="detail-label">保险公司</span><span class="detail-value">太平洋财险</span></div>
+        <div class="detail-row"><span class="detail-label">出险时间</span><span class="detail-value">2026-03-30 14:23</span></div>
+        <div class="detail-row"><span class="detail-label">事故地点</span><span class="detail-value">济南市历下区XX路</span></div>
+        <div class="detail-row"><span class="detail-label">被保险人</span><span class="detail-value">李某某</span></div>
+      </div>
+
+      <!-- 车辆信息 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot blue"></span>车辆信息</div>
+        <div class="detail-row"><span class="detail-label">车牌号码</span><span class="detail-value">鲁A·12345</span></div>
+        <div class="detail-row"><span class="detail-label">车方联系人</span><span class="detail-value">王某某</span></div>
+        <div class="detail-row"><span class="detail-label">车方电话</span><span class="detail-value">138****5678</span></div>
+      </div>
+
+      <!-- 伤者信息 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span>伤者信息</div>
+        <div class="detail-row"><span class="detail-label">伤者姓名</span><span class="detail-value">刘洋</span></div>
+        <div class="detail-row"><span class="detail-label">联系电话</span><span class="detail-value">139****8765</span></div>
+        <div class="detail-row"><span class="detail-label">伤者身份</span><div class="tag-value"><span class="tag-item">三者车</span><span class="tag-item off">标的司机</span></div></div>
+        <div class="detail-row"><span class="detail-label">伤者性别</span><div class="tag-value"><span class="tag-item">男</span><span class="tag-item off">女</span></div></div>
+        <div class="detail-row"><span class="detail-label">伤者年龄</span><span class="detail-value">35岁</span></div>
+        <div class="detail-row"><span class="detail-label">证件号码</span><span class="detail-value">370102***********45</span></div>
+      </div>
+
+      <!-- 就诊信息 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot blue"></span>就诊信息</div>
+        <div class="detail-row"><span class="detail-label">就诊医院</span><span class="detail-value">济南市第三人民医院</span></div>
+        <div class="detail-row"><span class="detail-label">病区/科室</span><span class="detail-value">骨科 · 骨科一病区</span></div>
+        <div class="detail-row"><span class="detail-label">床位号</span><span class="detail-value">402-3</span></div>
+      </div>
+
+      <!-- 事故情况 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span>事故情况</div>
+        <div class="detail-row"><span class="detail-label">交通状态</span><div class="tag-value"><span class="tag-item">行人</span><span class="tag-item off">自行车</span></div></div>
+        <div class="detail-row"><span class="detail-label">酒驾/毒驾</span><div class="tag-value"><span class="tag-item">否</span><span class="tag-item off">是</span></div></div>
+        <div class="detail-row"><span class="detail-label">驶离现场</span><div class="tag-value"><span class="tag-item">否</span><span class="tag-item off">是</span></div></div>
+        <div class="detail-row"><span class="detail-label">是否顶包</span><div class="tag-value"><span class="tag-item">否</span><span class="tag-item off">是</span></div></div>
+      </div>
+    </div>
+
+    <div id="step2" class="step-section">
+      <!-- 伤者详情 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span>伤者详情</div>
+        <div class="detail-row multi"><span class="detail-label">伤情诊断</span><span class="detail-value">左小腿骨折、软组织挫伤</span></div>
+        <div class="detail-row multi"><span class="detail-label">基础疾病</span><span class="detail-value">无</span></div>
+        <div class="detail-row multi"><span class="detail-label">治疗方案</span><span class="detail-value">石膏固定保守治疗，定期复查</span></div>
+      </div>
+
+      <!-- 费用垫付情况 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot orange"></span>费用垫付情况</div>
+        <div class="detail-row"><span class="detail-label">已交金额</span><span class="detail-value" style="color:var(--green);font-weight:700">¥8,000</span></div>
+        <div class="detail-row"><span class="detail-label">已使用金额</span><span class="detail-value">¥5,200</span></div>
+        <div class="detail-row"><span class="detail-label">预计医疗费</span><span class="detail-value">¥15,000</span></div>
+      </div>
+
+      <!-- 护理人员情况 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span>护理人员情况</div>
+        <div class="detail-row"><span class="detail-label">护理类型</span><div class="tag-value"><span class="tag-item">家属</span><span class="tag-item off">护工</span></div></div>
+        <div class="detail-row"><span class="detail-label">护理人员</span><span class="detail-value">刘某某（配偶）</span></div>
+        <div class="detail-row"><span class="detail-label">月收入</span><span class="detail-value">¥3,500</span></div>
+      </div>
+
+      <!-- 务工及收入情况 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span>务工及收入情况</div>
+        <div class="detail-row multi"><span class="detail-label">事故前工作</span><span class="detail-value">个体经营建材生意</span></div>
+        <div class="detail-row"><span class="detail-label">岗位</span><span class="detail-value">个体</span></div>
+        <div class="detail-row"><span class="detail-label">务工年限</span><span class="detail-value">10年</span></div>
+        <div class="detail-row"><span class="detail-label">月收入</span><span class="detail-value" style="color:var(--green);font-weight:700">¥8,000</span></div>
+      </div>
+
+      <!-- 家庭情况 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot blue"></span>家庭情况</div>
+        <div class="detail-row"><span class="detail-label">父亲年龄</span><span class="detail-value">62岁</span></div>
+        <div class="detail-row"><span class="detail-label">母亲年龄</span><span class="detail-value">60岁</span></div>
+        <div class="detail-row multi"><span class="detail-label">父母收入</span><span class="detail-value">均有退休金</span></div>
+        <div class="detail-row"><span class="detail-label">父母子女数</span><span class="detail-value">2人（含本人）</span></div>
+        <div class="detail-row"><span class="detail-label">伤者子女数</span><span class="detail-value">1人</span></div>
+        <div class="detail-row"><span class="detail-label">子女年龄</span><span class="detail-value">8岁</span></div>
+      </div>
+
+      <!-- 户籍及地址 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span>户籍及地址</div>
+        <div class="detail-row"><span class="detail-label">户籍性质</span><div class="tag-value"><span class="tag-item">农业户籍</span><span class="tag-item off">城镇户籍</span></div></div>
+        <div class="detail-row multi"><span class="detail-label">现居地址</span><span class="detail-value">济南市历下区XX小区</span></div>
+      </div>
+    </div>
+
+    <div id="step3" class="step-section">
+      <!-- 证明照片 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span>证明照片</div>
+        <div class="photo-grid">
+          <div class="photo-thumb"></div>
+          <div class="photo-thumb"></div>
+          <div class="photo-thumb"></div>
+        </div>
+      </div>
+
+      <!-- 全程录像 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span>全程录像</div>
+        <div class="record-block">
+          <div class="record-icon">🎥</div>
+          <div class="record-title">现场视频已录制</div>
+          <div class="record-sub">通过记录仪录制，时长 5分20秒</div>
+          <div class="record-info">
+            📅 录制时间：2026-03-31 10:30<br>
+            📍 录制地点：济南市第三人民医院
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="step4" class="step-section">
+      <!-- 告知事项确认 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span>告知事项确认</div>
+        <div class="notice-section">
+          <div class="notice-item">
+            <span class="check-icon">✓</span>
+            <span>提醒评残须通知保险公司</span>
+          </div>
+          <div class="notice-item">
+            <span class="check-icon">✓</span>
+            <span>提醒调解前须向我司咨询</span>
+          </div>
+          <div class="notice-item">
+            <span class="check-icon">✓</span>
+            <span>已告知理赔人员联系方式</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 签字确认 -->
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot blue"></span>签字确认</div>
+        <div class="sign-section">
+          <div class="sign-row">
+            <span class="sign-label">伤者签字</span>
+            <div class="sign-area done">✓ 刘洋</div>
+          </div>
+          <div class="sign-row">
+            <span class="sign-label">签字时间</span>
+            <div class="sign-area done" style="justify-content:flex-start;padding-left:12px">2026-03-31 11:00</div>
+          </div>
+          <div class="sign-row" style="border-bottom:none">
+            <span class="sign-label">人伤专员</span>
+            <div class="sign-area done">✓ 张三</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 固定底部审批按钮 -->
+  <div class="approval-wrap">
+    <div class="approval-actions">
+      <button class="approval-btn btn-reject" onclick="showToast('已拒绝')">拒绝</button>
+      <button class="approval-btn btn-approve" onclick="showToast('已通过')">通过审批</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast"></div>
+<script src="../common/script.js"></script>
+<script>
+// 标签切换
+document.querySelectorAll('.tab-item').forEach(function(item) {
+  item.addEventListener('click', function() {
+    var step = this.dataset.step;
+    
+    // 更新标签状态
+    document.querySelectorAll('.tab-item').forEach(function(t) {
+      t.classList.remove('active', 'done');
+    });
+    this.classList.add('active');
+    
+    // 更新已完成标签
+    var currentStep = parseInt(step);
+    document.querySelectorAll('.tab-item').forEach(function(t, i) {
+      var tStep = i + 1;
+      if (tStep < currentStep) {
+        t.classList.add('done');
+      }
+    });
+    
+    // 切换内容
+    document.querySelectorAll('.step-section').forEach(function(s) {
+      s.classList.remove('active');
+    });
+    document.getElementById('step' + step).classList.add('active');
+    
+    window.scrollTo(0, 0);
+  });
+});
+</script>
+</body>
+</html>

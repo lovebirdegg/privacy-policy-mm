@@ -3,35 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>探视记录 - 车检监拆复勘系统</title>
+<title>探视记录</title>
 <link rel="stylesheet" href="../common/style.css">
 </head>
 <body>
 <div class="phone-container">
-  <!-- 状态栏 -->
-  <div class="status-bar">
-    <span>9:41</span>
-    <span>📶 5G 🔋</span>
-  </div>
-
-  <!-- 顶部导航 -->
+  <div class="status-bar"><span>9:41</span><span>📶 5G 🔋</span></div>
   <div class="header">
     <a class="header-back" href="index.html">‹</a>
     <span class="header-title">探视记录</span>
-    <span class="header-action"></span>
+    <span style="width:32px"></span>
   </div>
 
-  <!-- 搜索筛选 -->
-  <div style="padding:12px 14px;background:white;border-bottom:1px solid var(--gray)">
-    <input type="text" placeholder="搜索伤者姓名/医院..." style="width:100%;padding:10px 12px;border:1px solid var(--gray);border-radius:8px;font-size:13px">
-    <div style="display:flex;gap:8px;margin-top:10px">
-      <select style="flex:1;padding:8px 12px;border:1px solid var(--gray);border-radius:6px;font-size:13px;background:white">
+  <!-- 搜索+筛选 -->
+  <div class="search-bar">
+    <div class="search-input-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" placeholder="搜索伤者姓名、医院...">
+    </div>
+    <div class="filter-row">
+      <select class="filter-select">
         <option>全部医院</option>
         <option>莱芜市人民医院</option>
         <option>莱芜中医院</option>
         <option>济南市中心医院</option>
       </select>
-      <select style="flex:1;padding:8px 12px;border:1px solid var(--gray);border-radius:6px;font-size:13px;background:white">
+      <select class="filter-select">
         <option>最近7天</option>
         <option>最近30天</option>
         <option>全部时间</option>
@@ -39,63 +36,61 @@
     </div>
   </div>
 
-  <!-- 内容区 -->
-  <div class="scroll-area" style="padding:12px 14px">
-    <!-- 记录项 -->
-    <div class="task-card" onclick="location.href='detail.html?id=T001'">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <span style="font-size:14px;font-weight:600">张三</span>
-        <span style="font-size:11px;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:10px">已完成</span>
+  <div class="scroll-area" style="padding:10px 12px">
+    <a class="task-card status-done" href="detail.html">
+      <div class="task-card-header">
+        <div class="task-id">张敏</div>
+        <span class="tag tag-green">已完成</span>
       </div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">🏥 莱芜市人民医院 | 骨科</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">👤 探视员：张三</div>
-      <div style="font-size:12px;color:var(--text3)">探视时间：2026-04-12 10:30</div>
-    </div>
+      <div class="task-info-row"><span class="task-label">医院：</span>莱芜市人民医院 | 骨科</div>
+      <div class="task-info-row"><span class="task-label">探视员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">探视时间：</span>2026-04-12 10:30</div>
+    </a>
 
-    <div class="task-card" onclick="location.href='detail.html?id=T002'">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <span style="font-size:14px;font-weight:600">李四</span>
-        <span style="font-size:11px;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:10px">已完成</span>
+    <a class="task-card status-done" href="detail.html">
+      <div class="task-card-header">
+        <div class="task-id">李四</div>
+        <span class="tag tag-green">已完成</span>
       </div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">🏥 济南市中心医院 | 外科</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">👤 探视员：张三</div>
-      <div style="font-size:12px;color:var(--text3)">探视时间：2026-04-11 15:20</div>
-    </div>
+      <div class="task-info-row"><span class="task-label">医院：</span>济南市中心医院 | 外科</div>
+      <div class="task-info-row"><span class="task-label">探视员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">探视时间：</span>2026-04-11 15:20</div>
+    </a>
 
-    <div class="task-card" onclick="location.href='detail.html?id=T003'">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <span style="font-size:14px;font-weight:600">王五</span>
-        <span style="font-size:11px;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:10px">已完成</span>
+    <a class="task-card status-done" href="detail.html">
+      <div class="task-card-header">
+        <div class="task-id">王五</div>
+        <span class="tag tag-green">已完成</span>
       </div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">🏥 莱芜中医院 | 内科</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">👤 探视员：张三</div>
-      <div style="font-size:12px;color:var(--text3)">探视时间：2026-04-10 09:45</div>
-    </div>
+      <div class="task-info-row"><span class="task-label">医院：</span>莱芜中医院 | 内科</div>
+      <div class="task-info-row"><span class="task-label">探视员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">探视时间：</span>2026-04-10 09:45</div>
+    </a>
 
-    <div class="task-card" onclick="location.href='detail.html?id=T004'">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <span style="font-size:14px;font-weight:600">赵六</span>
-        <span style="font-size:11px;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:10px">已完成</span>
+    <a class="task-card status-done" href="detail.html">
+      <div class="task-card-header">
+        <div class="task-id">赵强</div>
+        <span class="tag tag-green">已完成</span>
       </div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">🏥 莱芜市人民医院 | 骨科</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">👤 探视员：张三</div>
-      <div style="font-size:12px;color:var(--text3)">探视时间：2026-04-09 14:00</div>
-    </div>
+      <div class="task-info-row"><span class="task-label">医院：</span>莱芜市人民医院 | 骨科</div>
+      <div class="task-info-row"><span class="task-label">探视员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">探视时间：</span>2026-04-09 14:00</div>
+    </a>
 
-    <div class="task-card" onclick="location.href='detail.html?id=T005'">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <span style="font-size:14px;font-weight:600">钱七</span>
-        <span style="font-size:11px;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:10px">已完成</span>
+    <a class="task-card status-done" href="detail.html">
+      <div class="task-card-header">
+        <div class="task-id">钱七</div>
+        <span class="tag tag-green">已完成</span>
       </div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">🏥 济南市中心医院 | 神经科</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">👤 探视员：张三</div>
-      <div style="font-size:12px;color:var(--text3)">探视时间：2026-04-08 11:30</div>
-    </div>
+      <div class="task-info-row"><span class="task-label">医院：</span>济南市中心医院 | 神经科</div>
+      <div class="task-info-row"><span class="task-label">探视员：</span>张三</div>
+      <div class="task-info-row"><span class="task-label">探视时间：</span>2026-04-08 11:30</div>
+    </a>
 
     <div style="height:20px"></div>
   </div>
 </div>
-
+<div class="toast"></div>
 <script src="../common/script.js"></script>
 </body>
 </html>

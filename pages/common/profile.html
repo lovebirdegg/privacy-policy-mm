@@ -5,90 +5,230 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>个人中心</title>
 <link rel="stylesheet" href="../common/style.css">
+<style>
+  /* 头部 banner */
+  .profile-banner {
+    background: linear-gradient(135deg, var(--blue) 0%, #5b8af0 100%);
+    padding: 24px 20px 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .profile-banner::after {
+    content: '';
+    position: absolute;
+    right: -20px; bottom: -20px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+  .profile-banner::before {
+    content: '';
+    position: absolute;
+    right: 30px; bottom: 10px;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+  .avatar {
+    width: 62px; height: 62px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    border: 2px solid rgba(255,255,255,0.5);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 28px;
+  }
+  .profile-info { flex: 1; }
+  .profile-name  { color: white; font-size: 18px; font-weight: 700; }
+  .profile-role  { color: rgba(255,255,255,0.85); font-size: 13px; margin-top: 4px; }
+  .profile-org   { color: rgba(255,255,255,0.6); font-size: 11px; margin-top: 2px; }
+  .profile-edit-btn {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: white;
+    font-size: 11px;
+    border-radius: 14px;
+    padding: 4px 10px;
+    cursor: pointer;
+    margin-top: 8px;
+    display: inline-block;
+  }
+
+  /* 业绩卡 */
+  .perf-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    padding: 12px 14px;
+  }
+  .perf-item {
+    text-align: center;
+    padding: 8px 0;
+    border-right: 1px solid var(--gray);
+  }
+  .perf-item:last-child { border-right: none; }
+  .perf-num { font-size: 24px; font-weight: 800; }
+  .perf-label { font-size: 11px; color: var(--text3); margin-top: 3px; }
+
+  /* 菜单 */
+  .menu-section { margin-bottom: 12px; }
+  .menu-item-v2 {
+    display: flex; align-items: center;
+    padding: 14px 16px;
+    background: white;
+    border-bottom: 1px solid var(--gray);
+    text-decoration: none;
+    color: var(--text);
+    gap: 12px;
+    cursor: pointer;
+  }
+  .menu-item-v2:last-child { border-bottom: none; }
+  .menu-icon-wrap {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+  .menu-item-v2 .menu-label { flex: 1; font-size: 14px; }
+  .menu-item-v2 .menu-arrow { color: var(--text3); font-size: 16px; }
+  .menu-item-v2 .menu-badge {
+    background: var(--red); color: white;
+    font-size: 10px; border-radius: 10px;
+    padding: 1px 6px; margin-right: 4px;
+  }
+
+  /* 退出按钮 */
+  .logout-btn {
+    display: block;
+    width: 100%;
+    background: white;
+    color: var(--red);
+    border: 1px solid #f5c6c6;
+    border-radius: var(--radius);
+    padding: 13px;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  .logout-btn:active { opacity: 0.8; }
+</style>
 </head>
 <body>
 <div class="phone-container">
+  <!-- 状态栏（蓝色渐变顶部，不显示独立状态栏区域） -->
   <div class="status-bar">
     <span>9:41</span>
-    <span>📶 5G 🔋</span>
-  </div>
-  <div class="header">
-    <a class="header-back" href="../home/index.html">‹</a>
-    <span class="header-title">个人中心</span>
-    <span class="header-action"></span>
+    <span style="display:flex;align-items:center;gap:4px">
+      <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><rect x="0" y="4" width="3" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="4" y="2.5" width="3" height="8.5" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="8" y="1" width="3" height="10" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="12" y="0" width="3" height="11" rx="1" fill="rgba(255,255,255,0.95)"/></svg>
+      <span style="font-size:11px;letter-spacing:0.5px">5G</span>
+      <svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="19" height="10" rx="2" stroke="rgba(255,255,255,0.6)" stroke-width="1"/><rect x="2" y="2" width="14" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><path d="M21 3.5v4a2 2 0 0 0 0-4z" fill="rgba(255,255,255,0.6)"/></svg>
+    </span>
   </div>
 
-  <div class="scroll-area">
-    <!-- 用户信息卡片 -->
-    <div style="background:linear-gradient(135deg,var(--blue),#5b8af0);padding:28px 20px 20px;display:flex;align-items:center;gap:14px">
-      <div style="width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;font-size:28px">👤</div>
-      <div>
-        <div style="color:white;font-size:18px;font-weight:700">张三</div>
-        <div style="color:rgba(255,255,255,0.8);font-size:13px;margin-top:2px">监拆员 · 莱芜地区</div>
-        <div style="color:rgba(255,255,255,0.6);font-size:11px;margin-top:2px">太平洋财险 合作人员</div>
-      </div>
+  <!-- 个人信息 banner（无独立 header，直接渐变） -->
+  <div class="profile-banner">
+    <div class="avatar">👤</div>
+    <div class="profile-info">
+      <div class="profile-name">张三</div>
+      <div class="profile-role">监拆员 · 莱芜地区</div>
+      <div class="profile-org">太平洋财险 合作人员</div>
+      <span class="profile-edit-btn" onclick="showToast('编辑资料')">编辑资料</span>
     </div>
+  </div>
 
-    <div style="padding:14px">
-      <!-- 本月业绩 -->
-      <div class="card" style="margin:0 0 12px 0">
-        <div class="card-title">本月业绩</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);padding:10px 14px;gap:8px">
-          <div style="text-align:center">
-            <div style="font-size:22px;font-weight:700;color:var(--blue)">21</div>
-            <div style="font-size:11px;color:var(--text2)">监拆</div>
-          </div>
-          <div style="text-align:center">
-            <div style="font-size:22px;font-weight:700;color:var(--green)">9</div>
-            <div style="font-size:11px;color:var(--text2)">探视</div>
-          </div>
-          <div style="text-align:center">
-            <div style="font-size:22px;font-weight:700;color:var(--orange)">7</div>
-            <div style="font-size:11px;color:var(--text2)">物损</div>
-          </div>
+  <!-- 内容区 -->
+  <div class="scroll-area" style="padding:12px 14px">
+
+    <!-- 本月业绩 -->
+    <div class="card" style="margin:0 0 12px 0">
+      <div class="card-title">本月业绩</div>
+      <div class="perf-grid">
+        <div class="perf-item">
+          <div class="perf-num" style="color:var(--blue)">21</div>
+          <div class="perf-label">监拆</div>
+        </div>
+        <div class="perf-item">
+          <div class="perf-num" style="color:var(--green)">9</div>
+          <div class="perf-label">探视</div>
+        </div>
+        <div class="perf-item">
+          <div class="perf-num" style="color:var(--orange-dark)">7</div>
+          <div class="perf-label">物损</div>
         </div>
       </div>
-
-      <!-- 功能菜单 -->
-      <div class="card" style="margin:0 0 12px 0">
-        <a class="menu-item" href="#" onclick="showToast('账户设置')">
-          <span>👤 账户设置</span><span style="color:var(--text3)">›</span>
-        </a>
-        <a class="menu-item" href="#" onclick="showToast('通知设置')">
-          <span>🔔 通知设置</span><span style="color:var(--text3)">›</span>
-        </a>
-        <a class="menu-item" href="#" onclick="showToast('操作记录')">
-          <span>📋 操作记录</span><span style="color:var(--text3)">›</span>
-        </a>
-        <a class="menu-item" href="#" onclick="showToast('帮助中心')">
-          <span>❓ 帮助中心</span><span style="color:var(--text3)">›</span>
-        </a>
-        <a class="menu-item" style="border-bottom:none" href="#" onclick="showToast('关于系统')">
-          <span>ℹ️ 关于系统</span><span style="color:var(--text3)">›</span>
-        </a>
-      </div>
-
-      <!-- 退出登录 -->
-      <button style="width:100%;background:white;color:#e03e3e;border:1px solid #e03e3e;border-radius:10px;padding:12px;font-size:15px;cursor:pointer;margin-bottom:20px" onclick="showToast('退出登录')">退出登录</button>
     </div>
+
+    <!-- 账号与设置 -->
+    <div class="card menu-section" style="padding:0;overflow:hidden">
+      <a class="menu-item-v2" href="#" onclick="showToast('账户设置')">
+        <div class="menu-icon-wrap" style="background:#e8f0fe">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#2e6cf6" stroke-width="1.7"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#2e6cf6" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </div>
+        <span class="menu-label">账户设置</span>
+        <span class="menu-arrow">›</span>
+      </a>
+      <a class="menu-item-v2" href="#" onclick="showToast('通知设置')">
+        <div class="menu-icon-wrap" style="background:#fff8ec">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2zm6-6v-5c0-3.1-1.6-5.6-4.5-6.3V4a1.5 1.5 0 0 0-3 0v.7C7.6 5.4 6 7.9 6 11v5l-2 2v1h16v-1l-2-2z" fill="#f0a020"/></svg>
+        </div>
+        <span class="menu-label">通知设置</span>
+        <span class="menu-badge">3</span>
+        <span class="menu-arrow">›</span>
+      </a>
+      <a class="menu-item-v2" href="#" onclick="showToast('操作记录')">
+        <div class="menu-icon-wrap" style="background:#e6f7ef">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="#18a058" stroke-width="1.7"/><path d="M8 8h8M8 12h8M8 16h5" stroke="#18a058" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <span class="menu-label">操作记录</span>
+        <span class="menu-arrow">›</span>
+      </a>
+    </div>
+
+    <!-- 帮助与关于 -->
+    <div class="card menu-section" style="padding:0;overflow:hidden">
+      <a class="menu-item-v2" href="#" onclick="showToast('帮助中心')">
+        <div class="menu-icon-wrap" style="background:#f3e8ff">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#7c3aed" stroke-width="1.7"/><path d="M12 17v-1M12 13c0-2 2.5-2 2.5-4a2.5 2.5 0 0 0-5 0" stroke="#7c3aed" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </div>
+        <span class="menu-label">帮助中心</span>
+        <span class="menu-arrow">›</span>
+      </a>
+      <a class="menu-item-v2" href="#" onclick="showToast('关于系统')">
+        <div class="menu-icon-wrap" style="background:#e0f2f8">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#0891b2" stroke-width="1.7"/><path d="M12 8v1M12 11v5" stroke="#0891b2" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <span class="menu-label">关于系统</span>
+        <span class="menu-arrow">›</span>
+      </a>
+    </div>
+
+    <!-- 退出登录 -->
+    <button class="logout-btn" onclick="showToast('退出登录')">退出登录</button>
+
   </div>
 
   <!-- 底部导航 -->
   <div class="bottom-nav">
     <a class="nav-item" href="../home/index.html">
-      <span class="nav-icon">🏠</span>
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" width="22" height="22"><path d="M3 12L12 4l9 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-5h4v5h4a1 1 0 0 0 1-1v-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span>首页</span>
     </a>
     <a class="nav-item" href="cases.html">
-      <span class="nav-icon">📋</span>
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" width="22" height="22"><rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       <span>案件</span>
     </a>
     <a class="nav-item" href="stats.html">
-      <span class="nav-icon">📊</span>
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" width="22" height="22"><rect x="3" y="13" width="4" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="10" y="8" width="4" height="13" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="17" y="4" width="4" height="17" rx="1" stroke="currentColor" stroke-width="1.6"/></svg>
       <span>统计</span>
     </a>
     <a class="nav-item active" href="profile.html">
-      <span class="nav-icon">👤</span>
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" width="22" height="22"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
       <span>我的</span>
     </a>
   </div>

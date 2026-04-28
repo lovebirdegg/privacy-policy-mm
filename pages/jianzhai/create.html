@@ -5,114 +5,266 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>发布监拆订单</title>
 <link rel="stylesheet" href="../common/style.css">
+<style>
+/* 蓝色主题 */
+.status-bar { background: var(--blue); }
+.header { background: var(--blue); }
+.btn-primary { background: var(--blue); }
+
+/* 案件号输入组 - 紧凑版 */
+.input-with-btns {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.input-with-btns input { flex: 1; }
+.input-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: var(--blue-light);
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* 带按钮的输入框 - 紧凑版 */
+.input-with-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.input-with-btn input { flex: 1; }
+.input-btn-right {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: var(--blue-light);
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* 单选组 - 紧凑版 */
+.radio-group {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+.radio-item {
+  flex: 1;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text2);
+  background: #f5f5f5;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.radio-item.selected {
+  background: var(--blue-light);
+  color: var(--blue);
+  border-color: var(--blue);
+  font-weight: 600;
+}
+
+/* 照片上传 */
+.photo-upload-area {
+  flex: 1;
+  height: 70px;
+  border: 1px dashed #ddd;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: #fafafa;
+  cursor: pointer;
+}
+.photo-upload-area .icon { font-size: 24px; color: var(--text3); }
+.photo-upload-area .text { font-size: 11px; color: var(--text3); }
+.photo-upload-area:active { background: #f0f0f0; }
+
+.photo-preview {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.photo-item {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.photo-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.photo-item .del {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
 </head>
 <body>
 <div class="phone-container">
-  <div class="status-bar">
-    <span>9:41</span>
-    <span>📶 5G 🔋</span>
-  </div>
-  <div class="header">
+  <div class="status-bar blue"><span>9:41</span><span>📶 5G 🔋</span></div>
+  <div class="header blue">
     <a class="header-back" href="index.html">‹</a>
     <span class="header-title">发布监拆订单</span>
-    <span class="header-action"></span>
+    <span style="width:32px"></span>
   </div>
 
-  <div class="scroll-area" style="padding:12px 14px">
+  <div class="scroll-area" style="padding:10px 12px">
     <!-- 案件信息 -->
-    <div class="card" style="margin:0 0 12px 0">
-      <div class="card-title">案件信息</div>
+    <div class="card" style="margin:0 0 10px">
+      <div class="card-title"><span class="card-title-dot blue"></span>案件信息</div>
       <div class="form-item">
-        <label class="form-label">报案号</label>
-        <input class="form-input" type="text" placeholder="请输入报案号">
-      </div>
-      <div class="form-item">
-        <label class="form-label">保险公司</label>
-        <div class="form-select" onclick="showToast('选择保险公司')">请选择 <span class="arr">›</span></div>
-      </div>
-      <div class="form-item">
-        <label class="form-label">出险日期</label>
-        <input class="form-input" type="date">
-      </div>
-      <div class="form-item">
-        <label class="form-label">出险地点</label>
-        <input class="form-input" type="text" placeholder="请输入出险地点">
-      </div>
-    </div>
-
-    <!-- 车辆信息 -->
-    <div class="card" style="margin:0 0 12px 0">
-      <div class="card-title">车辆信息</div>
-      <div class="form-item">
-        <label class="form-label">车牌号</label>
-        <input class="form-input" type="text" placeholder="请输入车牌号">
-      </div>
-      <div class="form-item">
-        <label class="form-label">车辆品牌</label>
-        <div class="form-select" onclick="showToast('选择品牌')">请选择 <span class="arr">›</span></div>
-      </div>
-      <div class="form-item">
-        <label class="form-label">车辆型号</label>
-        <input class="form-input" type="text" placeholder="请输入车辆型号">
-      </div>
-      <div class="form-item">
-        <label class="form-label">车架号</label>
-        <input class="form-input" type="text" placeholder="请输入VIN码">
+        <label class="form-label form-label-req">案件号</label>
+        <div class="input-with-btns">
+          <input class="form-input" type="text" placeholder="请输入案件号">
+          <button class="input-btn" type="button" title="扫码">📷</button>
+          <button class="input-btn" type="button" title="发送">📨</button>
+        </div>
       </div>
     </div>
 
     <!-- 修理厂信息 -->
-    <div class="card" style="margin:0 0 12px 0">
-      <div class="card-title">修理厂信息</div>
+    <div class="card" style="margin:0 0 10px">
+      <div class="card-title"><span class="card-title-dot blue"></span>修理厂信息</div>
       <div class="form-item">
-        <label class="form-label">修理厂</label>
-        <div class="form-select" onclick="showToast('选择修理厂')">请选择 <span class="arr">›</span></div>
+        <label class="form-label form-label-req">修理厂选择</label>
+        <div class="input-with-btn">
+          <input class="form-input" type="text" placeholder="请选择修理厂">
+          <button class="input-btn-right" type="button" title="地图选择">📍</button>
+        </div>
       </div>
       <div class="form-item">
-        <label class="form-label">联系人</label>
-        <input class="form-input" type="text" placeholder="请输入联系人">
+        <label class="form-label">保险公司</label>
+        <input class="form-input" type="text" placeholder="请输入保险公司" value="太平洋保险">
       </div>
       <div class="form-item">
-        <label class="form-label">联系电话</label>
-        <input class="form-input" type="tel" placeholder="请输入联系电话">
-      </div>
-    </div>
-
-    <!-- 定损信息 -->
-    <div class="card" style="margin:0 0 12px 0">
-      <div class="card-title">定损信息</div>
-      <div class="form-item">
-        <label class="form-label">定损员</label>
-        <div class="form-select" onclick="showToast('选择定损员')">请选择 <span class="arr">›</span></div>
+        <label class="form-label">修理厂名称</label>
+        <input class="form-input" type="text" placeholder="请输入修理厂名称">
       </div>
       <div class="form-item">
-        <label class="form-label">损失类型</label>
-        <div class="form-select" onclick="showToast('选择损失类型')">请选择 <span class="arr">›</span></div>
-      </div>
-      <div class="form-item">
-        <label class="form-label">预估金额</label>
-        <input class="form-input" type="number" placeholder="请输入预估金额">
+        <label class="form-label">修理厂区域</label>
+        <input class="form-input" type="text" placeholder="省/市/区/县/乡镇">
       </div>
     </div>
 
-    <!-- 审批人 -->
-    <div class="card" style="margin:0 0 80px 0">
-      <div class="card-title">审批信息</div>
+    <!-- 车辆信息 -->
+    <div class="card" style="margin:0 0 10px">
+      <div class="card-title"><span class="card-title-dot blue"></span>车辆信息</div>
       <div class="form-item">
-        <label class="form-label">审批人</label>
+        <label class="form-label form-label-req">车牌号</label>
+        <input class="form-input" type="text" placeholder="请填写查勘车牌号">
+      </div>
+      <div class="form-item">
+        <label class="form-label">车型名称</label>
+        <div class="input-with-btn">
+          <input class="form-input" type="text" placeholder="请选择车型">
+          <button class="input-btn-right" type="button" title="选择车型">🔍</button>
+        </div>
+      </div>
+      <div class="form-item">
+        <label class="form-label">接待员</label>
+        <input class="form-input" type="text" placeholder="请填写接待员名称">
+      </div>
+      <div class="form-item">
+        <label class="form-label">接待员电话</label>
+        <input class="form-input" type="tel" placeholder="请填写接待员电话">
+      </div>
+    </div>
+
+    <!-- 监拆信息 -->
+    <div class="card" style="margin:0 0 10px">
+      <div class="card-title"><span class="card-title-dot blue"></span>监拆信息</div>
+      <div class="form-item">
+        <label class="form-label form-label-req">监拆部位</label>
+        <div class="radio-group" id="jianchai-part">
+          <div class="radio-item" data-value="front" onclick="selectRadio('jianchai-part', this)">前部</div>
+          <div class="radio-item" data-value="back" onclick="selectRadio('jianchai-part', this)">后部</div>
+          <div class="radio-item selected" data-value="both" onclick="selectRadio('jianchai-part', this)">前部+后部</div>
+        </div>
+      </div>
+      <div class="form-item">
+        <label class="form-label form-label-req">案值级别</label>
+        <div class="radio-group" id="case-level">
+          <div class="radio-item selected" data-value="small" onclick="selectRadio('case-level', this)">小案</div>
+          <div class="radio-item" data-value="large" onclick="selectRadio('case-level', this)">大案</div>
+        </div>
+      </div>
+      <div class="form-item">
+        <label class="form-label">整车照片</label>
+        <div class="photo-preview">
+          <div class="photo-upload-area" onclick="showToast('上传整车照片')">
+            <span class="icon">📷</span>
+            <span class="text">点击上传</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-item">
+        <label class="form-label form-label-req">预约时间</label>
+        <input class="form-input" type="datetime-local">
+      </div>
+      <div class="form-item" style="align-items:flex-start;border-bottom:none">
+        <label class="form-label">定损备注</label>
+        <textarea class="form-textarea" placeholder="请填写定损备注"></textarea>
+      </div>
+    </div>
+
+    <!-- 审批信息 -->
+    <div class="card" style="margin:0 0 80px">
+      <div class="card-title"><span class="card-title-dot blue"></span>审批信息</div>
+      <div class="form-item">
+        <label class="form-label form-label-req">审批人</label>
         <div class="form-select" onclick="showToast('选择审批人')">请选择 <span class="arr">›</span></div>
-      </div>
-      <div class="form-item">
-        <label class="form-label">备注</label>
-        <textarea class="form-textarea" placeholder="填写备注信息（选填）"></textarea>
       </div>
     </div>
   </div>
 
   <div class="bottom-action">
-    <button class="btn btn-full btn-primary" onclick="showToast('监拆订单已发布！');location.href='index.html'">发布监拆订单</button>
+    <button class="btn btn-full btn-primary" onclick="showToast('监拆订单已发布！');setTimeout(()=>location.href='index.html',1000)">发布监拆订单</button>
   </div>
 </div>
+<div class="toast"></div>
 <script src="../common/script.js"></script>
+<script>
+function selectRadio(groupId, el) {
+  document.querySelectorAll('#' + groupId + ' .radio-item').forEach(function(item) {
+    item.classList.remove('selected');
+  });
+  el.classList.add('selected');
+}
+</script>
 </body>
 </html>

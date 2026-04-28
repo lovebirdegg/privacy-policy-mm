@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>监拆任务</title>
-<link rel="stylesheet" href="../common/style.css">
+<title>复勘任务</title>
+<link rel="stylesheet" href="../../common/style.css">
 <style>
-/* 蓝色主题 */
-.status-bar { background: var(--blue); }
-.header { background: var(--blue); }
+/* 紫色主题 */
+.status-bar { background: var(--purple); }
+.header { background: var(--purple); }
 .header-action { color: #fff; }
 
 /* ==================== 筛选区域容器 ==================== */
@@ -67,7 +67,7 @@
   position: relative;
 }
 .status-tab.active {
-  background: var(--blue);
+  background: var(--purple);
   color: white;
   font-weight: 600;
 }
@@ -93,7 +93,7 @@
   top: 0;
   bottom: 0;
   width: 4px;
-  background: linear-gradient(180deg, var(--blue), #60a5fa);
+  background: linear-gradient(180deg, var(--purple), #a78bfa);
 }
 .task-card:active {
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -141,7 +141,7 @@
 .task-info-item .label { color: var(--text3); }
 .task-info-item .value { color: var(--text); }
 .task-info-item .tel {
-  color: var(--blue);
+  color: var(--purple);
   text-decoration: none;
   margin-left: 4px;
 }
@@ -169,16 +169,32 @@
 }
 .action-btn:active { transform: scale(0.96); }
 .action-btn.primary {
-  background: var(--blue);
+  background: var(--purple);
   color: #fff;
 }
+.action-btn.primary:active {
+  background: #6d28d9;
+}
 .action-btn.secondary {
-  background: #f0f9ff;
-  color: var(--blue);
+  background: #f5f3ff;
+  color: var(--purple);
+}
+.action-btn.secondary:active {
+  background: #ede9fe;
+}
+.action-btn.gray {
+  background: #f5f5f5;
+  color: var(--text2);
+}
+.action-btn.gray:active {
+  background: #e5e5e5;
 }
 .action-btn.danger {
   background: #fef2f2;
   color: var(--red);
+}
+.action-btn.danger:active {
+  background: #fee2e2;
 }
 
 /* 卡片底部 */
@@ -193,7 +209,7 @@
 .task-meta { font-size: 11px; color: var(--text3); }
 .task-action {
   font-size: 12px;
-  color: var(--blue);
+  color: var(--purple);
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -202,8 +218,8 @@
 
 /* 状态标签对应的左边框颜色 */
 .task-card[data-status="wait"]::before { background: linear-gradient(180deg, var(--orange), #f59e0b); }
-.task-card[data-status="accepted"]::before { background: linear-gradient(180deg, #3b82f6, #60a5fa); }
-.task-card[data-status="doing"]::before { background: linear-gradient(180deg, #3b82f6, #60a5fa); }
+.task-card[data-status="accepted"]::before { background: linear-gradient(180deg, var(--purple), #a78bfa); }
+.task-card[data-status="doing"]::before { background: linear-gradient(180deg, var(--blue), #60a5fa); }
 .task-card[data-status="completed"]::before { background: linear-gradient(180deg, var(--purple), #a78bfa); }
 .task-card[data-status="reviewed"]::before { background: linear-gradient(180deg, var(--green), #34d399); }
 
@@ -224,11 +240,11 @@
 </head>
 <body>
 <div class="phone-container">
-  <div class="status-bar blue"><span>9:41</span><span>📶 5G 🔋</span></div>
-  <div class="header blue">
-    <a class="header-back" href="index.html">‹</a>
-    <span class="header-title">监拆任务</span>
-    <a class="header-action" href="create.html">＋</a>
+  <div class="status-bar purple"><span>9:41</span><span style="display:flex;align-items:center;gap:4px"><svg width="15" height="11" viewBox="0 0 15 11" fill="none"><rect x="0" y="4" width="3" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="4" y="2.5" width="3" height="8.5" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="8" y="1" width="3" height="10" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="12" y="0" width="3" height="11" rx="1" fill="rgba(255,255,255,0.95)"/></svg><span style="font-size:11px;letter-spacing:0.5px">5G</span><svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="19" height="10" rx="2" stroke="rgba(255,255,255,0.6)" stroke-width="1"/><rect x="2" y="2" width="14" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><path d="M21 3.5v4a2 2 0 0 0 0-4z" fill="rgba(255,255,255,0.6)"/></svg></span></div>
+  <div class="header purple">
+    <a class="header-back" href="../index.html">‹</a>
+    <span class="header-title" style="color:white">复勘任务</span>
+    <a class="header-action" href="create.html" style="color:white">＋</a>
   </div>
 
   <!-- 筛选区域 -->
@@ -241,8 +257,8 @@
       <button class="status-tab active" data-status="all" onclick="switchTab('all', this)">全部</button>
       <button class="status-tab" data-status="wait" onclick="switchTab('wait', this)">待接单</button>
       <button class="status-tab" data-status="accepted" onclick="switchTab('accepted', this)">已接单</button>
-      <button class="status-tab" data-status="doing" onclick="switchTab('doing', this)">开始监拆</button>
-      <button class="status-tab" data-status="completed" onclick="switchTab('completed', this)">监拆完成</button>
+      <button class="status-tab" data-status="doing" onclick="switchTab('doing', this)">开始复勘</button>
+      <button class="status-tab" data-status="completed" onclick="switchTab('completed', this)">复勘完成</button>
       <button class="status-tab" data-status="reviewed" onclick="switchTab('reviewed', this)">审核完成</button>
     </div>
   </div>
@@ -250,23 +266,44 @@
   <div class="scroll-area" style="padding-top:8px">
     <div id="task-list">
 
-      <!-- 任务1 - 待接单 -->
+      <!-- 任务1 - 已接单 -->
+      <div class="task-card" data-status="accepted">
+        <div class="task-card-header">
+          <div class="task-id">C371200VEH26001636</div>
+          <span class="tag tag-purple">已接单</span>
+        </div>
+        <div class="task-info-list">
+          <div class="task-info-item"><span class="label">时间：</span>2026-04-17 12:37</div>
+          <div class="task-info-item"><span class="label">定损员：</span>张斌</div>
+          <div class="task-info-item"><span class="label">车牌号：</span>鲁AF17290</div>
+          <div class="task-info-item"><span class="label">车型名称：</span>奇瑞</div>
+          <div class="task-info-item"><span class="label">预约时间：</span>04-17 13:37</div>
+          <div class="task-info-item"><span class="label">修理厂：</span>奇瑞济南盛乾体验中心</div>
+          <div class="task-info-item" style="width:100%"><span class="label">地址：</span><span class="value" style="color:var(--purple)">龙潭东大街79号 ›</span></div>
+        </div>
+        <div class="task-card-actions">
+          <button class="action-btn secondary" onclick="showToast('查看受损照片')">📷 受损照片</button>
+          <button class="action-btn secondary" onclick="location.href='materials.html'">📁 案件素材</button>
+          <button class="action-btn danger" onclick="location.href='change.html'">✕ 申请改派</button>
+          <button class="action-btn gray" onclick="location.href='cancel.html'">✕ 取消案件</button>
+          <button class="action-btn primary" onclick="location.href='detail.html'">📋 案件详情</button>
+        </div>
+      </div>
+
+      <!-- 任务2 - 待接单 -->
       <div class="task-card" data-status="wait">
         <div class="task-card-header">
-          <div class="task-id">JD2026041501</div>
-          <span class="tag tag-blue">系统</span>
+          <div class="task-id">C371200VEH26001637</div>
           <span class="tag tag-orange">待接单</span>
         </div>
         <div class="task-info-list">
-          <div class="task-info-item"><span class="label">时间：</span>2026-04-15 09:30</div>
-          <div class="task-info-item"><span class="label">定损员：</span>李四<span class="tel" onclick="showToast('拨打电话')">📞</span></div>
-          <div class="task-info-item"><span class="label">车牌号：</span>鲁S·12345</div>
-          <div class="task-info-item"><span class="label">车型名称：</span>宝马 BMW7200</div>
-          <div class="task-info-item"><span class="label">监拆部位：</span>前部+后部</div>
-          <div class="task-info-item"><span class="label">预约时间：</span>04-16 10:00</div>
-          <div class="task-info-item"><span class="label">接待员：</span>张三<span class="tel" onclick="showToast('拨打电话')">📞</span></div>
-          <div class="task-info-item"><span class="label">修理厂：</span>莱芜鑫鑫修理厂</div>
-          <div class="task-info-item" style="width:100%"><span class="label">地址：</span><span class="value" style="color:var(--blue)">山东省济南市莱芜区...›</span></div>
+          <div class="task-info-item"><span class="label">时间：</span>2026-04-17 14:20</div>
+          <div class="task-info-item"><span class="label">定损员：</span>李明</div>
+          <div class="task-info-item"><span class="label">车牌号：</span>鲁A88888</div>
+          <div class="task-info-item"><span class="label">车型名称：</span>大众帕萨特</div>
+          <div class="task-info-item"><span class="label">预约时间：</span>04-17 15:00</div>
+          <div class="task-info-item"><span class="label">修理厂：</span>济南万通汽修</div>
+          <div class="task-info-item" style="width:100%"><span class="label">地址：</span><span class="value" style="color:var(--purple)">经十路168号 ›</span></div>
         </div>
         <div class="task-card-actions">
           <button class="action-btn secondary" onclick="showToast('查看受损照片')">📷 受损照片</button>
@@ -275,52 +312,20 @@
         </div>
       </div>
 
-      <!-- 任务2 - 已接单 -->
-      <div class="task-card" data-status="accepted">
-        <div class="task-card-header">
-          <div class="task-id">JD2026041502</div>
-          <span class="tag tag-blue">系统</span>
-          <span class="tag tag-blue">已接单</span>
-        </div>
-        <div class="task-info-list">
-          <div class="task-info-item"><span class="label">时间：</span>2026-04-15 10:15</div>
-          <div class="task-info-item"><span class="label">定损员：</span>王五<span class="tel" onclick="showToast('拨打电话')">📞</span></div>
-          <div class="task-info-item"><span class="label">监拆员：</span>赵六<span class="tel" onclick="showToast('拨打电话')">📞</span></div>
-          <div class="task-info-item"><span class="label">车牌号：</span>鲁A·88888</div>
-          <div class="task-info-item"><span class="label">车型名称：</span>奔驰C200L</div>
-          <div class="task-info-item"><span class="label">监拆部位：</span>前部</div>
-          <div class="task-info-item"><span class="label">预约时间：</span>04-16 14:00</div>
-          <div class="task-info-item"><span class="label">接待员：</span>孙七<span class="tel" onclick="showToast('拨打电话')">📞</span></div>
-          <div class="task-info-item"><span class="label">修理厂：</span>济南万通汽修</div>
-          <div class="task-info-item" style="width:100%"><span class="label">地址：</span><span class="value" style="color:var(--blue)">山东省济南市历下区...›</span></div>
-        </div>
-        <div class="task-card-actions">
-          <button class="action-btn secondary" onclick="showToast('查看受损照片')">📷 受损照片</button>
-          <button class="action-btn secondary" onclick="location.href='materials.html'">📁 案件素材</button>
-          <button class="action-btn danger" onclick="location.href='cancel.html'">✕ 取消订单</button>
-          <button class="action-btn danger" onclick="location.href='change.html'">🔄 申请改派</button>
-          <button class="action-btn primary" onclick="location.href='detail.html'">📋 案件详情</button>
-        </div>
-      </div>
-
-      <!-- 任务3 - 开始监拆 -->
+      <!-- 任务3 - 开始复勘 -->
       <div class="task-card" data-status="doing">
         <div class="task-card-header">
-          <div class="task-id">JD2026041401</div>
-          <span class="tag tag-blue">系统</span>
-          <span class="tag tag-purple">开始监拆</span>
+          <div class="task-id">C371200VEH26001638</div>
+          <span class="tag tag-purple">开始复勘</span>
         </div>
         <div class="task-info-list">
-          <div class="task-info-item"><span class="label">时间：</span>2026-04-14 14:20</div>
-          <div class="task-info-item"><span class="label">定损员：</span>李四<span class="tel" onclick="showToast('拨打电话')">📞</span></div>
-          <div class="task-info-item"><span class="label">监拆员：</span>赵六<span class="tel" onclick="showToast('拨打电话')">📞</span></div>
-          <div class="task-info-item"><span class="label">车牌号：</span>鲁Q·66666</div>
-          <div class="task-info-item"><span class="label">车型名称：</span>奥迪A6L</div>
-          <div class="task-info-item"><span class="label">监拆部位：</span>前部+后部</div>
-          <div class="task-info-item"><span class="label">预约时间：</span>04-15 09:00</div>
-          <div class="task-info-item"><span class="label">接待员：</span>孙七<span class="tel" onclick="showToast('拨打电话')">📞</span></div>
-          <div class="task-info-item"><span class="label">修理厂：</span>泰安平安汽修</div>
-          <div class="task-info-item" style="width:100%"><span class="label">地址：</span><span class="value" style="color:var(--blue)">山东省泰安市泰山区...›</span></div>
+          <div class="task-info-item"><span class="label">时间：</span>2026-04-16 09:30</div>
+          <div class="task-info-item"><span class="label">定损员：</span>王芳</div>
+          <div class="task-info-item"><span class="label">车牌号：</span>鲁B66666</div>
+          <div class="task-info-item"><span class="label">车型名称：</span>丰田凯美瑞</div>
+          <div class="task-info-item"><span class="label">预约时间：</span>04-16 10:30</div>
+          <div class="task-info-item"><span class="label">修理厂：</span>青岛顺达汽修</div>
+          <div class="task-info-item" style="width:100%"><span class="label">地址：</span><span class="value" style="color:var(--purple)">海尔路88号 ›</span></div>
         </div>
         <div class="task-card-actions">
           <button class="action-btn secondary" onclick="showToast('查看受损照片')">📷 受损照片</button>
@@ -329,54 +334,70 @@
         </div>
       </div>
 
-      <!-- 任务4 - 监拆完成 -->
+      <!-- 任务4 - 复勘完成 -->
       <div class="task-card" data-status="completed">
         <div class="task-card-header">
-          <div class="task-id">JD2026041301</div>
-          <span class="tag tag-blue">系统</span>
-          <span class="tag tag-blue">监拆完成</span>
+          <div class="task-id">C371200VEH26001639</div>
+          <span class="tag tag-purple">复勘完成</span>
         </div>
         <div class="task-info-list">
-          <div class="task-info-item"><span class="label">时间：</span>2026-04-13 16:30</div>
-          <div class="task-info-item"><span class="label">定损员：</span>王五<span class="tel" onclick="showToast('拨打电话')">📞</span></div>
-          <div class="task-info-item"><span class="label">监拆员：</span>赵六<span class="tel" onclick="showToast('拨打电话')">📞</span></div>
-          <div class="task-info-item"><span class="label">车牌号：</span>鲁J·55555</div>
-          <div class="task-info-item"><span class="label">车型名称：</span>大众帕萨特</div>
-          <div class="task-info-item"><span class="label">监拆部位：</span>后部</div>
-          <div class="task-info-item"><span class="label">预约时间：</span>04-14 10:00</div>
-          <div class="task-info-item"><span class="label">接待员：</span>孙七<span class="tel" onclick="showToast('拨打电话')">📞</span></div>
-          <div class="task-info-item"><span class="label">修理厂：</span>济宁顺达汽修</div>
-          <div class="task-info-item" style="width:100%"><span class="label">地址：</span><span class="value" style="color:var(--blue)">山东省济宁市任城区...›</span></div>
+          <div class="task-info-item"><span class="label">时间：</span>2026-04-15 11:00</div>
+          <div class="task-info-item"><span class="label">定损员：</span>赵强</div>
+          <div class="task-info-item"><span class="label">车牌号：</span>鲁C55555</div>
+          <div class="task-info-item"><span class="label">车型名称：</span>本田雅阁</div>
+          <div class="task-info-item"><span class="label">预约时间：</span>04-15 14:00</div>
+          <div class="task-info-item"><span class="label">修理厂：</span>烟台诚信汽修</div>
+          <div class="task-info-item" style="width:100%"><span class="label">地址：</span><span class="value" style="color:var(--purple)">南大街256号 ›</span></div>
         </div>
         <div class="task-card-actions">
           <button class="action-btn secondary" onclick="showToast('查看受损照片')">📷 受损照片</button>
           <button class="action-btn secondary" onclick="location.href='materials.html'">📁 案件素材</button>
-          <button class="action-btn primary" onclick="location.href='detail.html'">📋 案件详情</button>
+          <button class="action-btn primary" onclick="location.href='approval.html'">✓ 提交审批</button>
         </div>
       </div>
 
       <!-- 任务5 - 审核完成 -->
       <div class="task-card done" data-status="reviewed">
         <div class="task-card-header">
-          <div class="task-id">JD2026041201</div>
-          <span class="tag tag-blue">系统</span>
+          <div class="task-id">C371200VEH26001640</div>
           <span class="tag tag-green">审核完成</span>
         </div>
         <div class="task-info-list">
-          <div class="task-info-item"><span class="label">时间：</span>2026-04-12 11:00</div>
-          <div class="task-info-item"><span class="label">定损员：</span>李四<span class="tel" onclick="showToast('拨打电话')">📞</span></div>
-          <div class="task-info-item"><span class="label">监拆员：</span>赵六<span class="tel" onclick="showToast('拨打电话')">📞</span></div>
-          <div class="task-info-item"><span class="label">车牌号：</span>鲁S·33333</div>
-          <div class="task-info-item"><span class="label">车型名称：</span>丰田凯美瑞</div>
-          <div class="task-info-item"><span class="label">监拆部位：</span>前部+后部</div>
-          <div class="task-info-item"><span class="label">预约时间：</span>04-13 09:00</div>
-          <div class="task-info-item"><span class="label">接待员：</span>孙七<span class="tel" onclick="showToast('拨打电话')">📞</span></div>
-          <div class="task-info-item"><span class="label">修理厂：</span>莱芜鑫鑫修理厂</div>
-          <div class="task-info-item" style="width:100%"><span class="label">地址：</span><span class="value" style="color:var(--blue)">山东省济南市莱芜区...›</span></div>
+          <div class="task-info-item"><span class="label">时间：</span>2026-04-14 10:00</div>
+          <div class="task-info-item"><span class="label">定损员：</span>孙丽</div>
+          <div class="task-info-item"><span class="label">车牌号：</span>鲁D44444</div>
+          <div class="task-info-item"><span class="label">车型名称：</span>宝马5系</div>
+          <div class="task-info-item"><span class="label">预约时间：</span>04-14 11:00</div>
+          <div class="task-info-item"><span class="label">修理厂：</span>潍坊宝马4S店</div>
+          <div class="task-info-item" style="width:100%"><span class="label">地址：</span><span class="value" style="color:var(--text3)">北海路168号 ›</span></div>
         </div>
         <div class="task-card-footer">
-          <span class="task-meta">✅ 审核完成 · 2026-04-12 15:30</span>
+          <span class="task-meta">✅ 审核完成 · 2026-04-14 16:30</span>
           <span class="task-action" style="color:var(--text3)">查看详情 ›</span>
+        </div>
+      </div>
+
+      <!-- 任务6 - 已接单 -->
+      <div class="task-card" data-status="accepted">
+        <div class="task-card-header">
+          <div class="task-id">C371200VEH26001641</div>
+          <span class="tag tag-purple">已接单</span>
+        </div>
+        <div class="task-info-list">
+          <div class="task-info-item"><span class="label">时间：</span>2026-04-13 16:30</div>
+          <div class="task-info-item"><span class="label">定损员：</span>周杰</div>
+          <div class="task-info-item"><span class="label">车牌号：</span>鲁E33333</div>
+          <div class="task-info-item"><span class="label">车型名称：</span>奥迪A6L</div>
+          <div class="task-info-item"><span class="label">预约时间：</span>04-13 17:30</div>
+          <div class="task-info-item"><span class="label">修理厂：</span>淄博奥迪4S店</div>
+          <div class="task-info-item" style="width:100%"><span class="label">地址：</span><span class="value" style="color:var(--purple)">中心路99号 ›</span></div>
+        </div>
+        <div class="task-card-actions">
+          <button class="action-btn secondary" onclick="showToast('查看受损照片')">📷 受损照片</button>
+          <button class="action-btn secondary" onclick="location.href='materials.html'">📁 案件素材</button>
+          <button class="action-btn danger" onclick="location.href='change.html'">✕ 申请改派</button>
+          <button class="action-btn gray" onclick="location.href='cancel.html'">✕ 取消案件</button>
+          <button class="action-btn primary" onclick="location.href='detail.html'">📋 案件详情</button>
         </div>
       </div>
 
@@ -392,7 +413,7 @@
 </div>
 
 <div class="toast"></div>
-<script src="../common/script.js"></script>
+<script src="../../common/script.js"></script>
 <script>
 var currentStatus = 'all';
 

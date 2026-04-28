@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>取消案件</title>
+<link rel="stylesheet" href="../../common/style.css">
+<style>
+.status-bar { background: var(--purple); }
+.header { background: var(--purple); }
+.btn-primary { background: var(--purple); }
+.btn-cancel { background: #f5f5f5; color: var(--text2); }
+
+/* 任务信息行 */
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--gray);
+  font-size: 14px;
+}
+.info-label { color: var(--text2); }
+.info-value { color: var(--text); font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="phone-container">
+  <div class="status-bar purple"><span>9:41</span><span style="display:flex;align-items:center;gap:4px"><svg width="15" height="11" viewBox="0 0 15 11" fill="none"><rect x="0" y="4" width="3" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="4" y="2.5" width="3" height="8.5" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="8" y="1" width="3" height="10" rx="1" fill="rgba(255,255,255,0.95)"/><rect x="12" y="0" width="3" height="11" rx="1" fill="rgba(255,255,255,0.95)"/></svg><span style="font-size:11px;letter-spacing:0.5px">5G</span><svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="19" height="10" rx="2" stroke="rgba(255,255,255,0.6)" stroke-width="1"/><rect x="2" y="2" width="14" height="7" rx="1" fill="rgba(255,255,255,0.95)"/><path d="M21 3.5v4a2 2 0 0 0 0-4z" fill="rgba(255,255,255,0.6)"/></svg></span></div>
+  <div class="header purple">
+    <a class="header-back" href="tasks.html">‹</a>
+    <span class="header-title" style="color:white">取消案件</span>
+    <span style="width:32px"></span>
+  </div>
+
+  <div class="scroll-area" style="padding:10px 12px">
+    <!-- 任务信息 -->
+    <div class="card" style="margin:0 0 10px">
+      <div class="card-title"><span class="card-title-dot purple"></span>复勘任务信息</div>
+      <div class="info-row">
+        <span class="info-label">案件号</span>
+        <span class="info-value">C371200VEH26001636</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">车牌号</span>
+        <span class="info-value">鲁AF17290</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">修理厂</span>
+        <span class="info-value">奇瑞济南盛乾体验中心</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">预约时间</span>
+        <span class="info-value">04-17 13:37</span>
+      </div>
+      <div class="info-row" style="border-bottom:none">
+        <span class="info-label">接单时间</span>
+        <span class="info-value">2026-04-17 12:37</span>
+      </div>
+    </div>
+
+    <!-- 取消原因 -->
+    <div class="card" style="margin:0 0 10px">
+      <div class="card-title"><span class="card-title-dot purple"></span>取消原因</div>
+      <div class="form-item">
+        <label class="form-label form-label-req">选择取消原因</label>
+        <div class="form-select" onclick="showToast('选择取消原因')">请选择 <span class="arr">›</span></div>
+      </div>
+      <div class="form-item" style="align-items:flex-start;border-bottom:none">
+        <label class="form-label">详细说明</label>
+        <textarea class="form-textarea" placeholder="请详细说明取消原因..."></textarea>
+      </div>
+    </div>
+
+    <!-- 取消须知 -->
+    <div class="card" style="margin:0 0 80px">
+      <div class="card-title"><span class="card-title-dot orange"></span>⚠️ 取消须知</div>
+      <div style="padding:0 14px 14px;font-size:14px;color:var(--text2);line-height:1.8">
+        <p style="margin:0 0 8px">1. 取消案件后，此任务将重新进入待接单状态</p>
+        <p style="margin:0 0 8px">2. 频繁取消案件可能影响您的接单权重</p>
+        <p style="margin:0 0 8px">3. 如有紧急情况，请联系管理员处理</p>
+        <p style="margin:0">4. 取消申请提交后将由管理员审核</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-action" style="gap:10px">
+    <button class="btn btn-full btn-cancel" onclick="location.href='tasks.html'">返回任务列表</button>
+    <button class="btn btn-full btn-primary" onclick="showToast('取消申请已提交！');setTimeout(()=>location.href='tasks.html',1000)">确认取消案件</button>
+  </div>
+</div>
+<div class="toast"></div>
+<script src="../../common/script.js"></script>
+</body>
+</html>

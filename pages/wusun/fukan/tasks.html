@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>物鉴任务</title>
-<link rel="stylesheet" href="../common/style.css">
+<title>复勘任务</title>
+<link rel="stylesheet" href="../../common/style.css">
 <style>
 /* ==================== 筛选区域容器 ==================== */
 .filter-container {
@@ -58,7 +58,7 @@
   position: relative;
 }
 .status-tab.active {
-  background: var(--orange);
+  background: var(--purple);
   color: white;
   font-weight: 600;
 }
@@ -70,7 +70,7 @@
   transform: translateX(-50%);
   width: 20px;
   height: 3px;
-  background: var(--orange);
+  background: var(--purple);
   border-radius: 2px;
 }
 
@@ -95,7 +95,7 @@
   top: 0;
   bottom: 0;
   width: 4px;
-  background: linear-gradient(180deg, var(--orange), #f0a020);
+  background: linear-gradient(180deg, var(--purple), #a78bfa);
 }
 .task-card:active {
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -121,7 +121,7 @@
   border-radius: 10px;
   font-weight: 500;
 }
-.tag-orange { background: #fff3e0; color: var(--orange); }
+.tag-purple { background: #f5f3ff; color: var(--purple); }
 .tag-blue { background: #eff6ff; color: #3b82f6; }
 .tag-green { background: #f0fdf4; color: var(--green); }
 .tag-red { background: #fef2f2; color: var(--red); }
@@ -150,7 +150,7 @@
 .task-meta { font-size: 11px; color: var(--text3); }
 .task-action {
   font-size: 12px;
-  color: var(--orange);
+  color: var(--purple);
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -179,10 +179,10 @@
 </head>
 <body>
 <div class="phone-container">
-  <div class="status-bar orange"><span>9:41</span><span>📶 5G 🔋</span></div>
-  <div class="header orange">
-    <a class="header-back" href="index.html">‹</a>
-    <span class="header-title">物鉴任务</span>
+  <div class="status-bar purple"><span>9:41</span><span>📶 5G 🔋</span></div>
+  <div class="header purple">
+    <a class="header-back" href="../index.html">‹</a>
+    <span class="header-title">复勘任务</span>
     <a class="header-action" href="create.html">＋</a>
   </div>
 
@@ -194,7 +194,7 @@
     </div>
     <div class="status-tabs">
       <button class="status-tab active" data-status="all" onclick="switchTab('all', this)">全部</button>
-      <button class="status-tab" data-status="wait" onclick="switchTab('wait', this)">待接单</button>
+      <button class="status-tab" data-status="pending" onclick="switchTab('pending', this)">待复勘</button>
       <button class="status-tab" data-status="doing" onclick="switchTab('doing', this)">进行中</button>
       <button class="status-tab" data-status="done" onclick="switchTab('done', this)">已完成</button>
     </div>
@@ -202,13 +202,12 @@
 
   <div class="scroll-area" style="padding-top:8px">
     <div id="task-list">
-
-      <!-- 物鉴任务1 - 待接单 -->
-      <a class="task-card" href="detail.html" data-status="wait">
+      <!-- 待复勘 -->
+      <a class="task-card" href="detail.html" data-status="pending">
         <div class="task-card-header">
-          <div class="task-id">WS2026041201</div>
-          <span class="tag tag-orange">物鉴</span>
-          <span class="tag tag-red">待接单</span>
+          <div class="task-id">FK2026041201</div>
+          <span class="tag tag-purple">复勘</span>
+          <span class="tag tag-red">待复勘</span>
         </div>
         <div class="task-info-list">
           <div class="task-info-item"><span class="label">当事人：</span><span class="value">王建国</span></div>
@@ -217,39 +216,39 @@
         </div>
         <div class="task-card-footer">
           <span class="task-meta">📅 2026-04-12 09:15</span>
-          <span class="task-action">立即接单 ›</span>
+          <span class="task-action">开始复勘 ›</span>
         </div>
       </a>
 
-      <!-- 物鉴任务2 - 进行中 -->
+      <!-- 进行中1 -->
       <a class="task-card" href="detail.html" data-status="doing">
         <div class="task-card-header">
-          <div class="task-id">WS2026041202</div>
-          <span class="tag tag-orange">物鉴</span>
+          <div class="task-id">FK2026041202</div>
+          <span class="tag tag-purple">复勘</span>
           <span class="tag tag-blue">进行中</span>
         </div>
         <div class="task-info-list">
           <div class="task-info-item"><span class="label">当事人：</span><span class="value">李秀梅</span></div>
+          <div class="task-info-item"><span class="label">复勘员：</span><span class="value">张三</span></div>
           <div class="task-info-item"><span class="label">物损类型：</span><span class="value">设备损坏</span></div>
-          <div class="task-info-item"><span class="label">预估金额：</span><span class="amount">¥8,300</span></div>
         </div>
         <div class="task-card-footer">
-          <span class="task-meta">🔄 进行中 · 2026-04-12 10:22</span>
+          <span class="task-meta">🔄 进行中 · 2026-04-12 10:30</span>
           <span class="task-action">继续填写 ›</span>
         </div>
       </a>
 
-      <!-- 物鉴任务3 - 进行中 -->
+      <!-- 进行中2 -->
       <a class="task-card" href="detail.html" data-status="doing">
         <div class="task-card-header">
-          <div class="task-id">WS2026041105</div>
-          <span class="tag tag-orange">物鉴</span>
+          <div class="task-id">FK2026041105</div>
+          <span class="tag tag-purple">复勘</span>
           <span class="tag tag-blue">进行中</span>
         </div>
         <div class="task-info-list">
           <div class="task-info-item"><span class="label">当事人：</span><span class="value">赵大力</span></div>
+          <div class="task-info-item"><span class="label">复勘员：</span><span class="value">李四</span></div>
           <div class="task-info-item"><span class="label">物损类型：</span><span class="value">建筑损坏</span></div>
-          <div class="task-info-item"><span class="label">预估金额：</span><span class="amount">¥18,600</span></div>
         </div>
         <div class="task-card-footer">
           <span class="task-meta">🔄 进行中 · 2026-04-11 14:20</span>
@@ -257,42 +256,77 @@
         </div>
       </a>
 
-      <!-- 物鉴任务4 - 已完成 -->
-      <a class="task-card done" href="records.html" data-status="done">
+      <!-- 进行中3 -->
+      <a class="task-card" href="detail.html" data-status="doing">
         <div class="task-card-header">
-          <div class="task-id">WS2026041001</div>
-          <span class="tag tag-orange">物鉴</span>
+          <div class="task-id">FK2026041104</div>
+          <span class="tag tag-purple">复勘</span>
+          <span class="tag tag-blue">进行中</span>
+        </div>
+        <div class="task-info-list">
+          <div class="task-info-item"><span class="label">当事人：</span><span class="value">孙晓华</span></div>
+          <div class="task-info-item"><span class="label">复勘员：</span><span class="value">王五</span></div>
+          <div class="task-info-item"><span class="label">物损类型：</span><span class="value">财产损失</span></div>
+        </div>
+        <div class="task-card-footer">
+          <span class="task-meta">🔄 进行中 · 2026-04-11 11:00</span>
+          <span class="task-action">继续填写 ›</span>
+        </div>
+      </a>
+
+      <!-- 已完成1 -->
+      <a class="task-card done" href="detail.html" data-status="done">
+        <div class="task-card-header">
+          <div class="task-id">FK2026041103</div>
+          <span class="tag tag-purple">复勘</span>
           <span class="tag tag-green">已完成</span>
         </div>
         <div class="task-info-list">
           <div class="task-info-item"><span class="label">当事人：</span><span class="value">孙磊</span></div>
-          <div class="task-info-item"><span class="label">物损类型：</span><span class="value">车辆损失</span></div>
-          <div class="task-info-item"><span class="label">定损金额：</span><span class="amount">¥15,200</span></div>
+          <div class="task-info-item"><span class="label">复勘员：</span><span class="value">赵六</span></div>
+          <div class="task-info-item"><span class="label">定损金额：</span><span class="amount">¥8,800</span></div>
         </div>
         <div class="task-card-footer">
-          <span class="task-meta">✅ 已完成 · 2026-04-10 16:00</span>
+          <span class="task-meta">✅ 已完成 · 2026-04-11 16:45</span>
           <span class="task-action" style="color:var(--text3)">查看报告 ›</span>
         </div>
       </a>
 
-      <!-- 物鉴任务5 - 已完成 -->
-      <a class="task-card done" href="records.html" data-status="done">
+      <!-- 已完成2 -->
+      <a class="task-card done" href="detail.html" data-status="done">
         <div class="task-card-header">
-          <div class="task-id">WS2026040901</div>
-          <span class="tag tag-orange">物鉴</span>
+          <div class="task-id">FK2026041102</div>
+          <span class="tag tag-purple">复勘</span>
           <span class="tag tag-green">已完成</span>
         </div>
         <div class="task-info-list">
           <div class="task-info-item"><span class="label">当事人：</span><span class="value">周华</span></div>
-          <div class="task-info-item"><span class="label">物损类型：</span><span class="value">财产损失</span></div>
-          <div class="task-info-item"><span class="label">定损金额：</span><span class="amount">¥22,800</span></div>
+          <div class="task-info-item"><span class="label">复勘员：</span><span class="value">钱七</span></div>
+          <div class="task-info-item"><span class="label">定损金额：</span><span class="amount">¥15,200</span></div>
         </div>
         <div class="task-card-footer">
-          <span class="task-meta">✅ 已完成 · 2026-04-09 11:30</span>
+          <span class="task-meta">✅ 已完成 · 2026-04-11 11:20</span>
           <span class="task-action" style="color:var(--text3)">查看报告 ›</span>
         </div>
       </a>
 
+      <!-- 已完成3 -->
+      <a class="task-card done" href="detail.html" data-status="done">
+        <div class="task-card-header">
+          <div class="task-id">FK2026041001</div>
+          <span class="tag tag-purple">复勘</span>
+          <span class="tag tag-green">已完成</span>
+        </div>
+        <div class="task-info-list">
+          <div class="task-info-item"><span class="label">当事人：</span><span class="value">吴明</span></div>
+          <div class="task-info-item"><span class="label">复勘员：</span><span class="value">孙八</span></div>
+          <div class="task-info-item"><span class="label">定损金额：</span><span class="amount">¥22,000</span></div>
+        </div>
+        <div class="task-card-footer">
+          <span class="task-meta">✅ 已完成 · 2026-04-10 15:30</span>
+          <span class="task-action" style="color:var(--text3)">查看报告 ›</span>
+        </div>
+      </a>
     </div>
 
     <div id="emptyState" class="empty-state" style="display:none">
@@ -305,7 +339,7 @@
 </div>
 
 <div class="toast"></div>
-<script src="../common/script.js"></script>
+<script src="../../common/script.js"></script>
 <script>
 var currentStatus = 'all';
 
